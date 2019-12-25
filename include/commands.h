@@ -18,7 +18,7 @@ typedef struct s_parse	t_parse;
 typedef struct			s_cmd
 {
 	int8_t			type;
-	char			name[10];
+	char			name[15];
 	char			endian;
 	char			hash_hex_len;
 	int				(*parser)(int, char **, t_parse *);
@@ -83,15 +83,15 @@ static const			t_cmd g_cmds[] = {
 		{true, true, false}, 1, des, ofb_e_d, ofb_e_d},
 	{2, "des-cfb", -1, -1, sym_parser,
 		{true, true, false}, 1, des, cfb_e, cfb_d},
-	{2, "des3-ecb", -1, -1, sym_parser,
+	{2, "des-ede3", -1, -1, sym_parser,
 		{true, false, true}, 3, des, ecb3_e, ecb3_d},
-	{2, "des3-cbc", -1, -1, sym_parser,
+	{2, "des-ede3-cbc", -1, -1, sym_parser,
 		{true, true, true}, 3, des, cbc3_e, cbc3_d},
 	{2, "des3", -1, -1, sym_parser,
 		{true, true, true}, 3, des, cbc3_e, cbc3_d},
-	{2, "des3-ofb", -1, -1, sym_parser,
+	{2, "des-ede3-ofb", -1, -1, sym_parser,
 		{true, true, false}, 3, des, ofb3_e_d, ofb3_e_d},
-	{2, "des3-cfb", -1, -1, sym_parser,
+	{2, "des-ede3-cfb", -1, -1, sym_parser,
 		{true, true, false}, 3, des, cfb3_e, cfb3_d},
 	{-1, "", 0, 0, NULL,
 		{false, false, false}, 0, NULL, NULL, NULL}

@@ -17,7 +17,7 @@ static int		load_cmd(t_cmd *cmd, const t_cmd *src)
 	uint16_t			endian_sys;
 
 	cmd->type = src->type;
-	ft_memcpy(cmd->name, src->name, ft_strlen(src->name));
+	ft_memcpy(cmd->name, src->name, ft_strlen(src->name) + 1);
 	endian_sys = 1;
 	endian_sys = *((uint8_t *)&endian_sys) ? 0 : 1;
 	if (src->endian != -1)
@@ -58,6 +58,10 @@ int				cmd_parser(char *arg, t_parse *p)
 
 int				opt_parser(char *arg, t_parse *p)
 {
+//	static char		*opt[] = {"-p", "-q", "-r", "-s", "", 
+//						"-e", "-d", "-i", "-o", "-a",
+//						"-k", "-v", "-s", "-p", "",
+//						}};
 	static char		*h_opt[] = {"-p", "-q", "-r", "-s", ""};
 	static char		*s_opt[] = {"-e", "-d", "-i", "-o", "-a",
 							"-k", "-v", "-s", "-p", ""};

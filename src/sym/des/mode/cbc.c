@@ -22,7 +22,7 @@ int					cbc_e(t_parse *p, int64_t q)
 	while (++i < q + 1)
 	{
 		v[0] = des_block_e(*((uint64_t *)p->r.msg + i) ^ v[0], p);
-		ft_memcpy(p->w.msg + p->w.len, &v, 8);
+		ft_memcpy(p->w.msg + p->w.len, v, 8);
 		p->w.len += 8;
 	}
 	return (0);
@@ -39,7 +39,7 @@ int					cbc_d(t_parse *p, int64_t q)
 	{
 		v[1] = *((uint64_t *)p->r.msg + p->i[1] + i);
 		v[0] = des_block_d(v[1], p) ^ v[0];
-		ft_memcpy(p->w.msg + p->w.len, &v, 8);
+		ft_memcpy(p->w.msg + p->w.len, v, 8);
 		p->w.len += 8;
 		v[0] = v[1];
 	}

@@ -54,8 +54,8 @@ uint64_t			des_triple(uint64_t x, t_parse *p)
 {
 	bool	enc;
 
-	enc = (!p->o[6] || !ft_strcmp("des3-ofb", p->cmd.name)
-			|| !ft_strcmp("des3-cfb", p->cmd.name)) ? true : false;
+	enc = (!p->o[6] || !ft_strcmp("des-ede3-ofb", p->cmd.name)
+			|| !ft_strcmp("des-ede3-cfb", p->cmd.name)) ? true : false;
 	p->s.id_k = (enc) ? 0 : 2;
 	x = (enc) ? des_block_e(x, p) : des_block_d(x, p);
 	p->s.id_k = 1;

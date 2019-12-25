@@ -39,8 +39,8 @@ static void		handle_s_p_opts(t_parse *p, t_hash *hash)
 		if (!p->o[3])
 		{
 			toupper_stdout(p->cmd.name);
-			ternary = (p->o[4]) ? ft_printf(" (\"%s\") = ", p->r.msg)
-				: ft_printf(" (%s) = ", p->in_file);
+			ternary = (p->o[4]) ? ft_printf("(\"%s\")= ", p->r.msg)
+				: ft_printf("(%s)= ", p->in_file);
 			print_hexa(hash->h, p->cmd.hash_hex_len, true);
 		}
 		else

@@ -56,16 +56,23 @@
 
 # define ROT_28_LEFT(x, n) (((x)<<(n)) | ((x)>>(28-(n)))) & 0xfffffff000000000
 
+/*
+**# define EVP_BYTES_TO_KEY md5_pbkdf
+*/
+# define EVP_BYTES_TO_KEY sha256_pbkdf
+
 typedef struct			s_write
 {
 	int				fd;
 	char			*msg;
 	int64_t			len;
-}						t_write;
+}							t_write;
 
 /*
-**NB: t_write is used for padding with hash commands
-**		and for -a option with sym cipher commands
+**	In hash commands:
+**		t_write is used as a buffer for padding
+** In sym cipher commands:
+**		 t_write is the buffer where the t_read plaintext data (respectively the t_read ciphertext data) will be encrypted (respectively decrypted)
 */
 
 typedef struct			s_hash
@@ -214,9 +221,9 @@ uint64_t				des_triple(uint64_t x, t_parse *p);
 /*
 **src/sym/des
 */
-int						set_pass(t_parse *p, int verify);
-int						md5_pass_salt_hash(t_parse *tmp, t_parse *p);
-int						pbkdf(t_parse *p);
+int						md5_pbkdf(t_parse *tmp, t_parse *p);
+int						sha256_pbkdf(t_parse *tmp, t_parse *p);
+int						pbkdf(t_parse *p, bool verify, char *salt);
 int						check_out(t_parse *p);
 int						check_k_v(t_parse *p);
 char					*des_padding(t_parse *p, int64_t q);

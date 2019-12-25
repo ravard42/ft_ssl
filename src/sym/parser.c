@@ -74,7 +74,7 @@ static int		arg_feed_verif(t_parse *p)
 		return (0);
 	if (!p->o[6])
 	{
-		if (p->cmd.needed[0] && !p->s.arg[0].set && !pbkdf(p))
+		if (p->cmd.needed[0] && !p->s.arg[0].set && !pbkdf(p, true , NULL))
 			return (0);
 		if (p->cmd.needed[1] && !p->s.arg[1].set
 			&& ft_dprintf(2, "%sInitialization vector undefined%s\n",

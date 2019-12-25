@@ -12,24 +12,6 @@
 
 #include "ft_ssl.h"
 
-static void			init_sub_struct(t_parse *p)
-{
-	int	i;
-
-	ft_memset(p->cmd.name, 0, 10);
-	p->cmd.endian = 0;
-	p->cmd.hash_hex_len = 0;
-	p->cmd.needed[0] = false;
-	p->cmd.needed[1] = false;
-	p->cmd.run = NULL;
-	p->h.pbkdf = false;
-	i = -1;
-	while (++i < 4)
-		p->s.arg[i].set = false;
-	p->s.arg[3].p = NULL;
-	p->s.id_k = 0;
-}
-
 void				init_parse_struct(t_parse *p)
 {
 	int8_t	i;
@@ -44,9 +26,15 @@ void				init_parse_struct(t_parse *p)
 	p->out_file = NULL;
 	p->r.msg = NULL;
 	p->r.len = 0;
+	p->w.fd = -1;
 	p->w.msg = NULL;
 	p->w.len = 0;
-	init_sub_struct(p);
+	p->h.pbkdf = false;
+	i = -1;
+	while (++i < 4)
+		p->s.arg[i].set = false;
+	p->s.arg[3].p = NULL;
+	p->s.id_k = 0;
 }
 
 void				free_parse_struct(t_parse *p)

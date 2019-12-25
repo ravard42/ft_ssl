@@ -43,8 +43,12 @@ static int			dec(t_parse *p, int64_t q)
 		return (0);
 	p->w.len = 0;
 	p->cmd.run_d(p, q);
+//	ft_printf("p->w.len = %d\n", p->w.len);
 	if (p->cmd.needed[2])
+//	{
+//		if (p->r.len % 8 != 0 || p->r.len / 8 - p->)
 		p->w.len -= des_unpadding(&p->w);
+//	}
 	return (1);
 }
 

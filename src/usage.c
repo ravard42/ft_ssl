@@ -21,8 +21,8 @@
 static void			cmds_usage(void)
 {
 	static char		*cmds[] = {"end0", "md5", "sha256", "end1",
-			"base64", "des", "des-ecb", "des-cbc", "des-ofb", "des-cfb",
-			"des3", "des3-ecb", "des3-cbc", "des3-ofb", "des3-cfb", "end2"};
+			"base64", "des-ecb", "des-cbc", "des", "des-ofb", "des-cfb",
+			"des-ede3", "des-ede3-cbc", "des3", "des-ede3-ofb", "des-ede3-cfb", "end2"};
 	int				i;
 
 	i = -1;

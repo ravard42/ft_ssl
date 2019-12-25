@@ -21,7 +21,8 @@
 
 MD5_META="openssl md5,./ft_ssl md5"
 MD4_META="openssl md4,./ft_ssl md4"
-SHA256_META="openssl sha -sha256,./ft_ssl sha256"
+#SHA256_META="openssl sha -sha256,./ft_ssl sha256"
+SHA256_META="openssl sha256,./ft_ssl sha256"
 SHA1_META="openssl sha -sha1,./ft_ssl sha1"
 SHA224_META="openssl sha -sha224,./ft_ssl sha224"
 SHA384_META="openssl sha -sha384,./ft_ssl sha384"
@@ -30,7 +31,8 @@ SHA512224_META="shasum -a 512224,./ft_ssl sha512_224"
 SHA512256_META="shasum -a 512256,./ft_ssl sha512_256"
 
 # You may have to change the option of base64 for decrypt (differs in versions)
-BASE64="base64,base64 -D,./ft_ssl base64,./ft_ssl base64 -d,1"
+#BASE64="base64,base64 -D,./ft_ssl base64,./ft_ssl base64 -d,1"
+BASE64="base64,base64 -d,./ft_ssl base64,./ft_ssl base64 -d,1"
 BASE64_URL="base64 | tr '+/' '-_', tr -- '-_' '+/' | base64 -d,./ft_ssl base64_url,./ft_ssl base64_url -d,1"
 
 # FIXME you can change this if you don't handle such features

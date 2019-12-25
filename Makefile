@@ -1,9 +1,9 @@
 CC = gcc
 NAME = ft_ssl
 
-FLAGS = -Wall -Wextra -Werror
+#FLAGS = -Wall -Wextra -Werror
 #FLAGS = -Wall -Wextra -Werror -Ofast
-#FLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
 
 SRC = src/main.c\
 		src/init_and_free.c\
@@ -27,24 +27,25 @@ SRC = src/main.c\
 		src/sym/base64/b64_block_e.c\
 		src/sym/base64/b64_block_d.c\
 		src/sym/base64/b64.c\
-		src/sym/des/block_cipher/key_schedule.c\
-		src/sym/des/block_cipher/diffusion.c\
-		src/sym/des/block_cipher/confusion.c\
-		src/sym/des/block_cipher/round.c\
-		src/sym/des/block_cipher/des_block_e_d.c\
-		src/sym/des/pbkdf.c\
+		src/sym/des/core/key_schedule.c\
+		src/sym/des/core/diffusion.c\
+		src/sym/des/core/confusion.c\
+		src/sym/des/core/round.c\
+		src/sym/des/core/des_block_e_d.c\
+		src/sym/des/pbkdf/pbkdf.c\
+		src/sym/des/pbkdf/hash_mode.c\
 		src/sym/des/padding.c\
 		src/sym/des/check.c\
 		src/sym/des/opt_a.c\
-		src/sym/des/ecb.c\
-		src/sym/des/cbc.c\
-		src/sym/des/ofb.c\
-		src/sym/des/cfb.c\
-		src/sym/des/ecb3.c\
-		src/sym/des/cbc3.c\
-		src/sym/des/ofb3.c\
-		src/sym/des/cfb3.c\
 		src/sym/des/des.c\
+		src/sym/des/mode/ecb.c\
+		src/sym/des/mode/cbc.c\
+		src/sym/des/mode/ofb.c\
+		src/sym/des/mode/cfb.c\
+		src/sym/des/mode/ecb3.c\
+		src/sym/des/mode/cbc3.c\
+		src/sym/des/mode/ofb3.c\
+		src/sym/des/mode/cfb3.c\
 	
 OBJ = $(SRC:.c=.o)
 
