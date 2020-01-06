@@ -23,12 +23,12 @@
 # define V_DER_2_BIG				"ERROR: to big file in asn1 der (header len must be <= 0xffff)\n"
 # define V_DER_COR				"ERROR: der file corrupted\n"
 
-//# define V_TYPE 			uint64_t
-//# define	V_MID_INF		0xffffffff
-//# define	V_SUP				0xffffffffffffffff
-# define V_TYPE 			uint8_t
-# define	V_MID_INF		0xf
-# define	V_SUP				0xff
+# define V_TYPE 			uint64_t
+# define	V_MID_INF		0xffffffff
+# define	V_SUP				0xffffffffffffffff
+//# define V_TYPE 			uint8_t
+//# define	V_MID_INF		0xf
+//# define	V_SUP				0xff
 # define V_LEN				(int8_t)sizeof(V_TYPE)
 # define V_BIT_LEN		((int8_t)sizeof(V_TYPE) * 8)
 
