@@ -1,5 +1,0 @@
-echo -n Salted__0011223344 | ./ft_ssl des -p coucou -d
-echo -n "" | ./ft_ssl des -p couocu -d
-echo -n "" | ./ft_ssl des-ofb -p couocu -d
-echo -n "" | ./ft_ssl des -k 0 -d
-echo -n "" | ./ft_ssl des-ofb -k 0 -d
