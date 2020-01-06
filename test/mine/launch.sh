@@ -13,11 +13,13 @@ p="mypassword"
 
 #MAKING FT_SSL EXEC
 
-make -C ../../ > /dev/null 2>&1
+echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
+echo -ne "\r"
+make -C ../../  re > /dev/null 2>&1
 if (($? == 0));then
 echo -e "${KGRN}ft_ssl successfully built and ready to be tested$KNRM\n"
 else
-echo -e "${KRED}error in ft_ssl compilation$KNRM\n"
+echo -e "${KRED}error in ft_ssl compilation      $KNRM\n"
 fi
 cp ../../ft_ssl ./ 
 

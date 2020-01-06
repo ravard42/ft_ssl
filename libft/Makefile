@@ -1,7 +1,6 @@
 CC = gcc
-FLAGS = -Wall -Wextra -ggdb -fsanitize=address
-#FLAGS = -Wall -Wextra -Werror -Ofast
-#FLAGS = -Wall -Wextra -Werror
+#FLAGS = -Wall -Wextra -ggdb -fsanitize=address
+FLAGS = -Wall -Wextra -Werror
 NAME = libft.a
 SRC =	src/ft_printf/ft_printf.c\
 		src/ft_printf/ft_sprintf.c\
@@ -51,6 +50,8 @@ SRC =	src/ft_printf/ft_printf.c\
 		src/varint/v_expmod.c\
 		src/varint/v_gcd_eea.c\
 		src/varint/v_crt.c\
+		src/varint/v_asn1_der_int_seq_e.c\
+		src/varint/v_asn1_der_int_seq_d.c\
 
 OBJ = $(SRC:.c=.o)
 INCLUDE = ./include/

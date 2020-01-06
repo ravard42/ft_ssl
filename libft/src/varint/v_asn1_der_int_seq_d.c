@@ -1,0 +1,116 @@
+#include "libft.h"
+
+static int				free_der_d(t_der_d *o)
+{
+	t_der_d	*nxt;
+
+	nxt = o->nxt;
+	while (nxt)
+	{
+		o = nxt->nxt;
+		free(nxt);
+		nxt = o;
+	}
+	return (1);
+}
+
+static int				read_header(t_der_d *cu, int left)
+{
+	if (left < 3
+		|| !((cu->st_h[0] == 0x30 && cu->id == -1) || cu->st_h[0] == 0x02))
+		return (-1);
+	if (cu->st_h[1] > 0 && cu->st_h[1] < 0x80
+		&& (cu->st = cu->st_h + 2))
+		cu->len = cu->st_h[1];
+	else if (cu->st_h[1] == 0x81 && left >= 4 && cu->st_h[2] >= 0x80 
+		&& (cu->st = cu->st_h + 3))
+		cu->len = cu->st_h[2];
+	else if (cu->st_h[1] == 0x82 && left >= 5 && cu->st_h[2] >= 1
+		&& (cu->st = cu->st_h + 4))
+		cu->len = (cu->st_h[2] << 8) + cu->st_h[3];
+	else
+		return (-1);
+	left -= (cu->id == -1) ? cu->st - cu->st_h : cu->st - cu->st_h + cu->len;
+	if (left > 0)
+	{
+		if (!(cu->nxt = (t_der_d *)malloc(sizeof(t_der_d)))
+			&& ft_dprintf(2, "%smalloc error: asn1%s\n", KRED, KNRM))
+			return (-1);
+		cu->nxt->id = cu->id + 1;
+		cu->nxt->st_h = (cu->id == -1) ? cu->st : cu->st + cu->len;
+		cu->nxt->nxt = NULL;
+	}
+	return (left);
+}
+
+static int				check_and_count(t_der_d *o, t_read *r)
+{
+	int		tmp;
+	t_der_d	*cur;
+	int		ret;
+
+	tmp = r->len;
+	cur = o;
+	while (tmp)
+	{
+		tmp = read_header(cur, tmp);
+		if (tmp < 0 && ft_dprintf(2, "%s%s%s", KRED, V_DER_COR, KNRM)
+			&& free_der_d(o))
+			return (-1);
+		cur = cur->nxt;
+	}
+	cur = o;
+	tmp = 0;
+	ret = 0;
+	while ((cur = cur ->nxt) != NULL && ++ret)
+		tmp += cur->st - cur->st_h + cur->len;
+	if (tmp != (o->len) && ft_dprintf(2, "%s%s%s", KRED, V_DER_COR, KNRM)
+		&& free_der_d(o))
+		return (-1);
+	return (ret);
+}
+
+static t_varint		v_load(uint8_t *src, int len)
+{
+	int			i;
+	int			j;
+	int			k;
+	V_LEN_TYPE	v_id;
+	t_varint		ret;
+
+	ret = g_v[0];
+	i = 0;
+	while (i < len)
+	{
+		k = (i == 0 && (k = len % V_LEN)) ? k : V_LEN;
+		j = -1;
+		while (++j < k)
+		{
+			if ((v_id = (len - 1 - i) / V_LEN) >= V_MAX_LEN)
+				return (g_v[3]);
+			ret.x[v_id] |= ((V_TYPE)src[i + j] << 8 * (k - 1 - j));
+		}
+		i += k;
+	}	
+	v_len(&ret);
+	return (ret);
+}
+
+t_varint		*v_asn1_der_int_seq_d(int *nb_varint, t_read *r)
+{
+	t_der_d		ori;
+	t_varint		*ret;
+	t_der_d		*cur;
+
+	ori.id = -1;
+	ori.st_h = (uint8_t *)r->msg;
+	ori.nxt = NULL;
+	if ((*nb_varint = check_and_count(&ori, r)) == -1)
+		return (NULL);
+	ret = (t_varint *)malloc(sizeof(t_varint) * *nb_varint);
+	cur = &ori;
+	while ((cur = cur->nxt) != NULL)
+		ret[cur->id] = v_load(cur->st, cur->len);
+	free_der_d(&ori);
+	return (ret);
+}

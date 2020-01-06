@@ -13,6 +13,7 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
+
 # include <stdbool.h>
 # include <stdlib.h>
 # include <math.h>
@@ -245,5 +246,12 @@ int						ofb3_e_d(t_parse *p, int64_t q);
 int						cfb3_e(t_parse *p, int64_t q);
 int						cfb3_d(t_parse *p, int64_t q);
 int						des(t_parse *p);
+
+
+
+/*
+** ASYM
+*/
+
 
 #endif
