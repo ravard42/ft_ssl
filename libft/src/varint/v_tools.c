@@ -1,19 +1,5 @@
 #include "libft.h"
 
-int64_t					v_maxbin_pow(t_varint v)
-{
-	int64_t	j;
-
-	if (is_g_v(0, v))
-		return (-1);	
-	j = V_BIT_LEN - 1;
-	while (!(v.x[v.len - 1] >> j & 1))
-		j--;
-	j += (v.len > 1) ? (v.len - 1) * V_BIT_LEN : 0;
-	return (j);
-}
-
-
 bool				is_g_v(int8_t i, t_varint v)
 {
 	if (i == 3)
@@ -27,6 +13,17 @@ bool				is_g_v(int8_t i, t_varint v)
 	if (v.sign == 1 && v.len == 1 && v.x[0] == (V_TYPE)i)
 		return (true);
 	return (false);
+}
+
+void			v_len(t_varint *v)
+{
+	V_LEN_TYPE		i;
+
+	i = V_MAX_LEN;
+	while (--i > 0)
+		if (v->x[i])
+			break ;
+	v->len = i + 1;
 }
 
 t_varint		v_init(char sign, V_TYPE *src, V_LEN_TYPE len)
@@ -46,33 +43,16 @@ t_varint		v_init(char sign, V_TYPE *src, V_LEN_TYPE len)
 	return (v);
 }
 
-void			v_len(t_varint *v)
+void			v_sort(t_varint *a, t_varint *b)
 {
-	V_LEN_TYPE		i;
+	t_varint	tmp;
 
-	i = V_MAX_LEN;
-	while (--i > 0)
-		if (v->x[i])
-			break ;
-	v->len = i + 1;
-}
-
-t_varint				v_inc(t_varint a)
-{
-	a = v_add(a, g_v[1]);
-	return (a);
-}
-
-t_varint				v_dec(t_varint a)
-{
-	a = v_sub(a, g_v[1]);
-	return (a);
-}
-
-t_varint		v_abs(t_varint v)
-{
-	v.sign = 1;
-	return (v);
+	if (v_cmp(*a, "-lt", *b))
+	{
+		tmp = *a;
+		*a = *b;
+		*b = tmp;
+	}
 }
 
 void		v_print(t_varint *v, char *name, int64_t number, char *col)

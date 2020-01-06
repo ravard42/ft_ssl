@@ -1,21 +1,8 @@
 #include "libft.h"
 
-void			v_sort(t_varint *a, t_varint *b)
-{
-	t_varint	tmp;
-
-	if (v_cmp(*a, "-lt", *b))
-	{
-		tmp = *a;
-		*a = *b;
-		*b = tmp;
-	}
-}
-
 /*
 ** v_gcd et v_eea attendent des nombres positifs en entrée
 */
-
 
 t_varint		v_gcd(t_varint a, t_varint b)
 {

@@ -46,6 +46,7 @@ SRC = src/main.c\
 		src/sym/des/mode/cbc3.c\
 		src/sym/des/mode/ofb3.c\
 		src/sym/des/mode/cfb3.c\
+		src/asym/prob_prim_test.c\
 	
 OBJ = $(SRC:.c=.o)
 

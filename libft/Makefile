@@ -42,13 +42,14 @@ SRC =	src/ft_printf/ft_printf.c\
 		src/ft_rand.c\
 		src/putchar.c\
 		src/varint/v_tools.c\
+		src/varint/v_tools_2.c\
 		src/varint/v_check.c\
 		src/varint/v_cmp.c\
 		src/varint/v_add_sub.c\
 		src/varint/v_mul_exp.c\
 		src/varint/v_div_mod.c\
 		src/varint/v_expmod.c\
-		src/varint/v_gcd_eea.c\
+		src/varint/v_gcd_eea_inv.c\
 		src/varint/v_crt.c\
 		src/varint/v_asn1_der_int_seq_e.c\
 		src/varint/v_asn1_der_int_seq_d.c\

@@ -23,6 +23,7 @@
 # include "des/key_perm.h"
 # include "des/perm.h"
 # include "des/s_box.h"
+# include "first_primes.h"
 
 # define KNRM  "\x1B[0m"
 # define KRED  "\x1B[31;1m"
@@ -253,5 +254,6 @@ int						des(t_parse *p);
 ** ASYM
 */
 
+bool						prob_prim_test(int fd, t_varint n);
 
 #endif
