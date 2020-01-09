@@ -40,7 +40,7 @@ static int		load_cmd(t_cmd *cmd, const t_cmd *src)
 	return (1);
 }
 
-int				cmd_parser(char *arg, t_parse *p)
+int				cmd_parser(t_parse *p, char *arg)
 {
 	int				i;
 	int				j;
@@ -53,35 +53,5 @@ int				cmd_parser(char *arg, t_parse *p)
 		return (load_cmd(&(p->cmd), g_cmds + i));
 	ft_dprintf(2, "%s\"%s\" is not a valid command, program leaving [...]%s\n",
 			KRED, arg, KNRM);
-	return (0);
-}
-
-int				opt_parser(char *arg, t_parse *p)
-{
-//	static char		*opt[] = {"-p", "-q", "-r", "-s", "", 
-//						"-e", "-d", "-i", "-o", "-a",
-//						"-k", "-v", "-s", "-p", "",
-//						}};
-	static char		*h_opt[] = {"-p", "-q", "-r", "-s", ""};
-	static char		*s_opt[] = {"-e", "-d", "-i", "-o", "-a",
-							"-k", "-v", "-s", "-p", ""};
-	int				i;
-	int				j;
-
-	j = 0;
-	i = -1;
-	if (p->cmd.type == 1)
-		while (ft_strcmp(h_opt[++i], "")
-			&& (j = ft_strcmp(arg, h_opt[i])))
-			;
-	else if (p->cmd.type == 2)
-		while (ft_strcmp(s_opt[++i], "")
-			&& (j = ft_strcmp(arg, s_opt[i])))
-			;
-	if (j == 0 && p->cmd.type == 1)
-		return (p->o[i + 1] = 1);
-	else if (j == 0 && p->cmd.type == 2)
-		return (p->o[i + 1 + 4] = 1);
-	ft_dprintf(2, "%s\"%s\" is not a valid option%s\n", KRED, arg, KNRM);
 	return (0);
 }

@@ -54,16 +54,16 @@ int					des(t_parse *p)
 
 	if (!check_out(p))
 		return (0);
-	if (p->o[6] && p->o[9] && !opt_a_d(p))
+	if (p->s.o[1] && p->s.o[4] && !opt_a_d(p))
 		return (0);
 	if (!check_k_v(p))
 		return (0);
 	q = p->r.len / 8 - p->i[1];
-	if (!p->o[6] && !enc(p, q))
+	if (!p->s.o[1] && !enc(p, q))
 		return (0);
-	else if (p->o[6] && !dec(p, q))
+	else if (p->s.o[1] && !dec(p, q))
 		return (0);
-	if (!p->o[6] && p->o[9] && !opt_a_e(p))
+	if (!p->s.o[1] && p->s.o[4] && !opt_a_e(p))
 		return (0);
 	write(p->w.fd, p->w.msg, p->w.len);
 	if (p->w.fd > 1)

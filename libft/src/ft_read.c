@@ -29,7 +29,7 @@ static t_read	*new_link(t_read *current)
 	return (current->next);
 }
 
-static int		fill_linked_list(int fd, t_read *origin)
+static int		fill_linked_list(t_read *origin, int fd)
 {
 	t_read	*current;
 	int		r;
@@ -55,7 +55,7 @@ static int		fill_linked_list(int fd, t_read *origin)
 	return (n);
 }
 
-static void		merge_list(t_read *origin, t_read *r)
+static void		merge_list(t_read *r, t_read *origin)
 {
 	t_read	*current;
 	int		i;
@@ -82,7 +82,7 @@ static void		merge_list(t_read *origin, t_read *r)
 **	 >0				nombre de caractères lus
 */
 
-int				ft_read(char *file, t_read *r)
+int				ft_read(t_read *r, char *file)
 {
 	int		fd;
 	t_read	origin;
@@ -98,10 +98,10 @@ int				ft_read(char *file, t_read *r)
 	}
 	init_read_struct(r);
 	init_read_struct(&origin);
-	if ((r->len = fill_linked_list(fd, &origin)) <= 0)
+	if ((r->len = fill_linked_list(&origin, fd)) <= 0)
 		return (r->len);
 	if (!(r->msg = (char *)ft_memalloc(sizeof(char) * (r->len + 1))))
 		return (-2);
-	merge_list(&origin, r);
+	merge_list(r, &origin);
 	return (r->len);
 }

@@ -21,7 +21,7 @@ typedef struct			s_cmd
 	char			name[15];
 	char			endian;
 	char			hash_hex_len;
-	int				(*parser)(int, char **, t_parse *);
+	int				(*parser)(t_parse *, int, char **);
 	bool			needed[3];
 	uint8_t			nb_k;
 	int				(*run)(t_parse *);
@@ -44,10 +44,10 @@ typedef struct			s_cmd
 **nb_k == 3	<=> 192bit key needed : 168 used
 */
 
-int						hash_parser(int argc, char **argv, t_parse *p);
+int						hash_parser(t_parse *p, int argc, char **argv);
 int						md5(t_parse *p);
 int						sha256(t_parse *p);
-int						sym_parser(int argc, char **argv, t_parse *p);
+int						sym_parser(t_parse *p, int argc, char **argv);
 int						b64(t_parse *p);
 int						des(t_parse *p);
 int						ofb_e_d(t_parse *p, int64_t q);

@@ -2,7 +2,32 @@ CC = gcc
 #FLAGS = -Wall -Wextra -ggdb -fsanitize=address
 FLAGS = -Wall -Wextra -Werror
 NAME = libft.a
-SRC =	src/ft_printf/ft_printf.c\
+SRC =	src/ft_memalloc.c\
+		src/ft_memset.c\
+		src/ft_memcpy.c\
+		src/ft_memcmp.c\
+		src/ft_putchar.c\
+		src/ft_puthex.c\
+		src/ft_putstr.c\
+		src/ft_strlen.c\
+		src/ft_strcpy.c\
+		src/ft_strncpy.c\
+		src/ft_strcat.c\
+		src/ft_strchr.c\
+		src/ft_strcmp.c\
+		src/ft_strncmp.c\
+		src/ft_revstr.c\
+		src/ft_strdup.c\
+		src/ft_strsplit.c\
+		src/ft_atoi.c\
+		src/hstr_to_64_t.c\
+		src/malloc_free_tools.c\
+		src/rm_begin_whitespace.c\
+		src/rm_multi_whitespace.c\
+		src/get_next_line.c\
+		src/ft_rand.c\
+		src/ft_read.c\
+		src/ft_printf/ft_printf.c\
 		src/ft_printf/ft_sprintf.c\
 		src/ft_printf/ft_dprintf.c\
 		src/ft_printf/extract_specifier.c\
@@ -14,33 +39,11 @@ SRC =	src/ft_printf/ft_printf.c\
 		src/ft_printf/bin_conv.c\
 		src/ft_printf/undefined_conv.c\
 		src/ft_printf/tools.c\
-		src/ft_printf/str_tools.c\
 		src/ft_printf/write.c\
 		src/ft_printf/put_buffer.c\
 		src/ft_printf/malloc.c\
 		src/ft_printf/utf_32_to_8.c\
-		src/ft_memalloc.c\
-		src/ft_memcpy.c\
-		src/ft_strcpy.c\
-		src/ft_strncpy.c\
-		src/ft_strcat.c\
-		src/ft_strchr.c\
-		src/get_next_line.c\
-		src/ft_strdup.c\
-		src/ft_strsplit.c\
-		src/malloc_free_tools.c\
-		src/ft_strcmp.c\
-		src/ft_strncmp.c\
-		src/ft_toupper.c\
-		src/ft_atoi.c\
-		src/rm_begin_whitespace.c\
-		src/rm_multi_whitespace.c\
-		src/print_memory.c\
-		src/print_hexa.c\
 		src/bswap.c\
-		src/ft_read.c\
-		src/ft_rand.c\
-		src/putchar.c\
 		src/varint/v_tools.c\
 		src/varint/v_tools_2.c\
 		src/varint/v_check.c\

@@ -43,13 +43,31 @@
 # define D "-d, decode/decrypt mode"
 # define I "-i, input file for message"
 # define O "-o, output file for message"
-# define DES_ONLY "\x1B[33;1mdes only:\x1B[0m"
+# define DES "\x1B[33;1mdes:\x1B[0m"
 # define A " -a, decode/encode the input/output in base64"
 
 # define K " -k, key in hexa is the next argument."
 # define V " -v, initialization vector in hexa is the next argument."
 # define SALT " -s, the salt in hexa is the next argument."
 # define PW " -p, password in ascii is the next argument."
+# define IN "-in file (same as openssl -rand for genrsa)"
+# define OUT "-out file"
+# define GENRSA "\x1B[33;1mgenrsa:\x1B[0m"
+# define NB "size of the private key in bits (must be the last option specified, default 128bits)"
+# define RSA "\x1B[33;1mrsa:\x1B[0m"
+# define IF "-inform DER|PEM , key input format expected on -in (default PEM)"
+# define OF "-outform DER|PEM , key output format expected on -out (default PEM)"
+# define ENC "-des, encrypt/decrypt the private key with des before reading/writing it"
+# define PI "-passin, des password for reading (decrypt) is the next arg"
+# define PO "-passout, des password for writing (encrypt) is the next arg"
+# define PBI "-pubin, private key is read by default on -in, with this option a public key is read instead"
+# define PBO "-pubout, private key is output by default on -out, with this option a public key is output instead"
+# define T "-text, print key components and key encoded version"
+# define M "-modulus, print out the value of the modulus of the key"
+# define N "-noout, this option prevents output of the encoded version of the key"
+# define C "-check, check the consistency of an RSA private key"
+
+# define RSAUTL "\x1B[33;1mrsautl:\x1B[0m"
 
 # define SH_L(x, n) ((x) << (n))
 # define ROT_L(x, n) (((x) << (n)) | ((x) >> (32-(n))))
@@ -79,11 +97,22 @@ typedef struct			s_write
 
 typedef struct			s_hash
 {
+	uint8_t		o[5];
 	uint32_t		s[64];
 	uint32_t		k[64];
 	uint32_t		h[8];
 	bool			pbkdf;
 }						t_hash;
+
+/*
+** HASH OPTIONS
+**
+** o[0] = 1 => traitement des opts désactivés
+** o[1] : -p on/off
+** o[2] : -q on/off
+** o[3] : -r on/off
+** o[4] : -s on/off
+*/
 
 typedef struct			s_arg
 {
@@ -94,6 +123,7 @@ typedef struct			s_arg
 
 typedef struct			s_sym
 {
+	uint8_t		o[9];
 	uint32_t		r;
 	uint32_t		l;
 	t_arg			arg[4];
@@ -102,7 +132,18 @@ typedef struct			s_sym
 }						t_sym;
 
 /*
-** NOTE attributs  t_arg
+** SYM OPTIONS
+** o[0] : -e on/off
+** o[1] : -d on/off
+** o[2] : -i on/off
+** o[3] : -o on/off
+** o[4] : -a on/off
+** o[5] : -k on/off
+** o[6] : -v on/off
+** o[7] : -s on/off
+** o[8] : -p on/off
+**
+** SYM ARGS
 ** arg[0] : k
 ** arg[1] : v
 ** arg[2] : s
@@ -111,15 +152,14 @@ typedef struct			s_sym
 
 typedef struct			s_parse
 {
-	t_cmd			cmd;
+	t_cmd				cmd;
 	uint8_t			i[3];
-	uint8_t			o[14];
-	char			*in_file;
-	char			*out_file;
 	t_read			r;
+	char				*in_file;
 	t_write			w;
+	char				*out_file;
 	t_hash			h;
-	t_sym			s;
+	t_sym				s;
 }						t_parse;
 
 /*
@@ -130,38 +170,29 @@ typedef struct			s_parse
 **	i[1] == 2 <-> file to be decrypt salted (sym only)
 ** i[2] nombre de print sur stdout (hash only)
 **
-** o[0] = 1 => traitement des opts désactivés
-** o[1] : -p on/off
-** o[2] : -q on/off
-** o[3] : -r on/off
-** o[4] : -s on/off
-** o[5] : -e on/off
-** o[6] : -d on/off
-** o[7] : -i on/off
-** o[8] : -o on/off
-** o[9] : -a on/off
-** o[10] : -k on/off
-** o[11] : -v on/off
-** o[12] : -s on/off
-** o[13] : -p on/off
 */
 
 /*
 **src
 */
-int						usage(void);
-void					init_parse_struct(t_parse *p);
+//----------------int					usage(void);
+int					cmd_usage(void);
+int					asym_opt_usage(void);
+int					hash_opt_usage(void);
+int					sym_opt_usage(void);
+int					init_p(t_parse *p, char *cmd);
+//-------------free_parse_struct need to be improved (in free_p ...)
 void					free_parse_struct(t_parse *p);
 uint32_t				*multi_bswap32(uint32_t *h, int64_t size);
-int						cmd_parser(char *arg, t_parse *p);
-int						opt_parser(char *arg, t_parse *p);
-int						str_parser(char *arg, t_parse *p);
-int						fd_parser(char *arg, t_parse *p);
+int					cmd_parser(t_parse *p, char *arg);
+int					str_parser(t_parse *p, char *arg);
+int					fd_parser(t_parse *p, char *arg);
 /*
 **src/hash
 */
+//int					hash_parser(int argc, char **argv, t_parse *p);
 char					*hash_padding(t_parse *p);
-int						hash_parser(int argc, char **argv, t_parse *p);
+int					hash_opt(t_parse *p, char *arg);
 void					print_format(t_parse *p, t_hash *hash);
 /*
 **src/hash/md5
@@ -190,9 +221,9 @@ void					sha256_block_hash(t_hash *hash, char *pad,
 /*
 **src/sym/
 */
-uint64_t				*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str);
+//int					sym_parser(t_parse *p, int argc, char **argv);
 void					format_key(t_parse *p);
-int						sym_parser(int argc, char **argv, t_parse *p);
+int					sym_opt(t_parse *p, char *arg);
 /*
 **src/sym/base64
 */

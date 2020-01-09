@@ -78,16 +78,47 @@ typedef struct		s_conv
 	void			(*f)(va_list *va, t_spe *e);
 }					t_conv;
 
-char				*ft_strdup(const char *str);
-char				**ft_strsplit(const char *s, char c);
-char				**malloc_empty_str_tab(void);
-int					free_ok(void *ptr);
-int					free_split(char **tab);
+/*
+** basic functions
+*/
+
+void				*ft_memalloc(size_t size);
+void				ft_memset(char *b, char c, size_t len);
+void				*ft_memcpy(void *dst, const void *src, size_t n);
+int				ft_memcmp(const void *s1, const void *s2, size_t n);
+void				ft_putchar(char c);
+void				ft_putnchar(char *ptr, size_t len);
+void				ft_puthex(void *p, int64_t len, bool newline);
+void				ft_putstr(char *str);
+size_t			ft_strlen(const char *s);
+size_t			ft_wstrlen(wchar_t *wc);
 char				*ft_strcpy(char *dst, const char *src);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strchr(const char *s, int c);
-int					get_next_line(int fd, char **line);
+int					ft_strcmp(const char *s1, const char *s2);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+char				*ft_revstr(char *str);
+char				*ft_strdup(const char *str);
+char				**ft_strsplit(const char *s, char c);
+char				*polarity(char *str, int *sign);
+int				ft_len(char *buf, char mode);
+int				ft_power(int x, int n);
+int				ft_atoi(const char *str);
+int				ft_hexatoi(const char *str);
+char				ft_toupper(char c);
+uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str);
+char				**malloc_empty_str_tab(void);
+int				free_ok(void *ptr);
+int				free_split(char **tab);
+char				*rm_begin_whitespace(char *str);
+char				*rm_multi_whitespace(char *str);
+int				get_next_line(int fd, char **line);
+uint64_t			ft_rand(int urand_fd, uint64_t min, uint64_t max);
+int				ft_read(t_read *r, char *file);
+/*
+**	ft_printf
+*/
 int					ft_sprintf(char *str, const char *format, ...);
 int					ft_printf(const char *format, ...);
 int					ft_dprintf(int fd, const char *format, ...);
@@ -104,21 +135,9 @@ void				putchar_buffer(char c, char *buff);
 void				putstr_buffer(char *str, char *buff);
 void				putnbr_buffer(intmax_t n, char *buff);
 void				putbnbr_buffer(uintmax_t n, char *param, char *buff);
-int					ft_atoi(const char *str);
-int					ft_hexatoi(const char *str);
-char				*rm_begin_whitespace(char *str);
-char				*rm_multi_whitespace(char *str);
-char				*polarity(char *str, int *sign);
-int					ft_len(char *buf, char mode);
-int					ft_power(int x, int n);
 void				ft_exit(char *error);
-void				ft_memset(char *b, char c, size_t len);
-int					ft_memcmp(const void *s1, const void *s2, size_t n);
 int					catch_pos_numb(char *s);
 void				init_spe(t_spe *sp);
-char				*ft_revstr(char *str);
-size_t				ft_strlen(const char *s);
-int					wstrlen(wchar_t *wc);
 char				*add_nose(int n, char c, char *buff);
 char				*add_tail(int n, char c, char *buff);
 int					write_no_spe(char const *s, t_spe *sp);
@@ -129,26 +148,12 @@ void				oux_malloc(uintmax_t i, char b, t_spe *sp);
 void				c_malloc(char nb_char, t_spe *sp);
 void				s_malloc(char *str, t_spe *sp);
 int					utf_32_to_8(wchar_t utf_32, char *utf_8);
-int					ft_strcmp(const char *s1, const char *s2);
-int					ft_strncmp(const char *s1, const char *s2, size_t n);
-char				ft_toupper(char c);
-void				*ft_memalloc(size_t size);
-void				*ft_memcpy(void *dst, const void *src, size_t n);
+/*
+** switch endianness
+*/
 uint32_t			bswap32(uint32_t x);
 uint32_t			*multi_bswap32(uint32_t *h, int64_t size);
 uint64_t			bswap64(uint64_t x);
 uint64_t			*multi_bswap64(uint64_t *h, int64_t size);
-int					ft_read(char *file, t_read *r);
-void				ft_putchar(char c);
-void				ft_putnchar(char *ptr, size_t len);
-void				ft_putstr(char *str);
-void				print_bin_memory(void *p, char *unit, int64_t len);
-void				print_hex_memory(void *p, char *unit, int64_t len);
-/*
-**					print_hexa n'utilise pas ft_printf
-**					contraitrement aux deux fonction ci-dessus
-*/
-void				print_hexa(void *p, int64_t len, bool newline);
-uint64_t			ft_rand(int urand_fd, uint64_t min, uint64_t max);
 
 #endif

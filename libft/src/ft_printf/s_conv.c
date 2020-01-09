@@ -58,7 +58,7 @@ static char		*handle_wchar(wchar_t *wstr, t_spe *sp)
 	int				nb;
 	char			*utf_8;
 
-	i[0] = wstrlen(wstr);
+	i[0] = ft_wstrlen(wstr);
 	if (!(utf_8 = (char *)malloc(sizeof(char) * (i[0] * 4 + 1))))
 		ft_exit("soucis de malloc utf_8 wchar\n");
 	ft_memset(utf_8, 0, i[0] * 4 + 1);

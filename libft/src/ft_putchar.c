@@ -27,13 +27,3 @@ void			ft_putnchar(char *ptr, size_t len)
 	i = write(1, ptr, len);
 	(void)i;
 }
-
-void			ft_putstr(char *str)
-{
-	int	i;
-
-	i = -1;
-	if (str)
-		while (str[++i])
-			ft_putchar(str[i]);
-}

@@ -25,7 +25,7 @@ int			check_out(t_parse *p)
 
 int			check_k_v(t_parse *p)
 {
-	p->i[1] = p->o[6] && p->r.msg
+	p->i[1] = p->s.o[1] && p->r.msg
 		&& !ft_strncmp(p->r.msg, "Salted__", 8) ? 2 : 0;
 	if (!p->i[1])
 	{

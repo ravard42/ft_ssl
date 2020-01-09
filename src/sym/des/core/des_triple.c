@@ -14,10 +14,10 @@
 
 uint64_t			des_triple(uint64_t x, t_parse *p)
 {
-	p->s.id_k = (p->o[6]) ? 2 : 1;
-	x = (p->o[6]) ? des_block_d(x, p) : des_block_e(x, p);
+	p->s.id_k = (p->s.o[1]) ? 2 : 1;
+	x = (p->s.o[1]) ? des_block_d(x, p) : des_block_e(x, p);
 	p->s.id_k = 1;
-	x = (p->o[6]) ? des_block_d(x, p) : des_block_e(x, p);
-	p->s.id_k = (p->o[6]) ? 0 : 2;
-	x = (p->o[6]) ? des_block_d(x, p) : des_block_e(x, p);
+	x = (p->s.o[1]) ? des_block_d(x, p) : des_block_e(x, p);
+	p->s.id_k = (p->s.o[1]) ? 0 : 2;
+	x = (p->s.o[1]) ? des_block_d(x, p) : des_block_e(x, p);
 }

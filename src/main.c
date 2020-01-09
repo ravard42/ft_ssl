@@ -13,10 +13,10 @@
 #include "ft_ssl.h"
 
 /*
-**	tmp = -2 => fatal error (cmd not valide / allocation error) -> exit
+**	tmp = -2 => malloc error -> exit
 **	tmp = -1 => parsing error (open, read, opt non valide) -> handle next arg
-**	tmp = 0 => no more arg to be compute -> exit
-**	tmp = 1 => all is OK -> hash it
+**	tmp = 0 => no more arg to be computed -> exit
+**	tmp = 1 => all is OK -> run cmd
 */
 
 int	main(int argc, char **argv)
@@ -24,10 +24,9 @@ int	main(int argc, char **argv)
 	t_parse			p;
 	int				tmp;
 
-	init_parse_struct(&p);
-	if (argc == 1 || !cmd_parser(argv[1], &p))
-		return (usage());
-	while ((tmp = p.cmd.parser(argc, argv, &p)))
+	if (argc == 1 || !init_p(&p, argv[1]))
+		return (cmd_usage());
+	while ((tmp = p.cmd.parser(&p, argc, argv)))
 	{
 		if (tmp == -2)
 			break ;

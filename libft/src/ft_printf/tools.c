@@ -18,14 +18,6 @@ void			ft_exit(char *error)
 	exit(0);
 }
 
-void			ft_memset(char *b, char c, size_t len)
-{
-	size_t			i;
-
-	i = -1;
-	while (++i < len)
-		b[i] = c;
-}
 
 void			init_spe(t_spe *sp)
 {
@@ -56,20 +48,28 @@ int				catch_pos_numb(char *s)
 	return (ft_atoi(buff));
 }
 
-int				ft_memcmp(const void *s1, const void *s2, size_t n)
+char			*add_nose(int nb, char c, char *buff)
 {
-	unsigned char		*str1;
-	unsigned char		*str2;
-	size_t				i;
+	int		len;
+	int		i;
 
-	if (n != 0)
-	{
-		str1 = (unsigned char *)s1;
-		str2 = (unsigned char *)s2;
-		i = -1;
-		while (++i < n - 1 && str1[i] == str2[i])
-			;
-		return (str1[i] - str2[i]);
-	}
-	return (0);
+	len = ft_strlen(buff);
+	i = len;
+	while (--i >= 0)
+		buff[nb + i] = buff[i];
+	i = -1;
+	while (++i < nb)
+		buff[i] = c;
+	return (buff);
 }
+
+char			*add_tail(int nb, char c, char *buff)
+{
+	int		i;
+
+	i = -1;
+	while (++i < nb)
+		buff[i] = c;
+	return (buff);
+}
+

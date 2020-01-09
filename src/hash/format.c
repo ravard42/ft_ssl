@@ -27,26 +27,26 @@ static void		toupper_stdout(char *str)
 	}
 }
 
-static void		handle_s_p_opts(t_parse *p, t_hash *hash)
+static void		handle_opts(t_parse *p, t_hash *hash)
 {
 	char	ternary;
 
 	(void)ternary;
-	if (p->o[2])
-		print_hexa(hash->h, p->cmd.hash_hex_len, true);
+	if (p->h.o[2])
+		ft_puthex(hash->h, p->cmd.hash_hex_len, true);
 	else
 	{
-		if (!p->o[3])
+		if (!p->h.o[3])
 		{
 			toupper_stdout(p->cmd.name);
-			ternary = (p->o[4]) ? ft_printf("(\"%s\")= ", p->r.msg)
+			ternary = (p->h.o[4]) ? ft_printf("(\"%s\")= ", p->r.msg)
 				: ft_printf("(%s)= ", p->in_file);
-			print_hexa(hash->h, p->cmd.hash_hex_len, true);
+			ft_puthex(hash->h, p->cmd.hash_hex_len, true);
 		}
 		else
 		{
-			print_hexa(hash->h, p->cmd.hash_hex_len, false);
-			ternary = (p->o[4]) ? ft_printf(" \"%s\"\n", p->r.msg)
+			ft_puthex(hash->h, p->cmd.hash_hex_len, false);
+			ternary = (p->h.o[4]) ? ft_printf(" \"%s\"\n", p->r.msg)
 				: ft_printf(" %s\n", p->in_file);
 		}
 	}
@@ -54,14 +54,14 @@ static void		handle_s_p_opts(t_parse *p, t_hash *hash)
 
 void			print_format(t_parse *p, t_hash *hash)
 {
-	if (p->o[4] || p->in_file)
-		handle_s_p_opts(p, hash);
+	if (p->h.o[4] || p->in_file)
+		handle_opts(p, hash);
 	else
 	{
-		if (p->o[1])
+		if (p->h.o[1])
 			ft_printf("%s", p->r.msg);
-		print_hexa(hash->h, p->cmd.hash_hex_len, true);
+		ft_puthex(hash->h, p->cmd.hash_hex_len, true);
 	}
 	p->i[2]++;
-	p->o[0] = (p->in_file) ? 1 : 0;
+	p->h.o[0] = (p->in_file) ? 1 : 0;
 }

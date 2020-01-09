@@ -95,7 +95,7 @@ int				b64(t_parse *p)
 		p->w.fd = 1;
 	if (p->w.fd == -1 && ft_dprintf(2, "%sout_file opening error\n%s", KRED, KNRM))
 		return (0);
-	ret = (p->o[6]) ? run_b64_d(p)
+	ret = (p->s.o[1]) ? run_b64_d(p)
 		: run_b64_e(p);
 	if (ret == -2)
 		return (0);
