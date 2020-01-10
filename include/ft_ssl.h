@@ -41,8 +41,8 @@
 # define S "-s, print the sum of the given string"
 # define E "-e, encode/encrypt mode (default)"
 # define D "-d, decode/decrypt mode"
-# define I "-i, input file for message"
-# define O "-o, output file for message"
+# define I "-i, input file"
+# define O "-o, output file"
 # define DES "\x1B[33;1mdes:\x1B[0m"
 # define A " -a, decode/encode the input/output in base64"
 
@@ -66,6 +66,11 @@
 # define M "-modulus, print out the value of the modulus of the key"
 # define N "-noout, this option prevents output of the encoded version of the key"
 # define C "-check, check the consistency of an RSA private key"
+# define IK "-inkey val, input key"
+# define RSA_E "-encrypt, encrypt with public key"
+# define RSA_D "-decrypt, decrypt with private key"
+# define HEXD	"-hexdump, hex dump output"
+
 
 # define RSAUTL "\x1B[33;1mrsautl:\x1B[0m"
 
@@ -150,6 +155,11 @@ typedef struct			s_sym
 ** arg[3] : p
 */
 
+typedef struct			s_asym
+{
+	uint8_t		o[9];
+}							t_asym;
+
 typedef struct			s_parse
 {
 	t_cmd				cmd;
@@ -160,6 +170,7 @@ typedef struct			s_parse
 	char				*out_file;
 	t_hash			h;
 	t_sym				s;
+	t_asym			a;
 }						t_parse;
 
 /*
@@ -177,23 +188,35 @@ typedef struct			s_parse
 */
 //----------------int					usage(void);
 int					cmd_usage(void);
-int					asym_opt_usage(void);
-int					hash_opt_usage(void);
-int					sym_opt_usage(void);
+//int					asym_opt_usage(void);
+//nt					hash_opt_usage(void);
+//int					sym_opt_usage(void);
+int					opt_usage(char *title, const char **usg);
+
 int					init_p(t_parse *p, char *cmd);
 //-------------free_parse_struct need to be improved (in free_p ...)
 void					free_parse_struct(t_parse *p);
-uint32_t				*multi_bswap32(uint32_t *h, int64_t size);
 int					cmd_parser(t_parse *p, char *arg);
+int					opt_parser(t_parse *p, const char **opts, char *arg);
 int					str_parser(t_parse *p, char *arg);
 int					fd_parser(t_parse *p, char *arg);
+
 /*
-**src/hash
+** HASH
 */
-//int					hash_parser(int argc, char **argv, t_parse *p);
+	
+//static const char		*g_hash_o[] = {"-p", "-q", "-r", "-s", ""};
+
+/*
+**src/hash/
+*/
 char					*hash_padding(t_parse *p);
-int					hash_opt(t_parse *p, char *arg);
 void					print_format(t_parse *p, t_hash *hash);
+/*
+**src/hash/parser
+*/
+//int					hash_opt(t_parse *p, char *arg);
+int					hash_parser(t_parse *p, int argc, char **argv);
 /*
 **src/hash/md5
 */
@@ -218,12 +241,20 @@ uint32_t				g4(uint32_t *h);
 uint32_t				g5(uint32_t *h);
 void					sha256_block_hash(t_hash *hash, char *pad,
 							int64_t *id_block);
+
 /*
-**src/sym/
+** SYM
 */
-//int					sym_parser(t_parse *p, int argc, char **argv);
+	
+//static const char	*g_sym_o[] = {"-e", "-d", "-i", "-o", "-a",
+//							"-k", "-v", "-s", "-p", ""};
+
+/*
+**src/sym/parser
+*/
+//int					sym_opt(t_parse *p, char *arg);
 void					format_key(t_parse *p);
-int					sym_opt(t_parse *p, char *arg);
+int					sym_parser(t_parse *p, int argc, char **argv);
 /*
 **src/sym/base64
 */
@@ -285,6 +316,17 @@ int						des(t_parse *p);
 ** ASYM
 */
 
+//static const char		*g_genrsa_o[] = {"-rand", "-out"};
+//static const char		*g_rsa_o[] = {"-rand", "-out"};
+//static const char		*g_rsautl_o[] = {"-rand", "-out"};
+
+//int						asym_opt(t_parse *p, char *arg);
+int						genrsa_parser(t_parse *p, int argc, char **argv);
+int						rsa_parser(t_parse *p, int argc, char **argv);
+int						rsautl_parser(t_parse *p, int argc, char **argv);
 bool						prob_prim_test(int fd, t_varint n);
+int						genrsa(t_parse *p);
+int						rsa(t_parse *p);
+int						rsautl(t_parse *p);
 
 #endif

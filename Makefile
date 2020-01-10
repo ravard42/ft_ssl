@@ -6,12 +6,11 @@ NAME = ft_ssl
 FLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
 
 SRC = src/main.c\
-		src/init_and_free.c\
-		src/cmd_parser.c\
-		src/arg_parser.c\
-		src/usage.c\
-		src/hash/parser/p.c\
-		src/hash/parser/opt.c\
+		src/parser/init_and_free.c\
+		src/parser/cmd_opt_parser.c\
+		src/parser/cmd_opt_usage.c\
+		src/parser/arg_parser.c\
+		src/hash/hash_parser/hash_parser.c\
 		src/hash/padding.c\
 		src/hash/format.c\
 		src/hash/md5/md5.c\
@@ -23,8 +22,7 @@ SRC = src/main.c\
 		src/hash/sha256/func.c\
 		src/hash/sha256/func_bis.c\
 		src/hash/sha256/block_hash.c\
-		src/sym/parser/p.c\
-		src/sym/parser/opt.c\
+		src/sym/sym_parser/sym_parser.c\
 		src/sym/base64/b64_block_e.c\
 		src/sym/base64/b64_block_d.c\
 		src/sym/base64/b64.c\
@@ -47,7 +45,13 @@ SRC = src/main.c\
 		src/sym/des/mode/cbc3.c\
 		src/sym/des/mode/ofb3.c\
 		src/sym/des/mode/cfb3.c\
+		src/asym/asym_parser/genrsa_parser.c\
+		src/asym/asym_parser/rsa_parser.c\
+		src/asym/asym_parser/rsautl_parser.c\
 		src/asym/prob_prim_test.c\
+		src/asym/genrsa.c\
+		src/asym/rsa.c\
+		src/asym/rsautl.c\
 	
 OBJ = $(SRC:.c=.o)
 

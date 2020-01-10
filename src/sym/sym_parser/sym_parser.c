@@ -86,17 +86,23 @@ static int		arg_feed_verif(t_parse *p)
 	return (1);
 }
 
+
+static const char		*g_sym_usg[] = {E, D, I, O,
+									DES, A, K, V, SALT, PW, ""};
+
+static const char		*g_sym_opt[] = {"-e", "-d", "-i", "-o", "-a",
+							"-k", "-v", "-s", "-p", ""};
+
 int				sym_parser(t_parse *p, int argc, char **argv)
 {
-	(void)argc;
-	while (argv[++p->i[0]])
+	while (++p->i[0] < argc)
 	{
 		if (argv[p->i[0]][0] != '-'
 			&& ft_dprintf(2, "%serror: '%s' bad input argument%s\n",
 				KRED, argv[p->i[0]], KNRM))
-			return (sym_opt_usage());
-		if (!sym_opt(p, argv[p->i[0]]))
-			return (sym_opt_usage());
+			return (opt_usage("Cipher opts", g_sym_usg));
+		if (!opt_parser(p, g_sym_opt, argv[p->i[0]]))
+			return (opt_usage("Cipher opts", g_sym_usg));
 		if ((!p->in_file && p->s.o[2])
 				|| (!p->out_file && p->s.o[3])
 				|| (!p->s.arg[0].set && p->s.o[5])

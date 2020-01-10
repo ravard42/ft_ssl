@@ -55,3 +55,26 @@ int				cmd_parser(t_parse *p, char *arg)
 			KRED, arg, KNRM);
 	return (0);
 }
+
+int				opt_parser(t_parse *p, const char **opts, char *arg)
+{
+	int				i;
+	int				j;
+
+	j = 0;
+	i = -1;
+	while (ft_strcmp(opts[++i], "")
+		&& (j = ft_strcmp(opts[i], arg)))
+		;
+	if (j == 0)
+	{
+		if (p->cmd.type == 0)
+			return (p->a.o[i] = 1);
+		else if (p->cmd.type == 1)
+			return (p->h.o[i + 1] = 1);
+		else if (p->cmd.type == 2)
+			return (p->s.o[i] = 1);
+	}
+	ft_dprintf(2, "%s\"%s\" invalid option%s\n", KRED, arg, KNRM);
+	return (0);
+}

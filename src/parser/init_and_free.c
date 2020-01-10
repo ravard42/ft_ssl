@@ -15,7 +15,7 @@
 static void				init_asym_p(t_parse *p)
 {
 	(void)p;
-	ft_dprintf(2, "%sto be computed%s", KCYN, KNRM);
+	ft_dprintf(2, "%sinit_asym_p need to be computed%s\n", KCYN, KNRM);
 }
 
 static void				init_hash_p(t_parse *p)

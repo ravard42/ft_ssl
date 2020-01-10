@@ -12,6 +12,9 @@
 
 #include "ft_ssl.h"
 
+static const char		*g_hash_usg[] = {P, Q, R, S, ""};
+static const char		*g_hash_opt[] = {"-p", "-q", "-r", "-s", ""};
+
 int			hash_parser(t_parse * p, int argc, char **argv)
 {
 	if (p->i[0] == argc && p->i[2] != 0)
@@ -19,8 +22,8 @@ int			hash_parser(t_parse * p, int argc, char **argv)
 	p->i[0]++;
 	while (!p->h.o[0] && argv[p->i[0]] && argv[p->i[0]][0] == '-')
 	{
-		if (!hash_opt(p, argv[p->i[0]]))
-			return (hash_opt_usage());
+		if (!opt_parser(p, g_hash_opt, argv[p->i[0]]))
+			return (opt_usage("Message Digest opts", g_hash_usg));
 		if ((p->h.o[4] && ++(p->i[0])))
 			return (str_parser(p, argv[p->i[0]]));
 		if (p->h.o[1])
