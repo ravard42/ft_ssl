@@ -35,6 +35,6 @@ int	main(int argc, char **argv)
 		if (!p.cmd.run(&p))
 			break ;
 	}
-	free_parse_struct(&p);
+	free_p(&p);
 	return (0);
 }

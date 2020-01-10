@@ -6,12 +6,12 @@ NAME = ft_ssl
 FLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
 
 SRC = src/main.c\
-		src/parser/init_and_free.c\
+		src/parser/init_free.c\
 		src/parser/cmd_opt_parser.c\
 		src/parser/cmd_opt_usage.c\
 		src/parser/arg_parser.c\
-		src/hash/hash_parser/hash_parser.c\
-		src/hash/padding.c\
+		src/hash/hash_parser.c\
+		src/hash/hash_padding.c\
 		src/hash/format.c\
 		src/hash/md5/md5.c\
 		src/hash/md5/init.c\
@@ -22,7 +22,7 @@ SRC = src/main.c\
 		src/hash/sha256/func.c\
 		src/hash/sha256/func_bis.c\
 		src/hash/sha256/block_hash.c\
-		src/sym/sym_parser/sym_parser.c\
+		src/sym/sym_parser.c\
 		src/sym/base64/b64_block_e.c\
 		src/sym/base64/b64_block_d.c\
 		src/sym/base64/b64.c\
@@ -33,7 +33,7 @@ SRC = src/main.c\
 		src/sym/des/core/des_block_e_d.c\
 		src/sym/des/pbkdf/pbkdf.c\
 		src/sym/des/pbkdf/hash_mode.c\
-		src/sym/des/padding.c\
+		src/sym/des/des_padding.c\
 		src/sym/des/check.c\
 		src/sym/des/opt_a.c\
 		src/sym/des/des.c\

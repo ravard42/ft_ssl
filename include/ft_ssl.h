@@ -13,7 +13,6 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
-
 # include <stdbool.h>
 # include <stdlib.h>
 # include <math.h>
@@ -45,16 +44,13 @@
 # define O "-o, output file"
 # define DES "\x1B[33;1mdes:\x1B[0m"
 # define A " -a, decode/encode the input/output in base64"
-
 # define K " -k, key in hexa is the next argument."
 # define V " -v, initialization vector in hexa is the next argument."
 # define SALT " -s, the salt in hexa is the next argument."
 # define PW " -p, password in ascii is the next argument."
 # define IN "-in file (same as openssl -rand for genrsa)"
 # define OUT "-out file"
-# define GENRSA "\x1B[33;1mgenrsa:\x1B[0m"
 # define NB "size of the private key in bits (must be the last option specified, default 128bits)"
-# define RSA "\x1B[33;1mrsa:\x1B[0m"
 # define IF "-inform DER|PEM , key input format expected on -in (default PEM)"
 # define OF "-outform DER|PEM , key output format expected on -out (default PEM)"
 # define ENC "-des, encrypt/decrypt the private key with des before reading/writing it"
@@ -71,9 +67,6 @@
 # define RSA_D "-decrypt, decrypt with private key"
 # define HEXD	"-hexdump, hex dump output"
 
-
-# define RSAUTL "\x1B[33;1mrsautl:\x1B[0m"
-
 # define SH_L(x, n) ((x) << (n))
 # define ROT_L(x, n) (((x) << (n)) | ((x) >> (32-(n))))
 # define SH_R(x, n) ((x) >> (n))
@@ -86,12 +79,12 @@
 */
 # define EVP_BYTES_TO_KEY sha256_pbkdf
 
-typedef struct			s_write
+typedef struct		s_write
 {
-	int				fd;
+	int			fd;
 	char			*msg;
-	int64_t			len;
-}							t_write;
+	int64_t		len;
+}						t_write;
 
 /*
 **	In hash commands:
@@ -100,7 +93,7 @@ typedef struct			s_write
 **		 t_write is the buffer where the t_read plaintext data (respectively the t_read ciphertext data) will be encrypted (respectively decrypted)
 */
 
-typedef struct			s_hash
+typedef struct		s_hash
 {
 	uint8_t		o[5];
 	uint32_t		s[64];
@@ -119,21 +112,21 @@ typedef struct			s_hash
 ** o[4] : -s on/off
 */
 
-typedef struct			s_arg
+typedef struct		s_arg
 {
 	uint64_t		x[3];
 	char			*p;
 	bool			set;
 }						t_arg;
 
-typedef struct			s_sym
+typedef struct		s_sym
 {
 	uint8_t		o[9];
 	uint32_t		r;
 	uint32_t		l;
 	t_arg			arg[4];
 	uint64_t		sub_k[48];
-	uint8_t			id_k;
+	uint8_t		id_k;
 }						t_sym;
 
 /*
@@ -155,12 +148,12 @@ typedef struct			s_sym
 ** arg[3] : p
 */
 
-typedef struct			s_asym
+typedef struct		s_asym
 {
 	uint8_t		o[9];
-}							t_asym;
+}						t_asym;
 
-typedef struct			s_parse
+typedef struct		s_parse
 {
 	t_cmd				cmd;
 	uint8_t			i[3];
@@ -174,7 +167,7 @@ typedef struct			s_parse
 }						t_parse;
 
 /*
-** NOTE attributs  t_parse
+** NOTE: state attribut t_parse <-> i
 **
 ** i[0] indice de l'argument en cours de traitement
 ** i[1] == 1 <-> on a déjà lu sur stdin (hash only)
@@ -184,43 +177,26 @@ typedef struct			s_parse
 */
 
 /*
-**src
+** PARSER
 */
-//----------------int					usage(void);
-int					cmd_usage(void);
-//int					asym_opt_usage(void);
-//nt					hash_opt_usage(void);
-//int					sym_opt_usage(void);
-int					opt_usage(char *title, const char **usg);
-
-int					init_p(t_parse *p, char *cmd);
-//-------------free_parse_struct need to be improved (in free_p ...)
-void					free_parse_struct(t_parse *p);
 int					cmd_parser(t_parse *p, char *arg);
 int					opt_parser(t_parse *p, const char **opts, char *arg);
 int					str_parser(t_parse *p, char *arg);
 int					fd_parser(t_parse *p, char *arg);
-
+int					cmd_usage(void);
+int					opt_usage(char *title, const char **usg);
+int					init_p(t_parse *p, char *cmd);
+void					free_p(t_parse *p);
 /*
-** HASH
+** HASH CRYPTOGRAPHY
 */
-	
-//static const char		*g_hash_o[] = {"-p", "-q", "-r", "-s", ""};
-
-/*
-**src/hash/
-*/
+int					hash_parser(t_parse *p, int argc, char **argv);
 char					*hash_padding(t_parse *p);
 void					print_format(t_parse *p, t_hash *hash);
 /*
-**src/hash/parser
+** md5
 */
-//int					hash_opt(t_parse *p, char *arg);
-int					hash_parser(t_parse *p, int argc, char **argv);
-/*
-**src/hash/md5
-*/
-int						md5(t_parse *p);
+int					md5(t_parse *p);
 void					md5_init(t_hash *hash);
 uint32_t				f0(uint32_t *h);
 uint32_t				f1(uint32_t *h);
@@ -229,9 +205,9 @@ uint32_t				f3(uint32_t *h);
 void					md5_block_hash(t_hash *hash, char *pad,
 							int64_t *id_block);
 /*
-**src/hash/sha256
+** sha256
 */
-int						sha256(t_parse *p);
+int					sha256(t_parse *p);
 void					sha256_init(t_hash *hash);
 uint32_t				g0(uint32_t *h);
 uint32_t				g1(uint32_t *h);
@@ -241,33 +217,33 @@ uint32_t				g4(uint32_t *h);
 uint32_t				g5(uint32_t *h);
 void					sha256_block_hash(t_hash *hash, char *pad,
 							int64_t *id_block);
-
 /*
-** SYM
+** SYM CRYPTOGRAPHY
 */
-	
-//static const char	*g_sym_o[] = {"-e", "-d", "-i", "-o", "-a",
-//							"-k", "-v", "-s", "-p", ""};
-
-/*
-**src/sym/parser
-*/
-//int					sym_opt(t_parse *p, char *arg);
 void					format_key(t_parse *p);
 int					sym_parser(t_parse *p, int argc, char **argv);
 /*
-**src/sym/base64
+** base64
 */
 uint32_t				be_transpo(uint32_t x);
 uint32_t				b64_block_e(uint32_t in, uint8_t k, uint8_t b_endian);
 void					del_whitespaces(t_read *r);
 uint32_t				b64_block_d(uint32_t in, uint8_t *k, uint8_t b_endian);
-int						run_b64_e(t_parse *p);
-int						run_b64_d(t_parse *p);
-int						b64(t_parse *p);
-
+int					run_b64_e(t_parse *p);
+int					run_b64_d(t_parse *p);
+int					b64(t_parse *p);
 /*
-**src/sym/des/block_cipher
+** des
+*/
+int					des(t_parse *p);
+int					check_out(t_parse *p);
+int					check_k_v(t_parse *p);
+char					*des_padding(t_parse *p, int64_t q);
+int64_t				des_unpadding(t_write *w);
+int					opt_a_e(t_parse *p);
+int					opt_a_d(t_parse *p);
+/*
+** des/core
 */
 uint64_t				parity_bit_drop(uint64_t key);
 uint64_t				compress_d_box(uint64_t x);
@@ -281,52 +257,38 @@ void					des_round(t_parse *p, uint8_t i);
 uint64_t				des_block_e(uint64_t x, t_parse *p);
 uint64_t				des_block_d(uint64_t x, t_parse *p);
 uint64_t				des_triple(uint64_t x, t_parse *p);
-
 /*
-**src/sym/des
+** des/pbkdf
 */
-int						md5_pbkdf(t_parse *tmp, t_parse *p);
-int						sha256_pbkdf(t_parse *tmp, t_parse *p);
-int						pbkdf(t_parse *p, bool verify, char *salt);
-int						check_out(t_parse *p);
-int						check_k_v(t_parse *p);
-char					*des_padding(t_parse *p, int64_t q);
-int64_t					des_unpadding(t_write *w);
-int						opt_a_e(t_parse *p);
-int						opt_a_d(t_parse *p);
-int						ecb_e(t_parse *p, int64_t q);
-int						ecb_d(t_parse *p, int64_t q);
-int						cbc_e(t_parse *p, int64_t q);
-int						cbc_d(t_parse *p, int64_t q);
-int						ofb_e_d(t_parse *p, int64_t q);
-int						cfb_e(t_parse *p, int64_t q);
-int						cfb_d(t_parse *p, int64_t q);
-int						ecb3_e(t_parse *p, int64_t q);
-int						ecb3_d(t_parse *p, int64_t q);
-int						cbc3_e(t_parse *p, int64_t q);
-int						cbc3_d(t_parse *p, int64_t q);
-int						ofb3_e_d(t_parse *p, int64_t q);
-int						cfb3_e(t_parse *p, int64_t q);
-int						cfb3_d(t_parse *p, int64_t q);
-int						des(t_parse *p);
-
-
-
+int					md5_pbkdf(t_parse *tmp, t_parse *p);
+int					sha256_pbkdf(t_parse *tmp, t_parse *p);
+int					pbkdf(t_parse *p, bool verify, char *salt);
+/*
+** des/mode
+*/
+int					ecb_e(t_parse *p, int64_t q);
+int					ecb_d(t_parse *p, int64_t q);
+int					cbc_e(t_parse *p, int64_t q);
+int					cbc_d(t_parse *p, int64_t q);
+int					ofb_e_d(t_parse *p, int64_t q);
+int					cfb_e(t_parse *p, int64_t q);
+int					cfb_d(t_parse *p, int64_t q);
+int					ecb3_e(t_parse *p, int64_t q);
+int					ecb3_d(t_parse *p, int64_t q);
+int					cbc3_e(t_parse *p, int64_t q);
+int					cbc3_d(t_parse *p, int64_t q);
+int					ofb3_e_d(t_parse *p, int64_t q);
+int					cfb3_e(t_parse *p, int64_t q);
+int					cfb3_d(t_parse *p, int64_t q);
 /*
 ** ASYM
 */
-
-//static const char		*g_genrsa_o[] = {"-rand", "-out"};
-//static const char		*g_rsa_o[] = {"-rand", "-out"};
-//static const char		*g_rsautl_o[] = {"-rand", "-out"};
-
-//int						asym_opt(t_parse *p, char *arg);
-int						genrsa_parser(t_parse *p, int argc, char **argv);
-int						rsa_parser(t_parse *p, int argc, char **argv);
-int						rsautl_parser(t_parse *p, int argc, char **argv);
-bool						prob_prim_test(int fd, t_varint n);
-int						genrsa(t_parse *p);
-int						rsa(t_parse *p);
-int						rsautl(t_parse *p);
+int					genrsa_parser(t_parse *p, int argc, char **argv);
+int					rsa_parser(t_parse *p, int argc, char **argv);
+int					rsautl_parser(t_parse *p, int argc, char **argv);
+bool					prob_prim_test(int fd, t_varint n);
+int					genrsa(t_parse *p);
+int					rsa(t_parse *p);
+int					rsautl(t_parse *p);
 
 #endif

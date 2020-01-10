@@ -26,6 +26,6 @@ int		sha256(t_parse *p)
 		multi_bswap32(p->h.h, 8);
 	if (!p->h.pbkdf)
 		print_format(p, &p->h);
-	free_parse_struct(p);
+	free_p(p);
 	return (1);
 }

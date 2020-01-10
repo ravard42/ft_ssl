@@ -68,6 +68,6 @@ int					des(t_parse *p)
 	write(p->w.fd, p->w.msg, p->w.len);
 	if (p->w.fd > 1)
 		close(p->w.fd);
-	free_parse_struct(p);
+	free_p(p);
 	return (0);
 }
