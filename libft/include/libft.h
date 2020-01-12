@@ -106,6 +106,7 @@ int				ft_len(char *buf, char mode);
 int				ft_power(int x, int n);
 int				ft_atoi(const char *str);
 int				ft_hexatoi(const char *str);
+bool				ft_is_decimal(char *str);
 char				ft_toupper(char c);
 uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str);
 char				**malloc_empty_str_tab(void);
@@ -114,7 +115,8 @@ int				free_split(char **tab);
 char				*rm_begin_whitespace(char *str);
 char				*rm_multi_whitespace(char *str);
 int				get_next_line(int fd, char **line);
-uint64_t			ft_rand(int urand_fd, uint64_t min, uint64_t max);
+void				*ft_rand(void *dest, size_t len);
+uint64_t			ft_range(uint64_t src, uint64_t min, uint64_t max);
 int				ft_read(t_read *r, char *file);
 /*
 **	ft_printf

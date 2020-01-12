@@ -17,7 +17,10 @@ char	*ft_strdup(const char *str)
 	char	*dup;
 	int		i;
 
-	if ((dup = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1))) == NULL)
+	if (!str && ft_dprintf(2, "%strying to ft_strdup(NULL)... NULL returned%s\n", KYEL, KNRM))
+		return (NULL);
+	if (!(dup = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1)))
+		&& ft_dprintf(2, "%smalloc error in ft_strdup%s\n", KRED, KNRM))
 		return (NULL);
 	i = 0;
 	while (str[i])

@@ -31,15 +31,16 @@ t_varint		v_abs(t_varint v)
 	return (v);
 }
 
-t_varint		v_rand_n(int fd, V_LEN_TYPE len)
+/*
+** load a varint pseudo random number from /dev/urandom
+*/
+
+t_varint		v_rand_n(V_LEN_TYPE len)
 {
 	V_TYPE		rand_n[len];
-	V_LEN_TYPE		i;
 	t_varint		n;
 
-	i = -1;
-	while (++i < len)
-		rand_n[i] = ft_rand(fd, 0, 0);
+	ft_rand(rand_n, len * V_LEN);
 	n = v_init(1, rand_n, len);
 	return (n);
 }

@@ -42,7 +42,6 @@
 
 # define V_DEMI_LEN		16
 # define V_MAX_LEN		V_DEMI_LEN * 2 + 1
-//# define V_MAX_LEN		65
 # define V_LEN_TYPE		int16_t
 
 typedef struct				s_varint
@@ -97,7 +96,7 @@ int64_t						v_maxbin_pow(t_varint v);
 t_varint    				v_abs(t_varint v);
 t_varint 					v_inc(t_varint a);
 t_varint 					v_dec(t_varint a);
-t_varint						v_rand_n(int fd, V_LEN_TYPE len);
+t_varint						v_rand_n(V_LEN_TYPE len);
 
 int8_t						v_check(t_varint a, t_varint b, t_varint m, char *op);
 
