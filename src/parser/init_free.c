@@ -14,8 +14,12 @@
 
 static void				init_asym_p(t_parse *p)
 {
-	(void)p;
-	ft_dprintf(2, "%sinit_asym_p need to be computed%s\n", KCYN, KNRM);
+	int8_t	i;
+
+	i = -1;
+	while (++i < 2)
+		p->a.o[i] = 0;
+	p->a.m_nb = 128;
 }
 
 static void				init_hash_p(t_parse *p)
@@ -62,6 +66,9 @@ int				init_p(t_parse *p, char *cmd)
 		init_hash_p(p);
 	else if (p->cmd.type == 2)
 		init_sym_p(p);
+	p->rng.fd = -1;
+	p->rng.co = 0xa00000;
+	p->s.o[1] = 0;
 	return (1);
 }
 
@@ -74,6 +81,9 @@ void				free_p(t_parse *p)
 	if (p->in_file)
 		free(p->in_file);
 	p->in_file = NULL;
+	if (p->w.fd > 1)
+		close(p->w.fd);
+	p->w.fd = -1;
 	if (p->w.msg)
 		free(p->w.msg);
 	p->w.msg = NULL;

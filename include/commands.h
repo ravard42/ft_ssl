@@ -75,7 +75,7 @@ int						rsautl(t_parse *p);
 
 static const			t_cmd g_cmds[] = {
 	{0, "genrsa", -1, -1, genrsa_parser,
-		{false, false, false}, 0, genrsa, NULL, NULL},
+		{false, false, false}, 3, genrsa, NULL, NULL},
 	{0, "rsa", -1, -1, rsa_parser,
 		{false, false, false}, 0, rsa, NULL, NULL},
 	{0, "rsautl", -1, -1, rsautl_parser,

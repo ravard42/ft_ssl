@@ -100,8 +100,6 @@ int				b64(t_parse *p)
 	if (ret == -2)
 		return (0);
 	write(p->w.fd, p->w.msg, p->w.len);
-	if (p->w.fd > 1)
-		close(p->w.fd);
 	free_p(p);
 	return (ret);
 }

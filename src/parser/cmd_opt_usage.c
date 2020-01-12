@@ -40,7 +40,7 @@ int				cmd_usage(void)
 	ft_dprintf(2, "\n%sCipher commands%s:\n", KBLU, KNRM);
 	while (ft_strcmp("end2", cmds[++i]))
 		ft_dprintf(2, " %s\n", cmds[i]);
-	return (0);
+	return (1);
 }
 
 int				opt_usage(char *title, const char **usg)
@@ -51,5 +51,5 @@ int				opt_usage(char *title, const char **usg)
 	ft_dprintf(2, "%s%s%s:\n", KYEL, title, KNRM);
 	while (ft_strcmp(usg[++i], ""))
 		ft_dprintf(2, " %s\n", usg[i]);
-	return (0);
+	return (-3);
 }

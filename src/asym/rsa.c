@@ -3,5 +3,6 @@
 int						rsa(t_parse *p)
 {
 	(void)p;
-	return (1);
+	ft_printf("%sCOUCOU RSA%s\n", KCYN, KNRM);
+	return (0);
 }

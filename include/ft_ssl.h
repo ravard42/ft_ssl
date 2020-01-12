@@ -48,9 +48,10 @@
 # define V " -v, initialization vector in hexa is the next argument."
 # define SALT " -s, the salt in hexa is the next argument."
 # define PW " -p, password in ascii is the next argument."
-# define IN "-in file (same as openssl -rand for genrsa)"
-# define OUT "-out file"
-# define NB "size of the private key in bits (must be the last option specified, default 128bits)"
+# define RAND "-rand file, use file data to seed the random number generator"
+# define IN "-in file"
+# define OUT "-out file, where to write the private key (default stdout)"
+# define NB "numbits, size of the modulus in bits express in decimal (must be the last option specified, default 128 bits)"
 # define IF "-inform DER|PEM , key input format expected on -in (default PEM)"
 # define OF "-outform DER|PEM , key output format expected on -out (default PEM)"
 # define ENC "-des, encrypt/decrypt the private key with des before reading/writing it"
@@ -66,6 +67,8 @@
 # define RSA_E "-encrypt, encrypt with public key"
 # define RSA_D "-decrypt, decrypt with private key"
 # define HEXD	"-hexdump, hex dump output"
+
+# define SEED_ERR "csprng seeding or reseeding failed: lack of random input data on rng->fd"
 
 # define SH_L(x, n) ((x) << (n))
 # define ROT_L(x, n) (((x) << (n)) | ((x) >> (32-(n))))
@@ -147,12 +150,30 @@ typedef struct		s_sym
 ** arg[2] : s
 ** arg[3] : p
 */
-
 typedef struct		s_asym
 {
-	uint8_t		o[9];
+	uint8_t		o[2];
+	int16_t		m_nb;
 }						t_asym;
+/*
+** ASYM OPTIONS
+** o[0] : -rand
+** o[1] : -out
+**
+**	OTHER ASYM ATTR
+** m_nb		: modulus number of bits
+*/
 
+typedef struct		s_rng
+{
+	int			fd;
+	uint64_t		co;
+}						t_rng;
+/*
+** RNG ATTR
+** fd : fd for seed triple des key
+** co	: csprng triple des counter (input)
+*/
 typedef struct		s_parse
 {
 	t_cmd				cmd;
@@ -164,6 +185,7 @@ typedef struct		s_parse
 	t_hash			h;
 	t_sym				s;
 	t_asym			a;
+	t_rng				rng;
 }						t_parse;
 
 /*
@@ -286,9 +308,10 @@ int					cfb3_d(t_parse *p, int64_t q);
 int					genrsa_parser(t_parse *p, int argc, char **argv);
 int					rsa_parser(t_parse *p, int argc, char **argv);
 int					rsautl_parser(t_parse *p, int argc, char **argv);
-bool					prob_prim_test(int fd, t_varint n);
 int					genrsa(t_parse *p);
+t_varint				find_prime(int16_t nb, t_parse *p);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
+void					*prng(void *dest, size_t len, t_parse *p);
 
 #endif

@@ -48,10 +48,11 @@ SRC = src/main.c\
 		src/asym/asym_parser/genrsa_parser.c\
 		src/asym/asym_parser/rsa_parser.c\
 		src/asym/asym_parser/rsautl_parser.c\
-		src/asym/prob_prim_test.c\
+		src/asym/find_prime.c\
 		src/asym/genrsa.c\
 		src/asym/rsa.c\
 		src/asym/rsautl.c\
+		src/csprng.c\
 	
 OBJ = $(SRC:.c=.o)
 
