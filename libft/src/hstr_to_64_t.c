@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hstr_to_64_t.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/22 03:53:09 by ravard            #+#    #+#             */
+/*   Updated: 2020/01/22 03:54:07 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-char		ft_toupper(char c)
+char				ft_toupper(char c)
 {
 	if (c >= 'a' && c <= 'z')
 		return (c - 'a' + 'A');
@@ -28,7 +40,7 @@ padding with zero bytes to length%s\n", KYEL, KNRM);
 		return (i);
 	}
 	else if (ft_strlen(str) > (uint64_t)len)
-		ft_dprintf(2, "%shex string is too long, ignoring excess%s\n", KYEL, KNRM);
+		ft_dprintf(2, "%stoo long hex string, ignoring excess%s\n", KYEL, KNRM);
 	return (len);
 }
 

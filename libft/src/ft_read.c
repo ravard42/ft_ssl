@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/28 12:31:25 by ravard            #+#    #+#             */
-/*   Updated: 2019/06/28 12:43:20 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/22 03:50:22 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static int		fill_linked_list(t_read *origin, int fd)
 	}
 	if (fd)
 		close(fd);
-	if (r == -1 && ft_dprintf(2, "%sread error in ft_read [...]%s\n", KRED, KNRM))
+	if (r == -1
+		&& ft_dprintf(2, "%sread error in ft_read [...]%s\n", KRED, KNRM))
 		return (-1);
 	return (n);
 }

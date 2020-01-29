@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_rand.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/22 03:48:22 by ravard            #+#    #+#             */
+/*   Updated: 2020/01/22 03:49:12 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 /*
-** ft_range : [min, max[
+** ft_range return : [min, max[
 */
 
 uint64_t		ft_range(uint64_t src, uint64_t min, uint64_t max)
@@ -19,7 +31,7 @@ uint64_t		ft_range(uint64_t src, uint64_t min, uint64_t max)
 ** beware that dest have enough space memory for len bytes
 */
 
-void		*ft_rand(void *dest, size_t len)
+void			*ft_rand(void *dest, size_t len)
 {
 	int			fd;
 

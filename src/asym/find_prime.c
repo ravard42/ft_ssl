@@ -35,23 +35,29 @@ static int	miller_witness(t_varint n, t_varint s, t_varint d, t_parse *p)
 	t_varint r;
 	t_varint	i;
 
-	n_min_1 = v_dec(n);
+	n_min_1 = v_sub(n, g_v[1], true);
 	a = v_rand_a(n, p);	
 	r = v_expmod(a, d, n, true);
-	if (is_g_v(1, r)
-		|| v_cmp(r, "-eq", n_min_1))
+	if (is_g_v(1, &r)
+		|| v_cmp(&r, "-eq", &n_min_1, true))
 		return false;
 	i = g_v[1];
-	while (v_cmp(i, "-lt", s))
+	while (v_cmp(&i, "-lt", &s, true))
 	{
 		r = v_expmod(r, g_v[2], n, true);
-		if (v_cmp(r, "-eq", n_min_1))
+		if (v_cmp(&r, "-eq", &n_min_1, true))
 			return (false);
-		i = v_inc(i);
+		v_inc(&i);
 	}
 	return (true);
 }
 
+/*
+**	at the end of each loop we need an lvalue which contained n mod(p)
+**	endeed is_g_v expect a memory adrress and v_mod return an rvalue
+**	cause we don't need p anymore in this round we use it as this lvalue
+**	(no relation with a prime number until the next loop begins)
+*/
 
 static bool	first_prime_composite(t_varint n)
 {
@@ -63,33 +69,45 @@ static bool	first_prime_composite(t_varint n)
 	{
 		p = g_v[0];
 		p.x[0] = g_prime[i];
-		p.x[1] = (V_SUP == 0xff) ? *((uint8_t *)(g_prime + i) + 1) : 0;
-		p.len = (p.x[1]) ? 2 : 1;
-		if (v_cmp(n, "-eq", p))
+		if (V_SUP == 0xff && V_MAX_LEN > 1)
+		{
+			p.x[1] = *((uint8_t *)(g_prime + i) + 1);
+			p.len = (p.x[1]) ? 2 : 1;
+		}
+		if (v_cmp(&n, "-eq", &p, true))
 			return (false);
-		if(is_g_v(0, v_mod(n, p, true)))
+		p = v_mod(n, p, true, true);
+		if(is_g_v(0, &p))
 			return true;
 	}
 	return (false);
 }
 
+/*
+**	n_min_1 = 2^s * d  (with d % 2 == 0)
+**
+**	NB :in first place we use d as an lvalue
+**		to store intermediate results to compute s
+*/
+
 static bool			prob_prim_test(t_varint n, t_parse *p)
 {
-	int8_t	nb_a;
+	int8_t		nb_a;
 	t_varint	n_min_1;
-	t_varint s;
-	t_varint d;
+	t_varint 	s;
+	t_varint 	d;
 
 	if (first_prime_composite(n)
-		|| v_cmp(n, "-le", g_v[2]))
+		|| v_cmp(&n, "-le", &g_v[2], true))
 		return (false);
 	nb_a = 1;
-	n_min_1 = v_dec(n);
+	n_min_1 = v_sub(n, g_v[1], true);
 	s = g_v[1];
-	while (is_g_v(0, v_mod(n_min_1, v_exp(g_v[2], s), true)))
-		s = v_inc(s);
-	s = v_dec(s);
-	d = v_div(n_min_1, v_exp(g_v[2], s));
+	d = v_mod(n_min_1, v_exp(g_v[2], s), true, true);
+	while (is_g_v(0, &d) && v_inc(&s))
+		d = v_mod(n_min_1, v_exp(g_v[2], s), true, true);
+	v_dec(&s);
+	d = v_div(n_min_1, v_exp(g_v[2], s), true);
 	while (nb_a--)
 		if (miller_witness(n, s, d, p))
 			return (false);
@@ -109,7 +127,7 @@ t_varint		find_prime(int16_t nb, t_parse *p)
 	is_prime = false;
 	while (!is_prime)
 	{	
-		n = v_rand_n(nb / 64 + 1);
+		n = v_rand(nb / 64 + 1, false);
 		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;	
 		upper_nb = nb % 64;
 		n.x[n.len - 1] <<= (64 - upper_nb);

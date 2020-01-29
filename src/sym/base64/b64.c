@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:41:01 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 15:44:40 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/29 06:49:55 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int				b64(t_parse *p)
 		p->w.fd = open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		p->w.fd = 1;
-	if (p->w.fd == -1 && ft_dprintf(2, "%sout_file opening error\n%s", KRED, KNRM))
+	if (p->w.fd == -1
+		&& ft_dprintf(2, "%sout_file opening error\n%s", KRED, KNRM))
 		return (0);
 	ret = (p->s.o[1]) ? run_b64_d(p)
 		: run_b64_e(p);

@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 14:59:42 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 15:01:13 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/29 06:58:58 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void				init_sym_p(t_parse *p)
 	p->s.id_k = 0;
 }
 
-int				init_p(t_parse *p, char *cmd)
+int						init_p(t_parse *p, char *cmd)
 {
 	if (!cmd_parser(p, cmd))
 		return (0);
@@ -72,7 +72,7 @@ int				init_p(t_parse *p, char *cmd)
 	return (1);
 }
 
-void				free_p(t_parse *p)
+void					free_p(t_parse *p)
 {
 	if (p->r.msg)
 		free(p->r.msg);

@@ -6,17 +6,17 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:38:26 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 15:40:36 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/29 06:52:15 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
 static const char		*g_sym_usg[] = {E, D, I, O,
-									DES, A, K, V, SALT, PW, ""};
+	DES, A, K, V, SALT, PW, ""};
 
 static const char		*g_sym_opt[] = {"-e", "-d", "-i", "-o", "-a",
-							"-k", "-v", "-s", "-p", ""};
+	"-k", "-v", "-s", "-p", ""};
 
 void			format_key(t_parse *p)
 {
@@ -80,7 +80,7 @@ static int		arg_feed_verif(t_parse *p)
 		return (-3);
 	if (!p->s.o[1])
 	{
-		if (p->cmd.needed[0] && !p->s.arg[0].set && !pbkdf(p, true , NULL))
+		if (p->cmd.needed[0] && !p->s.arg[0].set && !pbkdf(p, true, NULL))
 			return (-3);
 		if (p->cmd.needed[1] && !p->s.arg[1].set
 			&& ft_dprintf(2, "%sInitialization vector undefined%s\n",
@@ -96,10 +96,6 @@ int				sym_parser(t_parse *p, int argc, char **argv)
 {
 	while (++p->i[0] < argc)
 	{
-//		if (argv[p->i[0]][0] != '-'
-//			&& ft_dprintf(2, "%serror: '%s' bad input argument%s\n",
-//				KRED, argv[p->i[0]], KNRM))
-//			return (opt_usage("Cipher opts", g_sym_usg));
 		if (!opt_parser(p, g_sym_opt, argv[p->i[0]]))
 			return (opt_usage("Cipher opts", g_sym_usg));
 		if ((!p->in_file && p->s.o[2])

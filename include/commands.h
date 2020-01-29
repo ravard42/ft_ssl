@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:07:33 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/11 12:27:34 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/29 07:09:31 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int						rsa_parser(t_parse *p, int argc, char **argv);
 int						rsa(t_parse *p);
 int						rsautl_parser(t_parse *p, int argc, char **argv);
 int						rsautl(t_parse *p);
-
 
 static const			t_cmd g_cmds[] = {
 	{0, "genrsa", -1, -1, genrsa_parser,

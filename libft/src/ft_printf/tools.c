@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 19:39:46 by ravard            #+#    #+#             */
-/*   Updated: 2018/03/12 08:01:27 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/22 03:57:29 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void			ft_exit(char *error)
 	ft_putstr(error);
 	exit(0);
 }
-
 
 void			init_spe(t_spe *sp)
 {
@@ -72,4 +71,3 @@ char			*add_tail(int nb, char c, char *buff)
 		buff[i] = c;
 	return (buff);
 }
-

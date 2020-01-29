@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/28 20:17:10 by ravard            #+#    #+#             */
-/*   Updated: 2019/06/28 20:19:25 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/29 06:47:31 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static const char		*g_hash_usg[] = {P, Q, R, S, ""};
 static const char		*g_hash_opt[] = {"-p", "-q", "-r", "-s", ""};
 
-int			hash_parser(t_parse * p, int argc, char **argv)
+int			hash_parser(t_parse *p, int argc, char **argv)
 {
 	if (p->i[0] == argc && p->i[2] != 0)
 		return (0);

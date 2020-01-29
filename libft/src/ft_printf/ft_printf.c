@@ -6,13 +6,13 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 02:11:31 by ravard            #+#    #+#             */
-/*   Updated: 2018/03/09 14:33:48 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/22 03:56:01 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	init(t_spe *sp)
+static void		init(t_spe *sp)
 {
 	sp->buff.b = NULL;
 	sp->buff.ret = 0;
@@ -21,16 +21,16 @@ static void	init(t_spe *sp)
 	sp->c_null_conv = 0;
 }
 
-int	ft_printf(const char *format, ...)
+int				ft_printf(const char *format, ...)
 {
-	static t_conv const	tab[] = {{"c", &c_conv},
+	static t_conv const		tab[] = {{"c", &c_conv},
 								{"s", &s_conv},
 								{"di", &d_conv},
 								{"ouxX", &oux_conv},
 								{"b", &bin_conv},
 								{"", &undefined_conv}};
-	va_list				va;
-	int					ret;
+	va_list					va;
+	int						ret;
 	t_spe					sp;
 
 	init(&sp);

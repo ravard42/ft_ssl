@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   v_asn1_der_int_seq_d.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/22 05:39:11 by ravard            #+#    #+#             */
+/*   Updated: 2020/01/22 05:47:43 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static int				free_der_d(t_der_d *o)
@@ -22,7 +34,7 @@ static int				read_header(t_der_d *cu, int left)
 	if (cu->st_h[1] > 0 && cu->st_h[1] < 0x80
 		&& (cu->st = cu->st_h + 2))
 		cu->len = cu->st_h[1];
-	else if (cu->st_h[1] == 0x81 && left >= 4 && cu->st_h[2] >= 0x80 
+	else if (cu->st_h[1] == 0x81 && left >= 4 && cu->st_h[2] >= 0x80
 		&& (cu->st = cu->st_h + 3))
 		cu->len = cu->st_h[2];
 	else if (cu->st_h[1] == 0x82 && left >= 5 && cu->st_h[2] >= 1
@@ -62,7 +74,7 @@ static int				check_and_count(t_der_d *o, t_read *r)
 	cur = o;
 	tmp = 0;
 	ret = 0;
-	while ((cur = cur ->nxt) != NULL && ++ret)
+	while ((cur = cur->nxt) != NULL && ++ret)
 		tmp += cur->st - cur->st_h + cur->len;
 	if (tmp != (o->len) && ft_dprintf(2, "%s%s%s", KRED, V_DER_COR, KNRM)
 		&& free_der_d(o))
@@ -70,19 +82,20 @@ static int				check_and_count(t_der_d *o, t_read *r)
 	return (ret);
 }
 
-static t_varint		v_load(uint8_t *src, int len)
+static t_varint			v_load(uint8_t *src, int len)
 {
 	int			i;
 	int			j;
 	int			k;
 	V_LEN_TYPE	v_id;
-	t_varint		ret;
+	t_varint	ret;
 
 	ret = g_v[0];
+	k = len % V_LEN;
 	i = 0;
 	while (i < len)
 	{
-		k = (i == 0 && (k = len % V_LEN)) ? k : V_LEN;
+		k = (i == 0 && k) ? k : V_LEN;
 		j = -1;
 		while (++j < k)
 		{
@@ -91,15 +104,15 @@ static t_varint		v_load(uint8_t *src, int len)
 			ret.x[v_id] |= ((V_TYPE)src[i + j] << 8 * (k - 1 - j));
 		}
 		i += k;
-	}	
+	}
 	v_len(&ret);
 	return (ret);
 }
 
-t_varint		*v_asn1_der_int_seq_d(int *nb_varint, t_read *r)
+t_varint				*v_asn1_der_int_seq_d(int *nb_varint, t_read *r)
 {
 	t_der_d		ori;
-	t_varint		*ret;
+	t_varint	*ret;
 	t_der_d		*cur;
 
 	ori.id = -1;

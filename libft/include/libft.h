@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/28 12:19:35 by ravard            #+#    #+#             */
-/*   Updated: 2019/06/28 12:22:48 by ravard           ###   ########.fr       */
+/*   Created: 2020/01/22 02:11:26 by ravard            #+#    #+#             */
+/*   Updated: 2020/01/22 02:12:59 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct		s_spe
 	char			type;
 	t_buff			buff;
 	char			*out;
-	int			fd;
+	int				fd;
 	int				c_null_conv;
 }					t_spe;
 
@@ -85,13 +85,13 @@ typedef struct		s_conv
 void				*ft_memalloc(size_t size);
 void				ft_memset(char *b, char c, size_t len);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
-int				ft_memcmp(const void *s1, const void *s2, size_t n);
+int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				ft_putchar(char c);
 void				ft_putnchar(char *ptr, size_t len);
 void				ft_puthex(void *p, int64_t len, bool newline);
 void				ft_putstr(char *str);
-size_t			ft_strlen(const char *s);
-size_t			ft_wstrlen(wchar_t *wc);
+size_t				ft_strlen(const char *s);
+size_t				ft_wstrlen(wchar_t *wc);
 char				*ft_strcpy(char *dst, const char *src);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 char				*ft_strcat(char *s1, const char *s2);
@@ -102,22 +102,22 @@ char				*ft_revstr(char *str);
 char				*ft_strdup(const char *str);
 char				**ft_strsplit(const char *s, char c);
 char				*polarity(char *str, int *sign);
-int				ft_len(char *buf, char mode);
-int				ft_power(int x, int n);
-int				ft_atoi(const char *str);
-int				ft_hexatoi(const char *str);
+int					ft_len(char *buf, char mode);
+int					ft_power(int x, int n);
+int					ft_atoi(const char *str);
+int					ft_hexatoi(const char *str);
 bool				ft_is_decimal(char *str);
 char				ft_toupper(char c);
 uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str);
 char				**malloc_empty_str_tab(void);
-int				free_ok(void *ptr);
-int				free_split(char **tab);
+int					free_ok(void *ptr);
+int					free_split(char **tab);
 char				*rm_begin_whitespace(char *str);
 char				*rm_multi_whitespace(char *str);
-int				get_next_line(int fd, char **line);
+int					get_next_line(int fd, char **line);
 void				*ft_rand(void *dest, size_t len);
 uint64_t			ft_range(uint64_t src, uint64_t min, uint64_t max);
-int				ft_read(t_read *r, char *file);
+int					ft_read(t_read *r, char *file);
 /*
 **	ft_printf
 */
