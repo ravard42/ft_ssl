@@ -14,7 +14,7 @@ int						genrsa(t_parse *p)
 	ft_printf("numbits = %d\n", p->a.m_nb);
 
 	t_varint	prime;
-	while (1)
+	for (int i = 0; i < 10; i++)
 	{
 		prime = find_prime(64, p);
 		for(int i = prime.len - 1; i != 0; i--)

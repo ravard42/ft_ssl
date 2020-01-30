@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 02:29:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 06:54:07 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/30 22:46:09 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,20 @@
 # define V_DER_INT_SEQ_ONLY	"asn1 der alg only handle sequence of integers\n"
 # define V_DER_2_BIG		"asn1 der header len must be <= 0xffff)\n"
 # define V_DER_COR			"der file corrupted\n"
-//
-//# define V_TYPE 			uint64_t
-//# define V_MID_INF			0xffffffff
-//# define V_SUP				0xffffffffffffffff
-//# define V_LEN				8
-//# define V_BIT_LEN			64
-//
 
-# define V_TYPE 			uint8_t
-# define V_MID_INF			0xf
-# define V_SUP				0xff
-# define V_LEN				1
-# define V_BIT_LEN			8
+# define V_TYPE 			uint64_t
+# define V_MID_INF			0xffffffff
+# define V_SUP				0xffffffffffffffff
+# define V_LEN				8
+# define V_BIT_LEN			64
 
+//
+//# define V_TYPE 			uint8_t
+//# define V_MID_INF			0xf
+//# define V_SUP				0xff
+//# define V_LEN				1
+//# define V_BIT_LEN			8
+//
 
 /*
 **	overflow protection note:
@@ -61,7 +61,7 @@
 **		(beware that V_LEN_TYPE is signed)
 */
 
-# define V_MAX_LEN			8
+# define V_MAX_LEN			4
 # define V_LEN_TYPE			int16_t
 
 typedef struct				s_varint
