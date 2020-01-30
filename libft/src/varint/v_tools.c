@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:22:35 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 04:38:01 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/30 07:06:34 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,10 @@ bool			is_g_v(int8_t i, t_varint *v)
 			return (true);
 		return (false);
 	}
-// ET VOILA PK C EST CHAUD DE RAPATRIER CES COPY EN PTR!!!
-//
-//	v->sign = (i == 0) ? 1 : v->sign;
-//	if (v->sign == 1 && v->len == 1 && v->x[0] == (V_TYPE)i)
-//		return (true);
 	if (v->len == 1)
 	{
-		if ((v->sign == 1 || v->sign == -1) && v->x[0] == (V_TYPE)i)
+		if ((v->sign == 1 || v->sign == -1)
+			&& v->x[0] == (V_TYPE)i && (v->sign = 1))
 			return (true);
 		if (v->sign == 1 && v->len == 1 && v->x[0] == (V_TYPE)i)
 			return (true);
@@ -64,6 +60,7 @@ t_varint		v_init(char sign, V_TYPE *src, V_LEN_TYPE len)
 	while (++i < len)
 		v.x[i] = src[i];
 	v_len(&v);
+	is_g_v(0, &v);
 	return (v);
 }
 

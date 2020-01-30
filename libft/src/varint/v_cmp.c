@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:21:26 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/23 16:10:52 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/30 00:41:23 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ static bool		v_lt(t_varint *a, t_varint *b)
 	if (a->sign == 1 && b->sign == -1)
 		return (false);
 	if (a->sign == -1 && b->sign == 1)
-	{
-		v_print(a, "entry", -2, KYEL);
 		return (true);
-	}
 	if (a->sign == 1 && b->sign == 1)
 		return (v_lt_pos(a, b));
 	return (v_lt_neg(a, b));

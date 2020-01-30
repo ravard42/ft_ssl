@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 02:29:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:02:38 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/30 06:54:07 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # define V_BAD_SUB 			"a < b in v_pos_sub\n"
 # define V_ADD_OVFL			"overflow in v_add or v_sub, increase V_MAX_LEN\n"
 # define V_MUL_OVFL			"overflow in v_mul, increase V_MAX_LEN\n"
-# define V_DIV_OVFL			"overflow in v_div or v_mod, increase V_MAX_LEN\n"
 # define V_EXP_OVFL			"overflow in v_exp, increase V_MAX_LEN\n"
 # define V_EXP_LIM			"expo lim value overtaken in v_exp\n"
 # define V_EXPMOD_OVFL		"overflow in v_expmod, increase V_MAX_LEN\n"
@@ -36,20 +35,20 @@
 # define V_DER_INT_SEQ_ONLY	"asn1 der alg only handle sequence of integers\n"
 # define V_DER_2_BIG		"asn1 der header len must be <= 0xffff)\n"
 # define V_DER_COR			"der file corrupted\n"
+//
+//# define V_TYPE 			uint64_t
+//# define V_MID_INF			0xffffffff
+//# define V_SUP				0xffffffffffffffff
+//# define V_LEN				8
+//# define V_BIT_LEN			64
+//
 
-# define V_TYPE 			uint64_t
-# define V_MID_INF			0xffffffff
-# define V_SUP				0xffffffffffffffff
-# define V_LEN				8
-# define V_BIT_LEN			64
+# define V_TYPE 			uint8_t
+# define V_MID_INF			0xf
+# define V_SUP				0xff
+# define V_LEN				1
+# define V_BIT_LEN			8
 
-/*
-**# define V_TYPE 			uint8_t
-**# define V_MID_INF			0xf
-**# define V_SUP				0xff
-**# define V_LEN				1
-**# define V_BIT_LEN			8
-*/
 
 /*
 **	overflow protection note:
@@ -62,7 +61,7 @@
 **		(beware that V_LEN_TYPE is signed)
 */
 
-# define V_MAX_LEN			4
+# define V_MAX_LEN			8
 # define V_LEN_TYPE			int16_t
 
 typedef struct				s_varint
@@ -91,6 +90,7 @@ typedef struct				s_der_d
 }							t_der_d;
 
 typedef struct s_read		t_read;
+typedef bool				(*t_op_check)(t_varint *[3]);
 
 /*
 **		g_v array regroups often used varint values
@@ -122,6 +122,11 @@ t_varint					v_rand(V_LEN_TYPE len, bool neg);
 
 bool						v_check(t_varint *a, t_varint *b, t_varint *m,
 		char *op);
+bool						v_add_check(t_varint *v[3]);
+bool						v_mul_check(t_varint *v[3]);
+bool						v_exp_check(t_varint *v[3]);
+bool						v_div_check(t_varint *v[3]);
+bool						v_expmod_check(t_varint *v[3]);
 
 bool						v_cmp(t_varint *a, char *cmp, t_varint *b,
 		bool check);
@@ -132,10 +137,10 @@ t_varint					v_sub(t_varint a, t_varint b, bool check);
 t_varint					v_mul(t_varint a, t_varint b, bool check);
 t_varint					v_exp(t_varint v, t_varint e);
 t_varint					v_div(t_varint dend, t_varint sor, bool check);
-t_varint					v_mod(t_varint dend, t_varint sor, bool pos,
+t_varint					v_mod(t_varint dend, t_varint sor, bool eucl,
 		bool check);
 t_varint					v_expmod(t_varint v, t_varint e, t_varint mod,
-		bool pos);
+		bool check);
 t_varint					v_gcd(t_varint a, t_varint b);
 void						v_eea(t_varint *coef_r0, t_varint a, t_varint b);
 t_varint					v_inv(t_varint v, t_varint mod);

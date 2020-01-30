@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 05:48:50 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 04:33:59 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/30 02:47:04 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ t_varint		v_crt(t_varint v, t_varint e, t_varint p, t_varint q)
 	if (is_g_v(0, &e))
 		return (g_v[1]);
 	crt[0] = v_mod(v, p, true, false);
-	crt[1] = v_mod(e, *v_dec(&p), true, false);
+	crt[1] = v_mod(e, v_sub(p, g_v[1], false), true, false);
 	crt[2] = v_mod(v, q, true, false);
-	crt[3] = v_mod(e, *v_dec(&q), true, false);
+	crt[3] = v_mod(e, v_sub(q, g_v[1], false), true, false);
 	crt[4] = v_inv(q, p);
 	crt[5] = v_expmod(crt[0], crt[1], p, true);
 	crt[6] = v_expmod(crt[2], crt[3], q, true);
