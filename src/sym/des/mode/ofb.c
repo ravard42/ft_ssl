@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:15:30 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 16:18:42 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:07:39 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ int					ofb_e_d(t_parse *p, int64_t q)
 	i = -1;
 	while (++i < q)
 	{
-		v[0] = des_block_e(v[0], p);
+		v[0] = des_block_e(v[0], &p->s);
 		v[1] = v[0] ^ *((uint64_t *)p->r.msg + p->i[1] + i);
 		ft_memcpy(p->w.msg + p->w.len, v + 1, 8);
 		p->w.len += 8;
 	}
 	ft_memcpy(v + 1, (uint64_t *)p->r.msg + p->i[1] + i, r);
-	v[1] ^= des_block_e(v[0], p);
+	v[1] ^= des_block_e(v[0], &p->s);
 	ft_memcpy(p->w.msg + p->w.len, v + 1, r);
 	p->w.len += r;
 	return (0);

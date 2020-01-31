@@ -6,44 +6,46 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 14:59:42 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:58:58 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:23:30 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-static void				init_asym_p(t_parse *p)
+static void				init_asym_p(t_asym *a)
 {
 	int8_t	i;
 
 	i = -1;
 	while (++i < 2)
-		p->a.o[i] = 0;
-	p->a.m_nb = 128;
+		a->o[i] = 0;
+	a->m_nb = 128;
 }
 
-static void				init_hash_p(t_parse *p)
+static void				init_hash_p(t_hash *h)
 {
 	int8_t	i;
 
 	i = -1;
 	while (++i < 5)
-		p->h.o[i] = 0;
-	p->h.pbkdf = false;
+		h->o[i] = 0;
+	h->pbkdf = false;
 }
 
-static void				init_sym_p(t_parse *p)
+static void				init_sym_p(t_sym *s)
 {
 	int8_t	i;
 
 	i = -1;
 	while (++i < 9)
-		p->s.o[i] = 0;
+		s->o[i] = 0;
 	i = -1;
 	while (++i < 4)
-		p->s.arg[i].set = false;
-	p->s.arg[3].p = NULL;
-	p->s.id_k = 0;
+		s->arg[i].set = false;
+	s->arg[3].p = NULL;
+	s->id_k = 0;
+	s->endian = 1;
+	s->endian = (*(uint8_t *)&s->endian) ? 0 : 1;
 }
 
 int						init_p(t_parse *p, char *cmd)
@@ -61,14 +63,14 @@ int						init_p(t_parse *p, char *cmd)
 	p->w.len = 0;
 	p->out_file = NULL;
 	if (p->cmd.type == 0)
-		init_asym_p(p);
+		init_asym_p(&p->a);
 	else if (p->cmd.type == 1)
-		init_hash_p(p);
+		init_hash_p(&p->h);
 	else if (p->cmd.type == 2)
-		init_sym_p(p);
+		init_sym_p(&p->s);
 	p->rng.fd = -1;
 	p->rng.co = 0xa00000;
-	p->s.o[1] = 0;
+	init_sym_p(&p->rng.s);
 	return (1);
 }
 

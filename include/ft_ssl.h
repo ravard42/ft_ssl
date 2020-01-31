@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/28 19:58:03 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:46:15 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:56:53 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@
 
 # define ROT_28_LEFT(x, n) (((x)<<(n)) | ((x)>>(28-(n)))) & 0xfffffff000000000
 
-/*
-**# define EVP_BYTES_TO_KEY md5_pbkdf
-*/
-# define EVP_BYTES_TO_KEY sha256_pbkdf
+
+# define EVP_BYTES_TO_KEY md5_pbkdf
+
+//# define EVP_BYTES_TO_KEY sha256_pbkdf
 
 typedef struct		s_write
 {
@@ -133,6 +133,7 @@ typedef struct		s_sym
 	t_arg			arg[4];
 	uint64_t		sub_k[48];
 	uint8_t			id_k;
+	uint16_t		endian;
 }					t_sym;
 
 /*
@@ -152,6 +153,8 @@ typedef struct		s_sym
 ** arg[1] : v
 ** arg[2] : s
 ** arg[3] : p
+**
+** endian = 1 if big endian 0 if little endian
 */
 typedef struct		s_asym
 {
@@ -171,11 +174,12 @@ typedef struct		s_rng
 {
 	int				fd;
 	uint64_t		co;
+	t_sym			s;
 }					t_rng;
 /*
 ** RNG ATTR
 ** fd : fd for seed triple des key
-** co	: csprng triple des counter (input)
+** co : csprng triple des counter (input)
 */
 typedef struct		s_parse
 {
@@ -244,14 +248,14 @@ void				sha256_block_hash(t_hash *hash, char *pad,
 /*
 ** SYM CRYPTOGRAPHY
 */
-void				format_key(t_parse *p);
 int					sym_parser(t_parse *p, int argc, char **argv);
+void				format_key(t_sym *s, uint8_t nb_k);
 /*
 ** base64
 */
 uint32_t			be_transpo(uint32_t x);
-uint32_t			b64_block_e(uint32_t in, uint8_t k, uint8_t b_endian);
 void				del_whitespaces(t_read *r);
+uint32_t			b64_block_e(uint32_t in, uint8_t k, uint8_t b_endian);
 uint32_t			b64_block_d(uint32_t in, uint8_t *k, uint8_t b_endian);
 int					run_b64_e(t_parse *p);
 int					run_b64_d(t_parse *p);
@@ -274,13 +278,15 @@ uint64_t			compress_d_box(uint64_t x);
 void				load_sub_k(t_sym *s, uint8_t id_k);
 uint64_t			initial_perm(uint64_t x);
 uint64_t			final_perm(uint64_t x);
-uint64_t			expansion_perm(uint32_t x, char b_endian);
+uint64_t			expansion_perm(t_sym *s);
 uint32_t			round_perm(uint32_t x);
 uint32_t			s_boxes(uint64_t x);
-void				des_round(t_parse *p, uint8_t i);
-uint64_t			des_block_e(uint64_t x, t_parse *p);
-uint64_t			des_block_d(uint64_t x, t_parse *p);
-uint64_t			des_triple(uint64_t x, t_parse *p);
+void				des_round(t_sym *s, uint8_t i);
+uint64_t			des_block_e(uint64_t x, t_sym *s);
+uint64_t			des_block_d(uint64_t x, t_sym *s);
+uint64_t            des3_block_e(uint64_t x, t_sym *s);
+uint64_t            des3_block_d(uint64_t x, t_sym *s);
+
 /*
 ** des/pbkdf
 */
@@ -311,9 +317,9 @@ int					genrsa_parser(t_parse *p, int argc, char **argv);
 int					rsa_parser(t_parse *p, int argc, char **argv);
 int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
-t_varint			find_prime(int16_t nb, t_parse *p);
+t_varint			find_prime(int16_t nb, t_rng *rng);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
-void				*prng(void *dest, size_t len, t_parse *p);
+void				*prng(void *dest, size_t len, t_rng *r);
 
 #endif

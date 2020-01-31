@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:11:56 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:54:19 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:37:59 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int					pbkdf(t_parse *p, bool verify, char *salt)
 		return (0);
 	ft_memcpy(p->s.arg[0].x,
 		&tmp.h.h, 8 * p->cmd.nb_k);
-	format_key(p);
+	format_key(&p->s, p->cmd.nb_k);
 	ft_memcpy(p->s.arg[1].x,
 		(uint8_t *)&tmp.h.h + 8 * p->cmd.nb_k, 8);
 	p->s.arg[0].set = true;

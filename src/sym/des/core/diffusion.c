@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 10:13:35 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/11 10:14:46 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:03:06 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ uint32_t		round_perm(uint32_t x)
 	return (y);
 }
 
-uint64_t		expansion_perm(uint32_t x, char b_endian)
+uint64_t		expansion_perm(t_sym *s)
 {
 	uint64_t		y;
 	uint64_t		tmp;
@@ -71,7 +71,7 @@ uint64_t		expansion_perm(uint32_t x, char b_endian)
 	uint64_t		mask;
 
 	y = 0;
-	tmp = (b_endian) ? (uint64_t)x << 32 : (uint64_t)x << 32;
+	tmp = (s->endian) ? (uint64_t)s->r << 32 : (uint64_t)s->r << 32;
 	i = -1;
 	while (++i < 48)
 	{

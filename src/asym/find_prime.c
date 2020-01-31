@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 23:31:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 23:35:53 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:56:51 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ static bool			first_prime_composite(t_varint n)
 ** cause they are not miller-witnesses for sur
 */
 
-static t_varint		v_rand_a(t_varint n, t_parse *p)
+static t_varint		v_rand_a(t_varint n, t_rng *rng)
 {
 	V_TYPE				rand_a[n.len];
 	t_varint			a;
 
-	prng(rand_a, n.len * V_LEN, p);
+	prng(rand_a, n.len * V_LEN, rng);
 	if (n.len == 1)
 		rand_a[0] = ft_range(rand_a[0], 2, n.x[0] - 1);
 	else
@@ -71,14 +71,14 @@ static t_varint		v_rand_a(t_varint n, t_parse *p)
 }
 
 static int			miller_witness(t_varint n, t_varint s, t_varint d,
-		t_parse *p)
+		t_rng *rng)
 {
 	t_varint	a;
 	t_varint	r;
 	t_varint	n_min_1;
 	t_varint	i;
 
-	a = v_rand_a(n, p);
+	a = v_rand_a(n, rng);
 	r = v_expmod(a, d, n, false);
 	n_min_1 = v_sub(n, g_v[1], false);
 	if (is_g_v(1, &r)
@@ -102,7 +102,7 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 **		to store intermediate results to compute s
 */
 
-static bool			prob_prim_test(t_varint n, t_parse *p)
+static bool			prob_prim_test(t_varint n, t_rng *rng)
 {
 	int8_t		nb_a;
 	t_varint	n_min_1;
@@ -121,13 +121,14 @@ static bool			prob_prim_test(t_varint n, t_parse *p)
 	v_dec(&s);
 	d = v_div(n_min_1, v_exp(g_v[2], s), false);
 	while (nb_a--)
-		if (miller_witness(n, s, d, p))
+		if (miller_witness(n, s, d, rng))
 			return (false);
 	return (true);
 }
 
-t_varint			find_prime(int16_t nb, t_parse *p)
+t_varint			find_prime(int16_t nb, t_rng *rng)
 {
+	V_TYPE		rand_n[1 + nb / V_BIT_LEN];
 	t_varint	n;
 	bool		is_prime;
 	int16_t		upper_nb;
@@ -139,14 +140,16 @@ t_varint			find_prime(int16_t nb, t_parse *p)
 	is_prime = false;
 	while (!is_prime)
 	{
-		n = v_rand(nb / 64 + 1, false);
+		prng(rand_n, 1 + nb / V_BIT_LEN, rng);
+		n = v_init(1, rand_n, 1 + nb / V_BIT_LEN);
+//		n = v_rand(nb / 64 + 1, false);
 		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;
 		upper_nb = nb % 64;
 		n.x[n.len - 1] <<= (64 - upper_nb);
 		n.x[n.len - 1] >>= (64 - upper_nb);
 		mask = 1 << upper_nb;
 		n.x[n.len - 1] |= mask;
-		is_prime = prob_prim_test(n, p);
+		is_prime = prob_prim_test(n, rng);
 	}
 	return (n);
 }

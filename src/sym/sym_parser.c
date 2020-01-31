@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:38:26 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:52:15 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 02:36:44 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ static const char		*g_sym_usg[] = {E, D, I, O,
 static const char		*g_sym_opt[] = {"-e", "-d", "-i", "-o", "-a",
 	"-k", "-v", "-s", "-p", ""};
 
-void			format_key(t_parse *p)
+void			format_key(t_sym *s, uint8_t nb_k)
 {
 	uint8_t	i;
 
 	i = -1;
-	while (++i < p->cmd.nb_k)
+	while (++i < nb_k)
 	{
-		*(p->s.arg[0].x + i) = (p->cmd.endian) ?
-			*(p->s.arg[0].x + i)
-			: bswap64(*(p->s.arg[0].x + i));
-		load_sub_k(&p->s, i);
+		*(s->arg[0].x + i) = (s->endian) ?
+			*(s->arg[0].x + i)
+			: bswap64(*(s->arg[0].x + i));
+		load_sub_k(s, i);
 	}
 }
 
@@ -38,7 +38,7 @@ static int		set_arg(t_parse *p, int id, char *arg)
 	{
 		if (!(hstr_to_64_t(p->s.arg[0].x, p->cmd.nb_k, arg)))
 			return (0);
-		format_key(p);
+		format_key(&p->s, p->cmd.nb_k);
 	}
 	else if (id == 1 || id == 2)
 	{

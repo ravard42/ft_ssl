@@ -16,7 +16,7 @@ int						genrsa(t_parse *p)
 	t_varint	prime;
 	for (int i = 0; i < 10; i++)
 	{
-		prime = find_prime(64, p);
+		prime = find_prime(64, &p->rng);
 		for(int i = prime.len - 1; i != 0; i--)
 			ft_printf("%s%016lx%s", KGRN, prime.x[i], KNRM);
 		ft_printf("%s%016lx\n%s", KGRN, prime.x[0], KNRM);
