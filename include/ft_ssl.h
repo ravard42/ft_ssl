@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/28 19:58:03 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 02:56:53 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 04:04:13 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,15 +159,15 @@ typedef struct		s_sym
 typedef struct		s_asym
 {
 	uint8_t			o[2];
-	int16_t			m_nb;
+	int16_t			mod_nb;
 }					t_asym;
 /*
 ** ASYM OPTIONS
 ** o[0] : -rand
 ** o[1] : -out
 **
-**	OTHER ASYM ATTR
-** m_nb		: modulus number of bits
+**	OTHER ASYM ATT
+** 	mod_nb : modulus number of bits
 */
 
 typedef struct		s_rng

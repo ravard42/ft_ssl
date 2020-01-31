@@ -3,14 +3,14 @@
 static const char		*g_grsa_usg[] = {RAND, OUT, NB, ""};
 static const char		*g_grsa_opt[] = {"-rand", "-out", ""};
 
-static int		numbits(char *n)
+static int		numbits(char *nb)
 {
 	int16_t		ret;
 
-	if (!ft_is_decimal(n)
-		&& ft_dprintf(2, "%sCan't parse %s as a decimal number%s\n", KRED, n, KNRM))
+	if (!ft_is_decimal(nb)
+		&& ft_dprintf(2, "%sCan't parse %s as a decimal number%s\n", KRED, nb, KNRM))
 		return(-1);
-	ret = (int16_t)ft_atoi(n);
+	ret = (int16_t)ft_atoi(nb);
 	if (ret < 128
 		&& ft_dprintf(2, "%smodulus numbits too small%s\n", KRED, KNRM))
 		return (-1);
@@ -24,7 +24,7 @@ static bool		open_fd_rng(t_parse *p)
 {
 	p->in_file = (p->in_file) ? p->in_file : ft_strdup("/dev/urandom");
 	if ((p->rng.fd = open(p->in_file, O_RDONLY)) == -1
-		&& ft_dprintf(2, "%srng.fd open error%s\n", KRED, KNRM))
+		&& ft_dprintf(2, "%sopen rng file descriptor for seeding error%s\n", KRED, KNRM))
 		return (false);
 	return (true);
 }
@@ -35,7 +35,7 @@ int				genrsa_parser(t_parse *p, int argc, char **argv)
 	{
 		if (p->i[0] == argc - 1)
 		{
-			if ((p->a.m_nb = numbits(argv[p->i[0]])) == -1)
+			if ((p->a.mod_nb = numbits(argv[p->i[0]])) == -1)
 				return (-3);
 		}
 		else

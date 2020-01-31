@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 14:59:42 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 02:23:30 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 03:26:38 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void				init_asym_p(t_asym *a)
 	i = -1;
 	while (++i < 2)
 		a->o[i] = 0;
-	a->m_nb = 128;
+	a->mod_nb = 128;
 }
 
 static void				init_hash_p(t_hash *h)

@@ -4,14 +4,12 @@
 ** rsa key order : version, n, e, d, p, q, dp, dq, qinv
 */
 
-
-
 int						genrsa(t_parse *p)
 {
-	ft_printf("%sCOUCOU GENRSA%s\n", KCYN, KNRM);
+	ft_printf("%sgenrsa cmd is running%s\n", KBLU, KNRM);
 	ft_printf("input rand file for PRNG seeding : %s\n", p->in_file);
 	ft_printf("output file : %s\n", p->out_file);
-	ft_printf("numbits = %d\n", p->a.m_nb);
+	ft_printf("modulus numbits = %d\n", p->a.mod_nb);
 
 	t_varint	prime;
 	for (int i = 0; i < 10; i++)

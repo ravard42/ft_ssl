@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 23:31:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 02:56:51 by ravard           ###   ########.fr       */
+/*   Updated: 2020/01/31 04:04:12 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,29 +126,36 @@ static bool			prob_prim_test(t_varint n, t_rng *rng)
 	return (true);
 }
 
-t_varint			find_prime(int16_t nb, t_rng *rng)
+/*
+**	1 + (p_nb - 1) / 8 is the number of random byte data needed to construct a nb-bit prime number
+**	reminder : mod_nb >= 128 so p_nb >= 64 
+**
+*/
+
+t_varint			find_prime(int16_t p_nb, t_rng *rng)
 {
-	V_TYPE		rand_n[1 + nb / V_BIT_LEN];
+	V_TYPE		rand_n[1 + (p_nb - 1) / 8];
 	t_varint	n;
 	bool		is_prime;
-	int16_t		upper_nb;
-	uint64_t	mask;
+//	int16_t		upper_nb;
+//	uint64_t	mask;
 
-	if ((1 + nb / V_BIT_LEN) * 2 > V_MAX_LEN
-		&& ft_dprintf(2, "%soverflow in prob_prim_test, increase V_MAX_LEN%s\n", KRED, KNRM))
+	if ((1 + (p_nb - 1) / 8) * 2 > V_MAX_LEN * V_LEN
+		&& ft_dprintf(2, "%soverflow in prob_prim_test, increase V_MAX_LEN or V_TYPE size%s\n", KRED, KNRM))
 		return (g_v[3]);
 	is_prime = false;
 	while (!is_prime)
 	{
-		prng(rand_n, 1 + nb / V_BIT_LEN, rng);
-		n = v_init(1, rand_n, 1 + nb / V_BIT_LEN);
+		prng(rand_n, 1 + (p_nb - 1) / 8, rng);
+		n = v_init(1, rand_n, (1 + (p_nb - 1) / 8) / V_LEN);
+//		v_print(&n, "n", -2, KYEL);
 //		n = v_rand(nb / 64 + 1, false);
 		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;
-		upper_nb = nb % 64;
-		n.x[n.len - 1] <<= (64 - upper_nb);
-		n.x[n.len - 1] >>= (64 - upper_nb);
-		mask = 1 << upper_nb;
-		n.x[n.len - 1] |= mask;
+//		upper_nb = nb % 64;
+//		n.x[n.len - 1] <<= (64 - upper_nb);
+//		n.x[n.len - 1] >>= (64 - upper_nb);
+//		mask = 1 << upper_nb;
+//		n.x[n.len - 1] |= mask;
 		is_prime = prob_prim_test(n, rng);
 	}
 	return (n);
