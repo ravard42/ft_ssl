@@ -68,7 +68,7 @@ void			v_sort(t_varint *a, t_varint *b, bool check)
 {
 	t_varint	tmp;
 
-	if (check && !v_check(a, b, &g_v[0], "sort"))
+	if (check && !v_check(a, b, NULL, "sort"))
 		return ;
 	if (v_cmp(a, "-lt", b, false))
 	{
@@ -82,7 +82,7 @@ void			v_print(t_varint *v, char *name, int64_t number, char *col)
 {
 	V_LEN_TYPE		i;
 
-	if (!v_check(v, &g_v[0], &g_v[0], "print"))
+	if (!v_check(v, NULL, NULL, "print"))
 		return ;
 	if (number == -2)
 		ft_dprintf(2, "%s<---VARINT %s------->%s\n", col, name, KNRM);

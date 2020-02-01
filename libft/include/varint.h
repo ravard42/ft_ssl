@@ -102,7 +102,7 @@ typedef bool				(*t_op_check)(t_varint *[3]);
 **		  3		 err (sign != -1 && sign != 1)
 */
 
-static t_varint			g_v[4] = {
+static const t_varint					g_v[4] = {
 	{1, 1, {0}},
 	{1, 1, {1}},
 	{1, 1, {2}},

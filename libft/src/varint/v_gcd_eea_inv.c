@@ -21,7 +21,7 @@ t_varint		v_gcd(t_varint a, t_varint b)
 	t_varint		r[2];
 	t_varint		tmp;
 
-	if (!v_check(&a, &b, &g_v[0], "gcd"))
+	if (!v_check(&a, &b, NULL, "gcd"))
 		return (g_v[3]);
 	if (a.sign != 1 || b.sign != 1)
 	{
@@ -70,7 +70,7 @@ void			v_eea(t_varint *coef_r0, t_varint a, t_varint b)
 	t_varint	coef_r1[2];
 	t_varint	tmp[2];
 
-	if (!v_check(&a, &b, &g_v[0], "eea"))
+	if (!v_check(&a, &b, NULL, "eea"))
 		return ;
 	verif_and_sort(coef_r0, coef_r1, &a, &b);
 	r[0] = a;
@@ -95,7 +95,7 @@ t_varint		v_inv(t_varint v, t_varint mod)
 	t_varint	tmp[2];
 	t_varint	gcd;
 
-	if (!v_check(&v, &g_v[0], &mod, "inv"))
+	if (!v_check(&v, NULL, &mod, "inv"))
 		return (g_v[3]);
 	gcd = v_gcd(v, mod);
 	if (!is_g_v(1, &gcd)

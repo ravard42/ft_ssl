@@ -80,7 +80,7 @@ t_varint			v_add(t_varint a, t_varint b, bool check)
 	bool			tmp;
 	t_varint		abs[2];
 
-	if (check && !v_check(&a, &b, &g_v[0], "add"))
+	if (check && !v_check(&a, &b, NULL, "add"))
 		return (g_v[3]);
 	abs[0] = v_abs(a);
 	abs[1] = v_abs(b);

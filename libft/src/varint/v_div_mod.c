@@ -57,7 +57,7 @@ t_varint				v_div(t_varint dend, t_varint sor, bool check)
 	t_varint		q;
 	int8_t			sign;
 
-	if (check && !v_check(&dend, &sor, &g_v[0], "div"))
+	if (check && !v_check(&dend, &sor, NULL, "div"))
 		return (g_v[3]);
 	sign = dend.sign * sor.sign;
 	dend.sign = 1;
@@ -82,7 +82,7 @@ t_varint				v_mod(t_varint dend, t_varint sor, bool eucl,
 	t_varint		r;
 	int8_t			sign;
 
-	if (check && !v_check(&dend, &sor, &g_v[0], "div"))
+	if (check && !v_check(&dend, &sor, NULL, "div"))
 		return (g_v[3]);
 	sign = dend.sign;
 	dend.sign = 1;

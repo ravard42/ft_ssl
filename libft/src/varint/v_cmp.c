@@ -83,7 +83,7 @@ static bool		v_eq(t_varint *a, t_varint *b)
 
 bool			v_cmp(t_varint *a, char *cmp, t_varint *b, bool check)
 {
-	if (check && !v_check(a, b, &g_v[0], "cmp"))
+	if (check && !v_check(a, b, NULL, "cmp"))
 		return (false);
 	if (!ft_strcmp("-eq", cmp))
 		return (v_eq(a, b));

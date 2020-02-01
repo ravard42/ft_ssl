@@ -109,8 +109,7 @@ static bool			prob_prim_test(t_varint n, t_rng *rng)
 	t_varint	s;
 	t_varint	d;
 
-	if (v_cmp(&n, "-le", &g_v[2], false)
-		|| first_prime_composite(n))
+	if (first_prime_composite(n))
 		return (false);
 	nb_a = 1;
 	n_min_1 = v_sub(n, g_v[1], false);
@@ -147,10 +146,10 @@ t_varint			find_prime(int16_t p_nb, t_rng *rng)
 	while (!is_prime)
 	{
 		prng(rand_n, 1 + (p_nb - 1) / 8, rng);
+		rand_n[0] = (V_TYPE)ft_range(rand_n[0], 3, V_SUP);
+		rand_n[0] += (rand_n[0] % 2 == 0) ? 1 : 0;
 		n = v_init(1, rand_n, (1 + (p_nb - 1) / 8) / V_LEN);
 //		v_print(&n, "n", -2, KYEL);
-//		n = v_rand(nb / 64 + 1, false);
-		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;
 //		upper_nb = nb % 64;
 //		n.x[n.len - 1] <<= (64 - upper_nb);
 //		n.x[n.len - 1] >>= (64 - upper_nb);

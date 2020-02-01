@@ -84,7 +84,7 @@ t_varint			v_mul(t_varint a, t_varint b, bool check)
 	V_LEN_TYPE		j;
 	int8_t			sign;
 
-	if (check && !v_check(&a, &b, &g_v[0], "mul"))
+	if (check && !v_check(&a, &b, NULL, "mul"))
 		return (g_v[3]);
 	sign = a.sign * b.sign;
 	a.sign = 1;
@@ -115,7 +115,7 @@ t_varint			v_exp(t_varint v, t_varint e)
 	int8_t						j;
 	t_varint					ret;
 
-	if (!v_check(&v, &e, &g_v[0], "exp"))
+	if (!v_check(&v, &e, NULL, "exp"))
 		return (g_v[3]);
 	if (is_g_v(0, &e))
 		return (g_v[1]);

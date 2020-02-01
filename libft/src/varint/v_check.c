@@ -44,14 +44,15 @@ static bool				v_len_check(t_varint *v)
 ** (v_crt have some error and need to be reviewed so awaiting)
 */
 
+static const char	*op_name[] = {"add", "mul", "exp",
+	"div", "expmod", NULL};
+static t_op_check	op_check[] = {v_add_check, v_mul_check,
+	v_exp_check, v_div_check, v_expmod_check};
+
 bool					v_check(t_varint *a, t_varint *b, t_varint *m, char *op)
 {
 	static t_varint		*v_tab[3] = {NULL, NULL, NULL};
 	int					i;
-	static const char	*op_name[] = {"add", "mul", "exp",
-		"div", "expmod", NULL};
-	static t_op_check	op_check[] = {v_add_check, v_mul_check,
-		v_exp_check, v_div_check, v_expmod_check};
 
 	v_tab[0] = a;
 	v_tab[1] = b;
@@ -59,11 +60,14 @@ bool					v_check(t_varint *a, t_varint *b, t_varint *m, char *op)
 	i = -1;
 	while (++i < 3)
 	{
-		is_g_v(0, v_tab[i]);
-		if (is_g_v(3, v_tab[i]))
-			return (false);
-		if (!v_len_check(v_tab[i]))
-			return (false);
+		if (v_tab[i])
+		{
+			is_g_v(0, v_tab[i]);
+			if (is_g_v(3, v_tab[i]))
+				return (false);
+			if (!v_len_check(v_tab[i]))
+				return (false);
+		}
 	}
 	i = -1;
 	while (op_name[++i] && ft_strcmp(op_name[i], op))
