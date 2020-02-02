@@ -43,6 +43,10 @@ void			v_len(t_varint *v)
 	v->len = i + 1;
 }
 
+/*
+** load len V_TYPE from V_TYPE *src in a varint variable n and return it
+*/
+
 t_varint		v_init(char sign, V_TYPE *src, V_LEN_TYPE len)
 {
 	t_varint		v;

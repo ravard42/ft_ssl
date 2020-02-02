@@ -317,9 +317,11 @@ int					genrsa_parser(t_parse *p, int argc, char **argv);
 int					rsa_parser(t_parse *p, int argc, char **argv);
 int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
-t_varint			find_prime(int16_t nb, t_rng *rng);
+t_varint				find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
+/*
+** csprng.c
+*/
 void				*prng(void *dest, size_t len, t_rng *r);
-
 #endif

@@ -126,35 +126,41 @@ static bool			prob_prim_test(t_varint n, t_rng *rng)
 }
 
 /*
-**	1 + (p_nb - 1) / 8 is the number of random byte data needed to construct a nb-bit prime number
-**	reminder : mod_nb >= 128 so p_nb >= 64 
+** about the process of generating nb-bit prime number in varint:
+** 1] we load a full random V_TYPE varint n 
+**		with the lower len that can contain nb-bit
+**	2] we applied a bitmask on n.x[len - 1]
+**		which set nbth-bit to one and upper to 0
 **
+**	reminder : 128 <= mod_nb <= 2048  so 64 <= nb <= 1024
 */
 
-t_varint			find_prime(int16_t p_nb, t_rng *rng)
+t_varint			find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng)
 {
-	V_TYPE		rand_n[1 + (p_nb - 1) / 8];
+	V_TYPE		rand_n[len];
 	t_varint	n;
-	bool		is_prime;
-//	int16_t		upper_nb;
-//	uint64_t	mask;
+	bool			is_prime;
+	int16_t		upper_nb;
+	V_TYPE		mask;
 
-	if ((1 + (p_nb - 1) / 8) * 2 > V_MAX_LEN * V_LEN
-		&& ft_dprintf(2, "%soverflow in prob_prim_test, increase V_MAX_LEN or V_TYPE size%s\n", KRED, KNRM))
+	if (len * 2 > V_MAX_LEN
+		&& ft_dprintf(2, "%soverflow in prob_prim_test, increase V_MAX_LEN or V_LEN (V_TYPE)%s\n", KRED, KNRM))
 		return (g_v[3]);
 	is_prime = false;
 	while (!is_prime)
 	{
-		prng(rand_n, 1 + (p_nb - 1) / 8, rng);
-		rand_n[0] = (V_TYPE)ft_range(rand_n[0], 3, V_SUP);
-		rand_n[0] += (rand_n[0] % 2 == 0) ? 1 : 0;
-		n = v_init(1, rand_n, (1 + (p_nb - 1) / 8) / V_LEN);
-//		v_print(&n, "n", -2, KYEL);
-//		upper_nb = nb % 64;
-//		n.x[n.len - 1] <<= (64 - upper_nb);
-//		n.x[n.len - 1] >>= (64 - upper_nb);
-//		mask = 1 << upper_nb;
-//		n.x[n.len - 1] |= mask;
+		if (!prng(rand_n, len * V_LEN, rng))
+			return (g_v[3]);
+		n = v_init(1, rand_n, len);
+		n.x[0] = (V_TYPE)ft_range(n.x[0], 3, V_SUP);
+		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;
+		upper_nb = nb % (V_BIT_LEN);
+		upper_nb = !upper_nb ? V_BIT_LEN : upper_nb;
+		mask = ~0;
+		mask >>= V_BIT_LEN - upper_nb;
+		n.x[n.len - 1] &= mask;
+		mask = (V_TYPE)1 << (upper_nb - 1);
+		n.x[n.len - 1] |= mask; 
 		is_prime = prob_prim_test(n, rng);
 	}
 	return (n);
