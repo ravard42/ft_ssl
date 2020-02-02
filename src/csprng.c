@@ -34,12 +34,12 @@ static bool		reseeding(t_rng *rng)
 }
 
 /*
-** triple des csprng
+** load len pseudo random bytes from des3 csprng in dest
 ** beware that dest have enough space memory for len bytes
-** treshold set at 0xa00000 for reseeding (~10min)
 **
-** need to replace t_parse by t_rng
-** which will have his own t_sym for running triple des
+** NB : csprng seeding process on rng->fd
+**		by default points on /dev/urandom
+** 	treshold set at 0xa00000 for reseeding (~10min)
 */
 
 void			*prng(void *dest, size_t len, t_rng *rng)

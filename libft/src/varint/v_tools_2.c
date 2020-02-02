@@ -47,7 +47,7 @@ t_varint				v_abs(t_varint v)
 }
 
 /*
-** load a varint pseudo random number from /dev/urandom
+** load len pseudo random V_TYPE from /dev/urandom in a varint variable and return it
 */
 
 t_varint				v_rand(V_LEN_TYPE len, bool neg)
