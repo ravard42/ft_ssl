@@ -36,19 +36,25 @@
 # define V_DER_2_BIG		"asn1 der header len must be <= 0xffff)\n"
 # define V_DER_COR			"der file corrupted\n"
 
-# define V_TYPE 			uint64_t
-# define V_MID_INF			0xffffffff
-# define V_SUP				0xffffffffffffffff
-# define V_LEN				8
-# define V_BIT_LEN			64
+# define UINT64
+# ifdef UINT64
+#  define V_TYPE 				uint64_t
+#  define V_TYPE_STR			"uint64_t"
+#  define V_MID_INF			0xffffffff
+#  define V_SUP				0xffffffffffffffff
+#  define V_LEN				8
+#  define V_BIT_LEN			64
+# endif
 
-//
-//# define V_TYPE 			uint8_t
-//# define V_MID_INF			0xf
-//# define V_SUP				0xff
-//# define V_LEN				1
-//# define V_BIT_LEN			8
-//
+//# define UINT8
+# ifdef UINT8
+#  define V_TYPE 			uint8_t
+#  define V_TYPE_STR			"uint8_t"
+#  define V_MID_INF			0xf
+#  define V_SUP				0xff
+#  define V_LEN				1
+#  define V_BIT_LEN			8
+# endif
 
 /*
 **	overflow protection note:
@@ -61,7 +67,7 @@
 **		(beware that V_LEN_TYPE is signed)
 */
 
-# define V_MAX_LEN			4
+# define V_MAX_LEN			64
 # define V_LEN_TYPE			int16_t
 
 typedef struct				s_varint

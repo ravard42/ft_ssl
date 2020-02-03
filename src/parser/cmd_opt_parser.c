@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-static int		load_cmd(t_cmd *cmd, const t_cmd *src)
+static bool		load_cmd(t_cmd *cmd, const t_cmd *src)
 {
 	uint16_t			endian_sys;
 
@@ -37,10 +37,10 @@ static int		load_cmd(t_cmd *cmd, const t_cmd *src)
 	cmd->run = src->run;
 	cmd->run_e = src->run_e;
 	cmd->run_d = src->run_d;
-	return (1);
+	return (true);
 }
 
-int				cmd_parser(t_parse *p, char *arg)
+bool				cmd_parser(t_parse *p, char *arg)
 {
 	int				i;
 	int				j;
@@ -53,10 +53,10 @@ int				cmd_parser(t_parse *p, char *arg)
 		return (load_cmd(&(p->cmd), g_cmds + i));
 	ft_dprintf(2, "%s\"%s\" is not a valid command, program leaving [...]%s\n",
 			KRED, arg, KNRM);
-	return (0);
+	return (false);
 }
 
-int				opt_parser(t_parse *p, const char **opts, char *arg)
+bool				opt_parser(t_parse *p, const char **opts, char *arg)
 {
 	int				i;
 	int				j;
@@ -76,5 +76,5 @@ int				opt_parser(t_parse *p, const char **opts, char *arg)
 			return (p->s.o[i] = 1);
 	}
 	ft_dprintf(2, "%s\"%s\" invalid option%s\n", KRED, arg, KNRM);
-	return (0);
+	return (false);
 }

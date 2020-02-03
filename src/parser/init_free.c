@@ -12,17 +12,24 @@
 
 #include "ft_ssl.h"
 
-static void				init_asym_p(t_asym *a)
+static bool				init_asym_p(t_asym *a)
 {
 	int8_t	i;
 
+	if (ft_strcmp("uint64_t", V_TYPE_STR)
+		&& ft_dprintf(2, "%s%s%s", KRED, V_TYPE_ERR, KNRM))
+		return (false);
+	if (V_MAX_LEN * V_LEN < 16
+		&& ft_dprintf(2, "%s%s%s", KRED, V_LEN_ERR, KNRM))
+		return (false);
 	i = -1;
 	while (++i < 2)
 		a->o[i] = 0;
 	a->mod_nb = 128;
+	return (true);
 }
 
-static void				init_hash_p(t_hash *h)
+static bool				init_hash_p(t_hash *h)
 {
 	int8_t	i;
 
@@ -30,9 +37,10 @@ static void				init_hash_p(t_hash *h)
 	while (++i < 5)
 		h->o[i] = 0;
 	h->pbkdf = false;
+	return (true);
 }
 
-static void				init_sym_p(t_sym *s)
+static bool				init_sym_p(t_sym *s)
 {
 	int8_t	i;
 
@@ -46,12 +54,13 @@ static void				init_sym_p(t_sym *s)
 	s->id_k = 0;
 	s->endian = 1;
 	s->endian = (*(uint8_t *)&s->endian) ? 0 : 1;
+	return (true);
 }
 
 int						init_p(t_parse *p, char *cmd)
 {
 	if (!cmd_parser(p, cmd))
-		return (0);
+		return (-1);
 	p->i[0] = 1;
 	p->i[1] = 0;
 	p->i[2] = 0;
@@ -62,12 +71,12 @@ int						init_p(t_parse *p, char *cmd)
 	p->w.msg = NULL;
 	p->w.len = 0;
 	p->out_file = NULL;
-	if (p->cmd.type == 0)
-		init_asym_p(&p->a);
-	else if (p->cmd.type == 1)
-		init_hash_p(&p->h);
-	else if (p->cmd.type == 2)
-		init_sym_p(&p->s);
+	if (p->cmd.type == 0 && !init_asym_p(&p->a))
+		return (0);
+	else if (p->cmd.type == 1 && !init_hash_p(&p->h))
+		return (0);
+	else if (p->cmd.type == 2 && !init_sym_p(&p->s))
+		return (0);
 	p->rng.fd = -1;
 	p->rng.co = 0xa00000;
 	init_sym_p(&p->rng.s);

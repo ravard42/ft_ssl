@@ -11,7 +11,7 @@ static int		numbits(char *nb)
 		&& ft_dprintf(2, "%sCan't parse %s as a decimal number%s\n", KRED, nb, KNRM))
 		return(-1);
 	ret = (int16_t)ft_atoi(nb);
-	if (ret < 128
+	if (ret < 64
 		&& ft_dprintf(2, "%smodulus numbits too small%s\n", KRED, KNRM))
 		return (-1);
 	else if (ret > 2048

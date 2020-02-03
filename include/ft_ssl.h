@@ -68,7 +68,11 @@
 # define RSA_D "-decrypt, decrypt with private key"
 # define HEXD	"-hexdump, hex dump output"
 
+# define V_LEN_ERR "rsa cmds need at least 16-byte variable on stack to compute\n----> Increase V_MAX_LEN or V_TYPE in libft/varint.h <----\n"
+# define V_TYPE_ERR "V_TYPE has to be set to uint64_t\n"
 # define SEED_ERR "csprng seeding or reseeding failed: lack of random input data on rng->fd"
+
+# define NB_MIL_RAB 1
 
 # define SH_L(x, n) ((x) << (n))
 # define ROT_L(x, n) (((x) << (n)) | ((x) >> (32-(n))))
@@ -207,8 +211,8 @@ typedef struct		s_parse
 /*
 ** PARSER
 */
-int					cmd_parser(t_parse *p, char *arg);
-int					opt_parser(t_parse *p, const char **opts, char *arg);
+bool					cmd_parser(t_parse *p, char *arg);
+bool					opt_parser(t_parse *p, const char **opts, char *arg);
 int					str_parser(t_parse *p, char *arg);
 int					fd_parser(t_parse *p, char *arg);
 int					cmd_usage(void);
@@ -317,6 +321,7 @@ int					genrsa_parser(t_parse *p, int argc, char **argv);
 int					rsa_parser(t_parse *p, int argc, char **argv);
 int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
+bool					sieve(t_varint *n);
 t_varint				find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);

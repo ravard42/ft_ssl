@@ -13,6 +13,8 @@
 #ifndef FIRST_PRIMES_H
 # define FIRST_PRIMES_H
 
+# define G_PRIME_LEN 256
+
 static const uint16_t	g_prime[2048] =
 {
 	2, 3, 5, 7, 11, 13, 17, 19, 23, 29,

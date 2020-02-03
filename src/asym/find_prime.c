@@ -25,7 +25,7 @@ static bool			first_prime_composite(t_varint n)
 	int			i;
 
 	i = -1;
-	while (++i < 2048)
+	while (++i < 256)
 	{
 		p = g_v[0];
 		p.x[0] = g_prime[i];
@@ -102,37 +102,54 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 **		to store intermediate results to compute s
 */
 
-static bool			prob_prim_test(t_varint n, t_rng *rng)
+static bool			prob_prim_test(t_varint *n, t_rng *rng)
 {
-	int8_t		nb_a;
 	t_varint	n_min_1;
 	t_varint	s;
 	t_varint	d;
+	int8_t		nb_a;
 
-	if (first_prime_composite(n))
+	ft_printf("\n%sFPC IN%s\n", KBLU, KNRM);
+	if (first_prime_composite(*n))
+//		nb_a = 1;
 		return (false);
-	nb_a = 1;
-	n_min_1 = v_sub(n, g_v[1], false);
+	ft_printf("\n%sFPC OUT%s\n", KBLU, KNRM);
+	
+	ft_printf("\n%sSIEVE IN%s\n", KYEL, KNRM);
+	if (!sieve(n))
+		//nb_a = 1;
+		return (false);
+	ft_printf("\n%sSIEVE OUT%s\n", KYEL, KNRM);
+	ft_printf(".");
+	n_min_1 = v_sub(*n, g_v[1], false);
 	s = g_v[1];
 	d = v_mod(n_min_1, v_exp(g_v[2], s), true, false);
 	while (is_g_v(0, &d) && v_inc(&s))
 		d = v_mod(n_min_1, v_exp(g_v[2], s), true, false);
 	v_dec(&s);
 	d = v_div(n_min_1, v_exp(g_v[2], s), false);
+	nb_a = NB_MIL_RAB;
 	while (nb_a--)
-		if (miller_witness(n, s, d, rng))
+	{
+		if (miller_witness(*n, s, d, rng))
 			return (false);
+		ft_printf("+");
+	}
+	ft_printf("\n");
 	return (true);
 }
 
 /*
-** about the process of generating nb-bit prime number in varint:
+** about the process of generating random nb-bit prime candidat in varint:
 ** 1] we load a full random V_TYPE varint n 
 **		with the lower len that can contain nb-bit
-**	2] we applied a bitmask on n.x[len - 1]
-**		which set nbth-bit to one and upper to 0
+**	2]	we make it odd setting lower bit to one
+**	3] we applied a bitmask on n.x[len - 1]
+**		which set nbth-bit to one and uppers to 0
 **
-**	reminder : 128 <= mod_nb <= 2048  so 64 <= nb <= 1024
+**	NB : 64 <= mod_nb <= 2048
+**		  so 32 <= nb <= 1024
+**		  and n >= 0x80000001 (and n bigger than all g_prime numbers)
 */
 
 t_varint			find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng)
@@ -152,8 +169,7 @@ t_varint			find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng)
 		if (!prng(rand_n, len * V_LEN, rng))
 			return (g_v[3]);
 		n = v_init(1, rand_n, len);
-		n.x[0] = (V_TYPE)ft_range(n.x[0], 3, V_SUP);
-		n.x[0] += (n.x[0] % 2 == 0) ? 1 : 0;
+		n.x[0] |= 0x1;
 		upper_nb = nb % (V_BIT_LEN);
 		upper_nb = !upper_nb ? V_BIT_LEN : upper_nb;
 		mask = ~0;
@@ -161,7 +177,7 @@ t_varint			find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng)
 		n.x[n.len - 1] &= mask;
 		mask = (V_TYPE)1 << (upper_nb - 1);
 		n.x[n.len - 1] |= mask; 
-		is_prime = prob_prim_test(n, rng);
+		is_prime = prob_prim_test(&n, rng);
 	}
 	return (n);
 }

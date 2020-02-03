@@ -2,7 +2,7 @@ CC = gcc
 NAME = ft_ssl
 
 #FLAGS = -Wall -Wextra -Werror
-#FLAGS = -Wall -Wextra -Werror -Ofast
+#FLAGS = -Wall -Wextra -Werror
 FLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
 
 SRC = src/main.c\
@@ -48,6 +48,7 @@ SRC = src/main.c\
 		src/asym/asym_parser/genrsa_parser.c\
 		src/asym/asym_parser/rsa_parser.c\
 		src/asym/asym_parser/rsautl_parser.c\
+		src/asym/sieve.c\
 		src/asym/find_prime.c\
 		src/asym/genrsa.c\
 		src/asym/rsa.c\
