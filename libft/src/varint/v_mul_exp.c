@@ -13,95 +13,123 @@
 #include "libft.h"
 
 /*
-**		     a|b   c|d
-**            x  *  y
+** binary decomposition
+** a = 1 * 2^n +  a_n-1 * 2^(n - 1) + ... + 2^0 * a_0
+** b = 1 * 2^m +  b_m-1 * 2^(m - 1) + ... + 2^0 * b_0
 **
-**	|sup = a * c||inf = b * d|
-**	     |mid[0] = a * d|
-**	     |mid[1] = b * c|
-**
-**	|----upper------lower----|
+** msb_id(a) = (a != 0) ? n : -1
+** msb_id(b) = (b != 0) ? m : -1
 */
-
-static V_TYPE		upper(V_TYPE x, V_TYPE y)
-{
-	V_TYPE			abcd[4];
-	V_TYPE			sup;
-	V_TYPE			mid[2];
-	V_TYPE			inf;
-	V_TYPE			to_upper[2];
-
-	abcd[0] = x >> V_BIT_LEN / 2;
-	abcd[1] = x & V_MID_INF;
-	abcd[2] = y >> V_BIT_LEN / 2;
-	abcd[3] = y & V_MID_INF;
-	sup = abcd[0] * abcd[2];
-	mid[0] = abcd[0] * abcd[3];
-	mid[1] = abcd[1] * abcd[2];
-	inf = abcd[1] * abcd[3];
-	to_upper[0] = (mid[0] >> V_BIT_LEN / 2)
-		+ (mid[1] >> V_BIT_LEN / 2);
-	to_upper[1] = ((mid[0] & V_MID_INF) + (mid[1] & V_MID_INF)
-			+ (inf >> V_BIT_LEN / 2)) >> V_BIT_LEN / 2;
-	return (sup + to_upper[0] + to_upper[1]);
-}
 
 /*
-** i : a index
-** j : b index <-> p_mul id <-> coincide with initial number of right 0 in p_mul
+**	V_MUL OVFL NOTE
+**
+** msb_id(a * b) <= n + m
 */
 
-static void			partial_mul(t_varint *p_mul, t_varint a, V_TYPE bxj)
+bool			v_mul_check(t_varint *v[3])
 {
-	V_LEN_TYPE		i;
-	V_TYPE			tmp;
-	V_TYPE			upp;
-	int8_t			carr;
+	int16_t	msb[3];
 
-	carr = 0;
-	upp = 0;
-	i = -1;
-	while (++i < a.len)
+	msb[0] = v_msb_id(v[0]);
+	msb[1] = v_msb_id(v[1]);
+	msb[2] = msb[0] + msb[1];
+	if (1 + msb[2] / V_BIT_LEN > V_MAX_LEN
+		&& ft_dprintf(2, "%s%s%s", KRED, V_MUL_OVFL, KNRM))
+		return (false);
+	return (true);
+}
+
+
+static void			process(t_varint *ret, uint32_t *u32[2], int16_t len[2])
+{
+	int16_t		i;
+	int16_t		j;
+	int16_t		k;
+	uint64_t		*u64;
+	uint64_t		carry;
+
+	j = -1;
+	while (++j < len[1])
 	{
-		tmp = a.x[i] * bxj;
-		p_mul->x[p_mul->len] = tmp + upp + carr;
-		p_mul->len++;
-		carr = add_carry(tmp, upp, carr);
-		upp = upper(a.x[i], bxj);
+		i = -1;
+		while (++i < len[0])
+		{
+			u64 = (uint64_t *)((uint32_t *)ret->x + i + j);
+			carry = *u64;
+			*u64 += (uint64_t)(*(u32[0] + i)) * (uint64_t)(*(u32[1] + j));
+			carry = (carry > *u64) ? 1 : 0;
+			if (carry && !(k = 0))
+				while ((*((uint8_t *)(u64 + 1) + k) += carry) == 0)
+					++k;
+		}
 	}
-	if ((tmp = upp + carr) > 0)
-	{
-		p_mul->x[p_mul->len] = tmp;
-		p_mul->len += 1;
-	}
-	v_len(p_mul);
+	v_len(ret, (len[0] + len[1]) * 4);
 }
 
 t_varint			v_mul(t_varint a, t_varint b, bool check)
 {
+	uint32_t		*u32[2];
+	int16_t		len[2];
 	t_varint		ret;
-	t_varint		p_mul;
-	V_LEN_TYPE		j;
-	int8_t			sign;
 
 	if (check && !v_check(&a, &b, NULL, "mul"))
 		return (g_v[3]);
-	sign = a.sign * b.sign;
-	a.sign = 1;
-	b.sign = 1;
+	u32[0] = (uint32_t *)a.x;
+	u32[1] = (uint32_t *)b.x;
+	len[0] = a.len / (ssize_t)sizeof(uint32_t);
+	len[0] += (a.len % (ssize_t)sizeof(uint32_t)) ? 1 : 0;
+	len[1] = b.len / (ssize_t)sizeof(uint32_t);
+	len[1] += (b.len % (ssize_t)sizeof(uint32_t)) ? 1 : 0;
 	ret = g_v[0];
-	j = -1;
-	while (++j < b.len)
-	{
-		p_mul = g_v[0];
-		p_mul.len = j;
-		partial_mul(&p_mul, a, b.x[j]);
-		ret = v_add(ret, p_mul, false);
-		if (is_g_v(3, &ret))
-			return (ret);
-	}
-	ret.sign = sign;
+	ret.sign = a.sign * b.sign;
+	process(&ret, u32, len);
 	return (ret);
+}
+
+/*
+**	V_EXP OVFL NOTE
+**
+**  v[0] -> v
+**  v[1] -> e
+**
+**	NB : (2^a)^b = 2^(a * b)
+**
+**		v < 2^(msb_id(v) + 1)
+**	=>	v^e < 2^((msb_id(v) + 1) * e)
+**
+**	NB:stack-overflow occured on mac-mini at V_MAX_LEN ~ 300000 (uint8_t)
+**		300000*8 = 2100000 (~2^21 bits)
+**
+**	if e >= 2^16 an error is raised
+** explanation:
+**	if we set v = e = 2^16
+**	(2^16)^(2^16) = 2^(16 * 2^16) = 2^(2^4 * 2^16) = 2^(2^20)
+**	it's almost the mac-mini stack limit of 2^21 bits
+*/
+
+bool			v_exp_check(t_varint *v[3])
+{
+	int8_t		i;
+	uint64_t	e64;
+	int64_t		msb[2];
+
+	if (v[1]->sign == -1
+		&& ft_dprintf(2, "%s%s%s", KRED, V_NEG_POW, KNRM))
+		return (false);
+	if (v[1]->len > 2
+		&& ft_dprintf(2, "%s%s%s", KRED, V_EXP_LIM, KNRM))
+		return (false);
+	e64 = 0;
+	i = -1;
+	while (++i < v[1]->len)
+		e64 += (uint64_t)v[1]->x[i] << V_BIT_LEN * i;
+	msb[0] = v_msb_id(v[0]);
+	msb[1] = (msb[0] + 1) * e64;
+	if (1 + msb[1] / V_BIT_LEN > V_MAX_LEN
+		&& ft_dprintf(2, "%s%s%s", KRED, V_EXP_OVFL, KNRM))
+		return (false);
+	return (true);
 }
 
 /*
@@ -111,7 +139,7 @@ t_varint			v_mul(t_varint a, t_varint b, bool check)
 
 t_varint			v_exp(t_varint v, t_varint e)
 {
-	V_LEN_TYPE					i;
+	int16_t					i;
 	int8_t						j;
 	t_varint					ret;
 

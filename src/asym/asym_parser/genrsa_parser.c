@@ -14,7 +14,7 @@ static int		numbits(char *nb)
 	if (ret < 64
 		&& ft_dprintf(2, "%smodulus numbits too small%s\n", KRED, KNRM))
 		return (-1);
-	else if (ret > 2048
+	else if (ret > 8192
 		&& ft_dprintf(2, "%smodulus numbits too big%s\n", KRED, KNRM))
 		return (-1);
 	return (ret);
@@ -24,7 +24,7 @@ static bool		open_fd_rng(t_parse *p)
 {
 	p->in_file = (p->in_file) ? p->in_file : ft_strdup("/dev/urandom");
 	if ((p->rng.fd = open(p->in_file, O_RDONLY)) == -1
-		&& ft_dprintf(2, "%sopen rng file descriptor for seeding error%s\n", KRED, KNRM))
+		&& ft_dprintf(2, "%sopen rng seed file error%s\n", KRED, KNRM))
 		return (false);
 	return (true);
 }

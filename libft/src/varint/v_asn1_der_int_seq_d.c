@@ -85,29 +85,24 @@ static int				check_and_count(t_der_d *o, t_read *r)
 static t_varint			v_load(uint8_t *src, int len)
 {
 	int			i;
-	int			j;
-	int			k;
-	V_LEN_TYPE	v_id;
 	t_varint	ret;
 
+	if (len > V_MAX_LEN
+		&& ft_dprintf(2, "%s%s%s", KRED, V_DER_OVFL, KNRM))
+		return (g_v[3]);
 	ret = g_v[0];
-	k = len % V_LEN;
-	i = 0;
-	while (i < len)
-	{
-		k = (i == 0 && k) ? k : V_LEN;
-		j = -1;
-		while (++j < k)
-		{
-			if ((v_id = (len - 1 - i) / V_LEN) >= V_MAX_LEN)
-				return (g_v[3]);
-			ret.x[v_id] |= ((V_TYPE)src[i + j] << 8 * (k - 1 - j));
-		}
-		i += k;
-	}
-	v_len(&ret);
+	i = len;
+	while (--i >= 0)
+		ret.x[i] = src[len - 1 - i];
+	v_len(&ret, len);
 	return (ret);
 }
+
+/*
+**	try to read an asn1 der integer sequence from t_read,
+**	if data are valid, store the number of varint decoded in *nb_varint,
+**	and return a varint fresh malloc array filled with decoded data.
+*/
 
 t_varint				*v_asn1_der_int_seq_d(int *nb_varint, t_read *r)
 {

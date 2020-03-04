@@ -22,13 +22,13 @@ static void		end_e(t_parse *p, int64_t i)
 	{
 		x = 0;
 		ft_memcpy(&x, (uint32_t *)(p->r.msg + 3 * i), re);
-		x = b64_block_e(x, re, p->cmd.endian);
+		x = b64_block_e(x, re, p->s.endian);
 		ft_memcpy(p->w.msg + p->w.len, &x, 4);
 		p->w.len += 4;
 	}
 	if (p->w.len % 65 != 0)
 	{
-		ft_memcpy(p->w.msg + p->w.len, &"\n", 1);
+		p->w.msg[p->w.len] = '\n';
 		p->w.len++;
 	}
 }
@@ -47,12 +47,12 @@ int				run_b64_e(t_parse *p)
 	i = -1;
 	while (++i < qu)
 	{
-		x = b64_block_e(*(uint32_t *)(p->r.msg + 3 * i), 3, p->cmd.endian);
+		x = b64_block_e(*(uint32_t *)(p->r.msg + 3 * i), 3, p->s.endian);
 		ft_memcpy(p->w.msg + p->w.len, &x, 4);
 		p->w.len += 4;
 		if (p->w.len % 65 == 64)
 		{
-			ft_memcpy(p->w.msg + p->w.len, &"\n", 1);
+			p->w.msg[p->w.len] = '\n';
 			p->w.len++;
 		}
 	}
@@ -76,7 +76,7 @@ int				run_b64_d(t_parse *p)
 	while (++i < qu)
 	{
 		if ((x = b64_block_d(*(uint32_t *)(p->r.msg + 4 * i),
-						&k, p->cmd.endian))
+						&k, p->s.endian))
 				== 0xFFFFFFFF)
 			return (0);
 		ft_memcpy(p->w.msg + p->w.len, &x, k);

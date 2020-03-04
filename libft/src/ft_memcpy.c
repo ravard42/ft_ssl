@@ -28,3 +28,17 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	}
 	return (str1);
 }
+
+void	*ft_memrcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char	*str1;
+	unsigned char	*str2;
+	size_t			i;
+
+	str1 = (unsigned char *)dst;
+	str2 = (unsigned char *)src;
+	i = -1;
+	while (++i < n)
+		str1[i] = str2[n - 1 - i];
+	return (str1);
+}

@@ -12,34 +12,6 @@
 
 #include "ft_ssl.h"
 
-static bool				init_asym_p(t_asym *a)
-{
-	int8_t	i;
-
-	if (ft_strcmp("uint64_t", V_TYPE_STR)
-		&& ft_dprintf(2, "%s%s%s", KRED, V_TYPE_ERR, KNRM))
-		return (false);
-	if (V_MAX_LEN * V_LEN < 16
-		&& ft_dprintf(2, "%s%s%s", KRED, V_LEN_ERR, KNRM))
-		return (false);
-	i = -1;
-	while (++i < 2)
-		a->o[i] = 0;
-	a->mod_nb = 128;
-	return (true);
-}
-
-static bool				init_hash_p(t_hash *h)
-{
-	int8_t	i;
-
-	i = -1;
-	while (++i < 5)
-		h->o[i] = 0;
-	h->pbkdf = false;
-	return (true);
-}
-
 static bool				init_sym_p(t_sym *s)
 {
 	int8_t	i;
@@ -57,6 +29,42 @@ static bool				init_sym_p(t_sym *s)
 	return (true);
 }
 
+static bool				init_asym_p(t_parse *p)
+{
+	int8_t	i;
+
+	//we are gonna use b64 and des in there
+	init_sym_p(&p->s);
+	if (!ft_strcmp("genrsa", p->cmd.name))
+	{
+		if ((V_MAX_LEN < 8 || V_MAX_LEN > 512)
+			&& ft_dprintf(2, "%s%s%s", KRED, V_GENRSA_STACK_ERR, KNRM))
+		return (false);
+		if (!(p->a.rsak = (t_varint *)ft_memalloc(sizeof(t_varint) * 9))
+			&& ft_dprintf(2, "%srsak malloc error%s\n", KRED, KNRM))
+			return (false);
+	}
+	else
+		p->a.rsak = NULL;
+	i = -1;
+	while (++i < 2)
+		p->a.o[i] = 0;
+	p->a.mod_nb = 64;
+	return (true);
+}
+
+static bool				init_hash_p(t_hash *h)
+{
+	int8_t	i;
+
+	i = -1;
+	while (++i < 5)
+		h->o[i] = 0;
+	h->pbkdf = false;
+	return (true);
+}
+
+
 int						init_p(t_parse *p, char *cmd)
 {
 	if (!cmd_parser(p, cmd))
@@ -71,7 +79,7 @@ int						init_p(t_parse *p, char *cmd)
 	p->w.msg = NULL;
 	p->w.len = 0;
 	p->out_file = NULL;
-	if (p->cmd.type == 0 && !init_asym_p(&p->a))
+	if (p->cmd.type == 0 && !init_asym_p(p))
 		return (0);
 	else if (p->cmd.type == 1 && !init_hash_p(&p->h))
 		return (0);
@@ -85,6 +93,9 @@ int						init_p(t_parse *p, char *cmd)
 
 void					free_p(t_parse *p)
 {
+	if (p->rng.fd > 1)
+		close(p->rng.fd);
+	p->rng.fd = -1;
 	if (p->r.msg)
 		free(p->r.msg);
 	p->r.msg = NULL;
@@ -107,4 +118,7 @@ void					free_p(t_parse *p)
 	if (p->cmd.type == 2 && p->s.arg[3].p)
 		free(p->s.arg[3].p);
 	p->s.arg[3].p = NULL;
+	if (p->cmd.type == 0 && p->a.rsak)
+		free(p->a.rsak);
+	p->a.rsak = NULL;
 }

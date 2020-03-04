@@ -13,37 +13,6 @@
 #include "ft_ssl.h"
 
 /*
-**	at the end of each loop we need an lvalue which contained n mod(p)
-**	endeed is_g_v expect a memory adrress and v_mod return an rvalue
-**	cause we don't need p anymore in this round we use it as this lvalue
-**	(no relation with a prime number until the next loop begins)
-*/
-
-static bool			first_prime_composite(t_varint n)
-{
-	t_varint	p;
-	int			i;
-
-	i = -1;
-	while (++i < 256)
-	{
-		p = g_v[0];
-		p.x[0] = g_prime[i];
-		if (V_SUP == 0xff && V_MAX_LEN > 1)
-		{
-			p.x[1] = *((uint8_t *)(g_prime + i) + 1);
-			p.len = (p.x[1]) ? 2 : 1;
-		}
-		if (v_cmp(&n, "-eq", &p, false))
-			return (false);
-		p = v_mod(n, p, true, false);
-		if (is_g_v(0, &p))
-			return (true);
-	}
-	return (false);
-}
-
-/*
 ** Miller-Rabin Probabilistic Primality Test
 */
 
@@ -55,15 +24,15 @@ static bool			first_prime_composite(t_varint n)
 
 static t_varint		v_rand_a(t_varint n, t_rng *rng)
 {
-	V_TYPE				rand_a[n.len];
+	uint8_t				rand_a[n.len];
 	t_varint			a;
 
-	prng(rand_a, n.len * V_LEN, rng);
+	prng(rand_a, n.len, rng);
 	if (n.len == 1)
 		rand_a[0] = ft_range(rand_a[0], 2, n.x[0] - 1);
 	else
 	{
-		rand_a[0] = ft_range(rand_a[0], 2, V_SUP);
+		rand_a[0] = ft_range(rand_a[0], 2, 0xff);
 		rand_a[n.len - 1] = ft_range(rand_a[n.len - 1], 0, n.x[n.len - 1] - 1);
 	}
 	a = v_init(1, rand_a, n.len);
@@ -81,16 +50,18 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 	a = v_rand_a(n, rng);
 	r = v_expmod(a, d, n, false);
 	n_min_1 = v_sub(n, g_v[1], false);
-	if (is_g_v(1, &r)
+	if ((is_g_v(1, &r)
 		|| v_cmp(&r, "-eq", &n_min_1, false))
+		&& ft_dprintf(2, "+"))
 		return (false);
 	i = g_v[1];
 	while (v_cmp(&i, "-lt", &s, false))
 	{
 		r = v_expmod(r, g_v[2], n, false);
-		if (v_cmp(&r, "-eq", &n_min_1, false))
+		if (v_cmp(&r, "-eq", &n_min_1, false)
+			&& ft_dprintf(2, "+"))
 			return (false);
-		v_inc(&i);
+		v_inc(&i, false);
 	}
 	return (true);
 }
@@ -105,79 +76,85 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 static bool			prob_prim_test(t_varint *n, t_rng *rng)
 {
 	t_varint	n_min_1;
-	t_varint	s;
+	t_varint	s[2];
 	t_varint	d;
 	int8_t		nb_a;
 
-	ft_printf("\n%sFPC IN%s\n", KBLU, KNRM);
-	if (first_prime_composite(*n))
-//		nb_a = 1;
-		return (false);
-	ft_printf("\n%sFPC OUT%s\n", KBLU, KNRM);
-	
-	ft_printf("\n%sSIEVE IN%s\n", KYEL, KNRM);
 	if (!sieve(n))
-		//nb_a = 1;
 		return (false);
-	ft_printf("\n%sSIEVE OUT%s\n", KYEL, KNRM);
-	ft_printf(".");
 	n_min_1 = v_sub(*n, g_v[1], false);
-	s = g_v[1];
-	d = v_mod(n_min_1, v_exp(g_v[2], s), true, false);
-	while (is_g_v(0, &d) && v_inc(&s))
-		d = v_mod(n_min_1, v_exp(g_v[2], s), true, false);
-	v_dec(&s);
-	d = v_div(n_min_1, v_exp(g_v[2], s), false);
+	s[0] = g_v[1];
+	s[1] = g_v[2];
+	d = v_mod(n_min_1, s[1], true, false);
+	while (is_g_v(0, &d) && v_inc(s, false))
+	{
+		s[1] = v_left_shift(s[1], false);
+		d = v_mod(n_min_1, s[1], true, false);
+	}
+	v_dec(s, false);
+	s[1] = v_right_shift(s[1], false);
+	d = v_div(n_min_1, s[1], false);
 	nb_a = NB_MIL_RAB;
 	while (nb_a--)
-	{
-		if (miller_witness(*n, s, d, rng))
+		if (miller_witness(*n, s[0], d, rng))
 			return (false);
-		ft_printf("+");
-	}
-	ft_printf("\n");
 	return (true);
 }
 
 /*
 ** about the process of generating random nb-bit prime candidat in varint:
-** 1] we load a full random V_TYPE varint n 
-**		with the lower len that can contain nb-bit
-**	2]	we make it odd setting lower bit to one
-**	3] we applied a bitmask on n.x[len - 1]
-**		which set nbth-bit to one and uppers to 0
+** 1] we load a full random uint8_t varint v s.t v.len = len 
+**		where len is the lower len that can contain nb-bit
+**	2]	we make it odd turning LSB to one
+**	3] we apply a bitmask on the head of v
+**		which set bits of index nb - 1 and nb - 2 to 1 and 0 respectively and all uppers to 0
 **
-**	NB : 64 <= mod_nb <= 2048
-**		  so 32 <= nb <= 1024
-**		  and n >= 0x80000001 (and n bigger than all g_prime numbers)
+**	NB : 64 <= mod_nb <= 4096
+**		  so 32 <= nb <= 2048
+**		  and v >= 0x80000001 (remark: v is bigger than all g_prime numbers)
+**		  we set bit of index nb - 2 to 0 cause we don't want sieve to return an nb + 1 bit lenght number 
 */
 
-t_varint			find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng)
+void				v_mask(t_varint *v, int16_t nb)
 {
-	V_TYPE		rand_n[len];
-	t_varint	n;
+	int8_t		upper_msb_id;
+	uint8_t		mask;
+
+	v->x[0] |= 0x1;
+	upper_msb_id = (nb - 1) % V_BIT_LEN;
+	if (upper_msb_id == 0)
+	{
+		v->x[v->len - 1] = 1;
+		v->x[v->len - 2] &= 0x7f;
+	}
+	else
+	{
+		v->x[v->len - 1] &= (0xff >> (7 - upper_msb_id));
+		mask = 1 << upper_msb_id;
+		v->x[v->len - 1] |= mask;
+		mask >>= 1;
+		mask = ~mask; 
+		v->x[v->len - 1] &= mask;
+	}
+}
+
+t_varint			find_prime(int16_t nb, int16_t len, t_rng *rng)
+{
+	uint8_t		rand_v[len];
+	t_varint		v;
 	bool			is_prime;
-	int16_t		upper_nb;
-	V_TYPE		mask;
 
 	if (len * 2 > V_MAX_LEN
-		&& ft_dprintf(2, "%soverflow in prob_prim_test, increase V_MAX_LEN or V_LEN (V_TYPE)%s\n", KRED, KNRM))
+		&& ft_dprintf(2, "%soverflow in prob_prim_test, increase V_MAX_LEN%s\n", KRED, KNRM))
 		return (g_v[3]);
 	is_prime = false;
 	while (!is_prime)
 	{
-		if (!prng(rand_n, len * V_LEN, rng))
+		if (!prng(rand_v, len, rng))
 			return (g_v[3]);
-		n = v_init(1, rand_n, len);
-		n.x[0] |= 0x1;
-		upper_nb = nb % (V_BIT_LEN);
-		upper_nb = !upper_nb ? V_BIT_LEN : upper_nb;
-		mask = ~0;
-		mask >>= V_BIT_LEN - upper_nb;
-		n.x[n.len - 1] &= mask;
-		mask = (V_TYPE)1 << (upper_nb - 1);
-		n.x[n.len - 1] |= mask; 
-		is_prime = prob_prim_test(&n, rng);
+		v = v_init(1, rand_v, len);
+		v_mask(&v, nb);
+		is_prime = prob_prim_test(&v, rng);
 	}
-	return (n);
+	return (v);
 }

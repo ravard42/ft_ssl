@@ -12,9 +12,18 @@
 
 #include "libft.h"
 
-int64_t					v_maxbin_pow(t_varint *v)
+/*
+** we recall that V_MAX_LEN <= 4096 bytes = 32768 bits
+** v_msb_id can return a maximum of 32767  (int16_t)
+** but it stay valid as it represents the index of the MSB (Most Significant Bit)
+** and not the number of bits 
+**
+** v_msb_id need valid varint len!
+*/
+
+int16_t					v_msb_id(t_varint *v)
 {
-	int64_t	j;
+	int16_t	j;
 
 	if (is_g_v(0, v))
 		return (-1);
@@ -28,15 +37,15 @@ int64_t					v_maxbin_pow(t_varint *v)
 	return (j);
 }
 
-t_varint				*v_inc(t_varint *a)
+t_varint				*v_inc(t_varint *a, bool check)
 {
-	*a = v_add(*a, g_v[1], true);
+	*a = v_add(*a, g_v[1], check);
 	return (a);
 }
 
-t_varint				*v_dec(t_varint *a)
+t_varint				*v_dec(t_varint *a, bool check)
 {
-	*a = v_sub(*a, g_v[1], true);
+	*a = v_sub(*a, g_v[1], check);
 	return (a);
 }
 
@@ -47,14 +56,14 @@ t_varint				v_abs(t_varint v)
 }
 
 /*
-** load len pseudo random V_TYPE from /dev/urandom in a varint variable and return it
+** load len pseudo random uint8_t chunk from /dev/urandom in a varint variable and return it
 */
 
-t_varint				v_rand(V_LEN_TYPE len, bool neg)
+t_varint				v_rand(int16_t len, bool neg)
 {
-	V_TYPE			rand_n[len];
+	uint8_t			rand_n[len];
 	t_varint		n;
-	uint8_t			sign;
+	int8_t			sign;
 
 	if (neg)
 	{
@@ -63,7 +72,7 @@ t_varint				v_rand(V_LEN_TYPE len, bool neg)
 	}
 	else
 		sign = 1;
-	ft_rand(rand_n, len * V_LEN);
+	ft_rand(rand_n, len);
 	n = v_init(sign, rand_n, len);
 	return (n);
 }

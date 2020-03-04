@@ -3,7 +3,9 @@ NAME = ft_ssl
 
 #FLAGS = -Wall -Wextra -Werror
 #FLAGS = -Wall -Wextra -Werror
-FLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
+FLAGS = -Wall -Wextra -g -fsanitize=address
+#FLAGS = -Wall -Wextra -ggdb
+#FLAGS = -Wall -Wextra -O2
 
 SRC = src/main.c\
 		src/parser/init_free.c\
@@ -57,7 +59,7 @@ SRC = src/main.c\
 	
 OBJ = $(SRC:.c=.o)
 
-INCL = -I libft/include -I include
+INCL = -I libft/include -I libft/include/nnaumenk -I include
 LIB =  -L ./libft -lft -lm
 
 all : $(NAME)

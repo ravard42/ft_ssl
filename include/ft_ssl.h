@@ -33,6 +33,9 @@
 # define KCYN  "\x1B[36;1m"
 # define KWHT  "\x1B[37;1m"
 
+/*
+** OPTION USAGE
+*/
 # define U "%susage%s: ./ft_ssl %scommand %s[opts]%s [args]\n"
 # define P "-p, echo STDIN to STDOUT and append the checksum to STDOUT"
 # define Q "-q, quiet mode, only print the checksum"
@@ -68,11 +71,28 @@
 # define RSA_D "-decrypt, decrypt with private key"
 # define HEXD	"-hexdump, hex dump output"
 
-# define V_LEN_ERR "rsa cmds need at least 16-byte variable on stack to compute\n----> Increase V_MAX_LEN or V_TYPE in libft/varint.h <----\n"
-# define V_TYPE_ERR "V_TYPE has to be set to uint64_t\n"
+# define GENRSA_RUNNING "Generating RSA private key, %hd bit long modulus (2 primes)\n"
+
+
+/*
+** ERROR MSGS
+*/
+
+/*
+** varint len <= 4096 (32768 bits) (cf varint.h)
+** as we need to twice the memory space to compute operations on varint in rsa process it means we have an rsa key-size (modulus) treshold set to 16384 bits.
+** In practice and because of rsa run-time limitation we set it to 4096 for modulus key-size.
+** NB: rsautl need twice as many memory than genrsa and rsa cmds
+*/
+
+# define V_GENRSA_STACK_ERR "libft/include/varint.h bad stack setting\ngenrsa cmd need at least 8-byte varint for RSA-64\nand at most 512-byte for RSA-4096\n"
 # define SEED_ERR "csprng seeding or reseeding failed: lack of random input data on rng->fd"
 
-# define NB_MIL_RAB 1
+/*
+**
+*/
+
+# define NB_MIL_RAB 2
 
 # define SH_L(x, n) ((x) << (n))
 # define ROT_L(x, n) (((x) << (n)) | ((x) >> (32-(n))))
@@ -82,9 +102,9 @@
 # define ROT_28_LEFT(x, n) (((x)<<(n)) | ((x)>>(28-(n)))) & 0xfffffff000000000
 
 
-# define EVP_BYTES_TO_KEY md5_pbkdf
+//# define EVP_BYTES_TO_KEY md5_pbkdf
 
-//# define EVP_BYTES_TO_KEY sha256_pbkdf
+# define EVP_BYTES_TO_KEY sha256_pbkdf
 
 typedef struct		s_write
 {
@@ -160,18 +180,24 @@ typedef struct		s_sym
 **
 ** endian = 1 if big endian 0 if little endian
 */
+
+static const t_varint	g_f4 = {1, 3, {1, 0, 1}};
+
 typedef struct		s_asym
 {
 	uint8_t			o[2];
 	int16_t			mod_nb;
+	t_varint			*rsak;
 }					t_asym;
+
 /*
 ** ASYM OPTIONS
 ** o[0] : -rand
 ** o[1] : -out
 **
 **	OTHER ASYM ATT
-** 	mod_nb : modulus number of bits
+** 	mod_nb 			: modulus number of bits
+** 	rsa key order 	: version, n, e, d, p, q, dp, dq, qinv
 */
 
 typedef struct		s_rng
@@ -180,11 +206,14 @@ typedef struct		s_rng
 	uint64_t		co;
 	t_sym			s;
 }					t_rng;
+
 /*
 ** RNG ATTR
 ** fd : fd for seed triple des key
 ** co : csprng triple des counter (input)
+**	s	: t_sym variable to compute 3des
 */
+
 typedef struct		s_parse
 {
 	t_cmd			cmd;
@@ -322,7 +351,7 @@ int					rsa_parser(t_parse *p, int argc, char **argv);
 int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
 bool					sieve(t_varint *n);
-t_varint				find_prime(int16_t nb, V_LEN_TYPE len, t_rng *rng);
+t_varint				find_prime(int16_t nb, int16_t len, t_rng *rng);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
 /*

@@ -9,19 +9,19 @@ KMAG="\x1B[35;1m"
 KCYN="\x1B[36;1m"
 KWHT="\x1B[37;1m"
 
-p="mypassword"
 
 #MAKING FT_SSL EXEC
+make_dir="/home/ravard/projets/42/ft_ssl"
 
 echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
 echo -ne "\r"
-make -C ../../  re > /dev/null 2>&1
+make -C $make_dir  re > /dev/null 2>&1
 if (($? == 0));then
 echo -e "${KGRN}ft_ssl successfully built and ready to be tested$KNRM\n"
 else
 echo -e "${KRED}error in ft_ssl compilation      $KNRM\n"
 fi
-cp ../../ft_ssl ./ 
+cp $make_dir/ft_ssl ./ 
 
 
 #MESSAGE DIGEST TESTS
@@ -105,6 +105,8 @@ diff my_ssl.dec $file
 dec=$?
 
 #P_S ENC TESTS
+p="mypassword"
+
 ./ft_ssl ${cmd:5} -p $p -s $s -i $file -o my_ssl.enc -a
 openssl ${cmd:5} -pass pass:$p -S $s -in $file -out openssl.enc -a > /dev/null 2>&1
 diff my_ssl.enc openssl.enc

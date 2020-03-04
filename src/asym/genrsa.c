@@ -1,18 +1,60 @@
 #include "ft_ssl.h"
+//
+//static void				v_print_hex(t_varint *v)
+//{
+//	for(int i = v->len - 1; i != 0; i--)
+//		ft_dprintf(2, "%s%02lx%s", KGRN, v->x[i], KNRM);
+//	ft_dprintf(2, "%s%02lx\n%s", KGRN, v->x[0], KNRM);
+//}
+//
 
-static void				v_print_hex(t_varint *v)
+static t_varint				set_rsa_prime(int16_t nb, t_rng *rng)
 {
-	for(int i = v->len - 1; i != 0; i--)
-		ft_printf("%s%016lx%s", KGRN, v->x[i], KNRM);
-	ft_printf("%s%016lx\n%s", KGRN, v->x[0], KNRM);
+	t_varint		tmp;
+	t_varint		ret;
+	
+	while (true)
+	{
+		ret = find_prime(nb, 1 + (nb - 1) / V_BIT_LEN, rng);
+		if (is_g_v(3, &ret)
+			&& ft_dprintf(2, "%sprogram leaving ...\n%s", KRED, KNRM))
+			exit(0);
+		tmp = v_gcd(g_f4, v_sub(ret, g_v[1], false), false);
+		if (!is_g_v(1, &tmp) && ft_dprintf(2, "*"))
+			continue ;
+		ft_dprintf(2, "\n");
+		break ;
+	}
+	return (ret);
+}
+
+int						write_rsak(t_parse *p)
+{
+	v_asn1_der_int_seq_e(&p->r, p->a.rsak, 9);
+	if (p->out_file)
+      p->w.fd = open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+   else
+      p->w.fd = 1;
+   if (p->w.fd == -1
+      && ft_dprintf(2, "%sout_file opening error\n%s", KRED, KNRM))
+      return (0);
+//	DER
+//	write(p->w.fd, p->r.msg, p->r.len);
+// PEM (need to initialize t_sym struct here!!!!)
+	if (run_b64_e(p) != -2)
+	{
+		ft_dprintf(p->w.fd, "-----BEGIN RSA PRIVATE KEY-----\n");
+		write(p->w.fd, p->w.msg, p->w.len);
+		ft_dprintf(p->w.fd, "-----END RSA PRIVATE KEY-----\n");
+	}
+	// BURN IT
+	ft_memset((char *)p->a.rsak, 0, sizeof(t_varint) * 9);
+	free_p(p);
+	return (0);
 }
 
 /*
-** rsa key order : version, n, e, d, p, q, dp, dq, qinv
-*/
-
-/*
-**	1 + (nb - 1) / (V_BIT_LEN) is the lower number of random V_TYPE needed
+**	1 + (nb - 1) / (V_BIT_LEN) is the lower number of random uint8_t needed
 ** to construct all kind of nb-bit number in a varint variable
 */
 
@@ -20,50 +62,32 @@ int						genrsa(t_parse *p)
 {
 //	ft_printf("input rand file for PRNG seeding : %s\n", p->in_file);
 //	ft_printf("output file : %s\n", p->out_file);
+	t_varint		p_min_1;
+	t_varint		q_min_1;
 
-//	bool			is_set[2];
-	int16_t		nb[2];
-	t_varint		prime[2];
-//	t_varint		tmp;
+	p->a.rsak[0] = g_v[0];
+	ft_dprintf(2, GENRSA_RUNNING, p->a.mod_nb);
+	p->a.rsak[4] = set_rsa_prime(p->a.mod_nb - p->a.mod_nb / 2, &p->rng);
+	p_min_1 = v_sub(p->a.rsak[4], g_v[1], false);
+	p->a.rsak[5] = set_rsa_prime(p->a.mod_nb / 2, &p->rng);
+	while (v_cmp(p->a.rsak + 4, "-eq", p->a.rsak + 5, false))	
+		p->a.rsak[5] = set_rsa_prime(p->a.mod_nb / 2, &p->rng);
+	q_min_1 = v_sub(p->a.rsak[5], g_v[1], false);
+	p->a.rsak[1] = v_mul(p->a.rsak[4], p->a.rsak[5], false);
+	ft_dprintf(2, "e is 65537 (0x010001)\n");
+	p->a.rsak[2] = g_f4;
+	p->a.rsak[3] = v_inv(g_f4, v_mul(p_min_1, q_min_1, false), false);
+	p->a.rsak[6] = v_mod(p->a.rsak[3], p_min_1, true, false);
+	p->a.rsak[7] = v_mod(p->a.rsak[3], q_min_1, true, false);
+	p->a.rsak[8] = v_inv(p->a.rsak[5], p->a.rsak[4], false);
 
-//	ft_dprintf(2, "Generating RSA private key, %hd bit long modulus (2 primes)\n", p->a.mod_nb);
-//	is_set[0] = false;
-//	is_set[1] = false;
-	nb[0] = p->a.mod_nb - p->a.mod_nb / 2;
-//	nb[1] = p->a.mod_nb / 2;
-////	ft_printf("nb = (%d, %d)\nlen = (%d, %d)\n", nb[0], nb[1], 1 + (nb[0] - 1) / V_BIT_LEN, 1 + (nb[1] - 1)/ V_BIT_LEN);
-//
-//	while (!is_set[0])
+//	char	name[5] = {'v', '[', '0', ']', 0};
+//	for (int i = 0; i < 9; i++)
 //	{
-//		prime[0] = find_prime(nb[0], 1 + (nb[0] - 1) / V_BIT_LEN, &p->rng);
-//		if (is_g_v(3, prime))
-//			return (0);
-//		tmp = v_gcd(g_v[4], prime[0]);
-//		if (!is_g_v(1, &tmp))
-//			ft_dprintf(2, "*");
-//		else if ((is_set[0] = true))
-//			ft_dprintf(2, "\n");
+//		v_print_hex(p->a.rsak + i);
+//		name[2] = '0' + i;
+//		v_print(name, p->a.rsak + i);
 //	}
-//	while (!is_set[1])
-//	{
-//		prime[1] = find_prime(nb[1], 1 + (nb[1] - 1) / V_BIT_LEN, &p->rng);
-//		if (is_g_v(3, prime + 1))
-//			return (0);
-//		tmp = v_gcd(g_v[4], prime[1]);
-//		if (!is_g_v(1, &tmp)
-//			|| v_cmp(prime, "-eq", prime + 1, false))
-//			ft_dprintf(2, "*");
-//		else if ((is_set[1] = true))
-//			ft_dprintf(2, "\n");
-//	}
-//	ft_dprintf(2, "e is 65537 (0x010001)\n");
-//	v_print_hex(prime);
-//	v_print_hex(prime + 1);
 
-	for (int i = 0; i < 2; i++)
-	{
-		prime[0] = find_prime(nb[0], 1 + (nb[0] - 1) / V_BIT_LEN, &p->rng);
-		v_print_hex(prime);
-	}
-	return (0);
+	return (write_rsak(p));
 }

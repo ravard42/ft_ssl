@@ -14,7 +14,7 @@
 
 static bool		v_lt_pos(t_varint *a, t_varint *b)
 {
-	V_LEN_TYPE	i;
+	int16_t	i;
 
 	if (a->len > b->len)
 		return (false);
@@ -32,7 +32,7 @@ static bool		v_lt_pos(t_varint *a, t_varint *b)
 
 static bool		v_lt_neg(t_varint *a, t_varint *b)
 {
-	V_LEN_TYPE	i;
+	int16_t	i;
 
 	if (a->len > b->len)
 		return (true);
@@ -63,7 +63,7 @@ static bool		v_lt(t_varint *a, t_varint *b)
 
 static bool		v_eq(t_varint *a, t_varint *b)
 {
-	V_LEN_TYPE	i;
+	int16_t	i;
 
 	if (is_g_v(0, a) && is_g_v(0, b))
 		return (true);

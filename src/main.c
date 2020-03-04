@@ -13,11 +13,11 @@
 #include "ft_ssl.h"
 
 /*
-** tmp = -3 => parsing error -> exit
-**	tmp = -2 => malloc error -> exit
-**	tmp = -1 => parsing error -> handle next arg
-**	tmp = 0 => no more arg to be computed -> exit
-**	tmp = 1 => all is OK -> run cmd
+** tmp == -3 => parsing error -> exit
+**	tmp == -2 => malloc error -> exit
+**	tmp == -1 => parsing error -> handle next arg (hash func only)
+**	tmp == 0 => no more arg to be computed -> exit
+**	tmp == 1 => all is OK -> run cmd
 */
 
 int	main(int argc, char **argv)
