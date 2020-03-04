@@ -15,6 +15,7 @@
 static bool				init_sym_p(t_sym *s)
 {
 	int8_t	i;
+	uint16_t	tmp;
 
 	i = -1;
 	while (++i < 9)
@@ -24,8 +25,8 @@ static bool				init_sym_p(t_sym *s)
 		s->arg[i].set = false;
 	s->arg[3].p = NULL;
 	s->id_k = 0;
-	s->endian = 1;
-	s->endian = (*(uint8_t *)&s->endian) ? 0 : 1;
+	tmp = 1;
+	s->endian = (*((uint8_t *)&tmp)) ? 0 : 1;
 	return (true);
 }
 

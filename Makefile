@@ -59,7 +59,7 @@ SRC = src/main.c\
 	
 OBJ = $(SRC:.c=.o)
 
-INCL = -I libft/include -I libft/include/nnaumenk -I include
+INCL = -I libft/include -I include
 LIB =  -L ./libft -lft -lm
 
 all : $(NAME)

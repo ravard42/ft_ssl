@@ -157,7 +157,7 @@ typedef struct		s_sym
 	t_arg			arg[4];
 	uint64_t		sub_k[48];
 	uint8_t			id_k;
-	uint16_t		endian;
+	uint8_t		endian;
 }					t_sym;
 
 /*
