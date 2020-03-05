@@ -56,14 +56,14 @@ static bool			b64_d_check(uint32_t in, uint8_t b_endian)
 	{
 		ascii_id = endian((in << (pos * 8)) & 0xFF000000);
 		i = g_rev_tab64[ascii_id];
-		if (i == -42)
+		if (i == 64)
 			equal = 1;
-		if (i == -1 && ft_dprintf(2, "%sb64 err_0 : bad char\n%s", KRED, KNRM))
+		if (i == 80 && ft_dprintf(2, "%sb64 err_0 : bad char\n%s", KRED, KNRM))
 			return (false);
-		else if (equal && i != -42
+		else if (equal && i != 64
 				&& ft_dprintf(2, "%sb64 err_1 : bad use of '='%s\n", KRED, KNRM))
 			return (false);
-		else if (i == -42 && (pos == 0 || pos == 1)
+		else if (i == 64 && (pos == 0 || pos == 1)
 				&& ft_dprintf(2, "%sb64 err_2 : bad use of '='%s\n", KRED, KNRM))
 			return (false);
 	}
@@ -87,7 +87,7 @@ uint32_t			b64_block_d(uint32_t in, uint8_t *k, uint8_t b_endian)
 	{
 		ascii_id = endian((in << (*k * 8)) & 0xFF000000);
 		i = g_rev_tab64[ascii_id];
-		if (i == -42)
+		if (i == 64)
 			break ;
 		i <<= (26 - (*k * 6));
 		out |= (b_endian) ? (uint32_t)i : bswap32(i);
