@@ -15,7 +15,8 @@ make_dir="/home/ravard/projets/42/ft_ssl"
 
 echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
 echo -ne "\r"
-make -C $make_dir  re > /dev/null 2>&1
+#make -C $make_dir  re > /dev/null 2>&1
+make -C $make_dir
 if (($? == 0));then
 echo -e "${KGRN}ft_ssl successfully built and ready to be tested$KNRM\n"
 else

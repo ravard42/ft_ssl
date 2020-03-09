@@ -58,10 +58,10 @@ bool				cmd_parser(t_parse *p, char *arg)
 
 bool				opt_parser(t_parse *p, const char **opts, char *arg)
 {
-	int				i;
-	int				j;
+	int8_t			i;
+	int8_t			j;
 
-	j = 0;
+	j = -1;
 	i = -1;
 	while (ft_strcmp(opts[++i], "")
 		&& (j = ft_strcmp(opts[i], arg)))

@@ -12,23 +12,30 @@
 
 #include "ft_ssl.h"
 
-int					set_pass(t_parse *p, bool verify)
+char					*set_pass(bool verify)
 {
 	char	*tmp;
+	char	*pw;
 
 	tmp = getpass("enter password:");
 	if (!ft_strlen(tmp) && ft_dprintf(2, "%sempty password%s\n", KRED, KNRM))
-		return (0);
-	p->s.arg[3].p = ft_strdup(tmp);
-	p->s.arg[3].set = true;
+		return (NULL);
+
+//	p->s.arg[3].p = ft_strdup(tmp);
+//	p->s.arg[3].set = true;
+	pw = ft_strdup(tmp);
 	if (verify)
 	{
 		tmp = getpass("verify password:");
-		if (ft_strcmp(p->s.arg[3].p, tmp)
-				&& ft_dprintf(2, "%sverify failure%s\n", KRED, KNRM))
-			return (0);
+//		if (ft_strcmp(p->s.arg[3].p, tmp)
+		if (ft_strcmp(pw, tmp))
+		{
+			ft_dprintf(2, "%sverify failure%s\n", KRED, KNRM);
+			free(pw);
+			return (NULL);
+		}
 	}
-	return (1);
+	return (pw);
 }
 
 static int			set_salt(t_parse *p, char *salt)
@@ -43,7 +50,7 @@ static int			set_salt(t_parse *p, char *salt)
 	}
 	else
 	{
-		if ((fd = open("/dev/urandom", O_RDONLY) == -1)
+		if ((fd = open("/dev/urandom", O_RDONLY)) == -1
 			&& ft_dprintf(2, "%sopen /dev/urandom error in pbkdf%s\n", KRED, KNRM))
 			return (0);
 		if (read(fd, &p->s.arg[2].x, 8) == -1
@@ -58,8 +65,9 @@ int					pbkdf(t_parse *p, bool verify, char *salt)
 {
 	t_parse		tmp;
 
-	if (!(p->s.arg[3].p) && !set_pass(p, verify))
+	if (!(p->s.arg[3].p) && !(p->s.arg[3].p = set_pass(verify)))
 		return (0);
+	p->s.arg[3].set = true;
 	if (!(p->s.arg[2].set) && !set_salt(p, salt))
 		return (0);
 	if (!EVP_BYTES_TO_KEY(&tmp, p))

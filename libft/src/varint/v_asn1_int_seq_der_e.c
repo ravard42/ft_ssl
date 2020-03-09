@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   v_asn1_der_int_seq_e.c                             :+:      :+:    :+:   */
+/*   v_asn1_int_seq_der_e.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -82,7 +82,7 @@ void				write_data(t_read *r, uint8_t h[][6], t_varint *v, int nb_varint)
 **	NB: *r must be blank (r->msg not allocated)
 */
 
-int				v_asn1_der_int_seq_e(t_read *r, t_varint *v, int nb_varint)
+int				v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
 {
 	unsigned int	seq_len;
 	int				i;

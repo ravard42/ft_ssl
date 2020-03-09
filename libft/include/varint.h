@@ -158,8 +158,8 @@ t_varint					v_inv(t_varint v, t_varint mod, bool check);
 t_varint					v_crt(t_varint v, t_varint e, t_varint p,
 		t_varint q);
 
-int							v_asn1_der_int_seq_e(t_read *r, t_varint *v,
+int							v_asn1_int_seq_der_e(t_read *r, t_varint *v,
 		int nb_varint);
-t_varint					*v_asn1_der_int_seq_d(int *nb_varint, t_read *r);
+t_varint					*v_asn1_int_seq_der_d(int *nb_varint, t_read *r);
 
 #endif

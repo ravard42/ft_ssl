@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   v_asn1_der_int_seq_d.c                             :+:      :+:    :+:   */
+/*   v_asn1_int_seq_der_d.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -104,7 +104,7 @@ static t_varint			v_load(uint8_t *src, int len)
 **	and return a varint fresh malloc array filled with decoded data.
 */
 
-t_varint				*v_asn1_der_int_seq_d(int *nb_varint, t_read *r)
+t_varint				*v_asn1_int_seq_der_d(int *nb_varint, t_read *r)
 {
 	t_der_d		ori;
 	t_varint	*ret;

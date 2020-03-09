@@ -18,7 +18,7 @@ char	*ft_strdup(const char *str)
 	int		i;
 
 	if (!str
-		&& ft_dprintf(2, "%sft_strdup(NULL), NULL returned%s\n", KYEL, KNRM))
+		&& ft_dprintf(2, "%sft_strdup(NULL) returned NULL [...]%s\n", KYEL, KNRM))
 		return (NULL);
 	if (!(dup = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1)))
 		&& ft_dprintf(2, "%smalloc error in ft_strdup%s\n", KRED, KNRM))

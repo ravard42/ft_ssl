@@ -52,14 +52,14 @@
 # define SALT " -s, the salt in hexa is the next argument."
 # define PW " -p, password in ascii is the next argument."
 # define RAND "-rand file, use file data to seed the random number generator"
-# define IN "-in file"
-# define OUT "-out file, where to write the private key (default stdout)"
+# define IN "-in file (default stdin)"
+# define OUT "-out file (default stdout)"
 # define NB "numbits, size of the modulus in bits express in decimal (must be the last option specified, default 128 bits)"
 # define IF "-inform DER|PEM , key input format expected on -in (default PEM)"
 # define OF "-outform DER|PEM , key output format expected on -out (default PEM)"
-# define ENC "-des, encrypt/decrypt the private key with des before reading/writing it"
-# define PI "-passin, des password for reading (decrypt) is the next arg"
-# define PO "-passout, des password for writing (encrypt) is the next arg"
+# define PI "-passin, des password for reading is the next arg (decrypt)"
+# define PO "-passout, des password for writing is the next arg (encrypt)"
+# define ENC "-des, encrypt private key with des before writing it\n  (pbkdf is used, if -passout not present, user will be prompted for a pass phrase)"
 # define PBI "-pubin, private key is read by default on -in, with this option a public key is read instead"
 # define PBO "-pubout, private key is output by default on -out, with this option a public key is output instead"
 # define T "-text, print key components and key encoded version"
@@ -185,17 +185,33 @@ static const t_varint	g_f4 = {1, 3, {1, 0, 1}};
 
 typedef struct		s_asym
 {
-	uint8_t			o[2];
+	uint8_t			o[13];
+	char				*pi;
+	char				*po;
 	int16_t			mod_nb;
 	t_varint			*rsak;
 }					t_asym;
 
 /*
 ** ASYM OPTIONS
-** o[0] : -rand
+** o[0] : -rand (genrsa) -in (rsa|rsautl)
 ** o[1] : -out
+**	o[2] : -inform (0 for PEM, 2 for DER)
+**	o[3] : -outform (0 for PEM, 2 for DER)
+**	o[4] : 1 for -passin, else 0
+**	o[5] : 1 for -passout, else 0
+**	o[6] : 1 for -des, else 0
+**	o[7] : 1 for -pubin, else 0
+**	o[8] : 1 for -pubout, else 0
+**	o[9] : 1 for -text, else 0
+**	o[10] : 1 for -modulus, else 0
+**	o[11] : 1 for -noout, else 0
+**	o[12] : 1 for -check, else 0
+**
 **
 **	OTHER ASYM ATT
+**		pi					: -passin arg
+**		po					: -passout arg
 ** 	mod_nb 			: modulus number of bits
 ** 	rsa key order 	: version, n, e, d, p, q, dp, dq, qinv
 */
@@ -325,6 +341,7 @@ uint64_t            des3_block_d(uint64_t x, t_sym *s);
 */
 int					md5_pbkdf(t_parse *tmp, t_parse *p);
 int					sha256_pbkdf(t_parse *tmp, t_parse *p);
+char              *set_pass(bool verify);
 int					pbkdf(t_parse *p, bool verify, char *salt);
 /*
 ** des/mode
@@ -352,6 +369,7 @@ int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
 bool					sieve(t_varint *n);
 t_varint				find_prime(int16_t nb, int16_t len, t_rng *rng);
+int					write_rsak(t_parse *p);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
 /*

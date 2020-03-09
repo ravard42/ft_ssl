@@ -19,7 +19,7 @@
 */
 
 static const char	*g_cmd_name[] = {
-	"\x1B[36;1mgenrsa (to be computed)", "rsa (to be computed)",
+	"genrsa", "\x1B[36;1mrsa (to be computed)",
 	"rsautl (to be computed)", "end0",
 	"md5", "sha256", "end1",
 	"base64", "des-ecb", "des-cbc", "des", "des-ofb", "des-cfb",

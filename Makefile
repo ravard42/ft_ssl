@@ -3,9 +3,9 @@ NAME = ft_ssl
 
 #FLAGS = -Wall -Wextra -Werror
 #FLAGS = -Wall -Wextra -Werror
-#FLAGS = -Wall -Wextra -g -fsanitize=address
+FLAGS = -Wall -Wextra -g -fsanitize=address
 #FLAGS = -Wall -Wextra -ggdb
-FLAGS = -Wall -Wextra -O2
+#FLAGS = -Wall -Wextra -O2
 
 SRC = src/main.c\
 		src/parser/init_free.c\
@@ -53,6 +53,7 @@ SRC = src/main.c\
 		src/asym/sieve.c\
 		src/asym/find_prime.c\
 		src/asym/genrsa.c\
+		src/asym/read_write_rsak.c\
 		src/asym/rsa.c\
 		src/asym/rsautl.c\
 		src/csprng.c\

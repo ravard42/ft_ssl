@@ -36,8 +36,14 @@ static bool				init_asym_p(t_parse *p)
 
 	//we are gonna use b64 and des in there
 	init_sym_p(&p->s);
+	i = -1;
+	while (++i < 13)
+		p->a.o[i] = 0;
+	p->a.pi = NULL;
+	p->a.po = NULL;
 	if (!ft_strcmp("genrsa", p->cmd.name))
 	{
+		p->a.mod_nb = 64;
 		if ((V_MAX_LEN < 8 || V_MAX_LEN > 512)
 			&& ft_dprintf(2, "%s%s%s", KRED, V_GENRSA_STACK_ERR, KNRM))
 		return (false);
@@ -47,10 +53,6 @@ static bool				init_asym_p(t_parse *p)
 	}
 	else
 		p->a.rsak = NULL;
-	i = -1;
-	while (++i < 2)
-		p->a.o[i] = 0;
-	p->a.mod_nb = 64;
 	return (true);
 }
 
@@ -119,6 +121,12 @@ void					free_p(t_parse *p)
 	if (p->cmd.type == 2 && p->s.arg[3].p)
 		free(p->s.arg[3].p);
 	p->s.arg[3].p = NULL;
+	if (p->cmd.type == 0 && p->a.pi)
+		free(p->a.pi);
+	p->a.pi = NULL;
+	if (p->cmd.type == 0 && p->a.po)
+		free(p->a.po);
+	p->a.po = NULL;
 	if (p->cmd.type == 0 && p->a.rsak)
 		free(p->a.rsak);
 	p->a.rsak = NULL;
