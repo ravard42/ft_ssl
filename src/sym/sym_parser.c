@@ -46,8 +46,13 @@ static int		set_arg(t_parse *p, int id, char *arg)
 			return (0);
 	}
 	else if (id == 3)
+	{
+		if (ft_strlen(arg) < 4
+			&& ft_dprintf(2, "%spassword need at least 4 char\n%s", KRED, KNRM))
+			return (0);
 		if (!(p->s.arg[3].p = ft_strdup(arg)))
 			return (0);
+	}
 	p->s.arg[id].set = true;
 	return (1);
 }

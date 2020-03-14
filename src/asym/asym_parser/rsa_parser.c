@@ -75,7 +75,8 @@ static char		*load_pw(int8_t mode, char *pw_in)
 	}
 	if (pw == NULL)
 		ft_dprintf(2, "%spw_parser error%s\n", KRED, KNRM);
-	else if (!pw[0] && ft_dprintf(2, "%sempty password%s\n", KRED, KNRM))
+	else if (ft_strlen(pw) < 4
+		&& ft_dprintf(2, "%spassword need at least 4 char%s\n", KRED, KNRM))
 	{
 		free(pw);
 		pw = NULL;

@@ -44,5 +44,6 @@ int						rsa(t_parse *p)
 		ft_putrhex(p->a.rsak[1].x, p->a.rsak[1].len, true, true);
 //	if (!p->a.o[11])
 //	write_rsak(p);
+
 	return (0);
 }

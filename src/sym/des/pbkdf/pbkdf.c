@@ -18,16 +18,14 @@ char					*set_pass(bool verify)
 	char	*pw;
 
 	tmp = getpass("enter password:");
-	if (!ft_strlen(tmp) && ft_dprintf(2, "%sempty password%s\n", KRED, KNRM))
+	if (ft_strlen(tmp) < 4
+		&& ft_dprintf(2, "%spassword need at least 4 char%s\n", KRED, KNRM))
 		return (NULL);
-
-//	p->s.arg[3].p = ft_strdup(tmp);
-//	p->s.arg[3].set = true;
-	pw = ft_strdup(tmp);
+	if (!(pw = ft_strdup(tmp)))
+		return (NULL);
 	if (verify)
 	{
 		tmp = getpass("verify password:");
-//		if (ft_strcmp(p->s.arg[3].p, tmp)
 		if (ft_strcmp(pw, tmp))
 		{
 			ft_dprintf(2, "%sverify failure%s\n", KRED, KNRM);

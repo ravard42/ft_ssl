@@ -106,7 +106,7 @@ diff my_ssl.dec $file
 dec=$?
 
 #P_S ENC TESTS
-p="mypassword"
+p="toto"
 
 ./ft_ssl ${cmd:5} -p $p -s $s -i $file -o my_ssl.enc -a
 openssl ${cmd:5} -pass pass:$p -S $s -in $file -out openssl.enc -a > /dev/null 2>&1
