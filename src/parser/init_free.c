@@ -22,8 +22,10 @@ static bool				init_sym_p(t_sym *s)
 		s->o[i] = 0;
 	i = -1;
 	while (++i < 4)
+	{
 		s->arg[i].set = false;
-	s->arg[3].p = NULL;
+		s->arg[i].p = NULL;
+	}
 	s->id_k = 0;
 	tmp = 1;
 	s->endian = (*((uint8_t *)&tmp)) ? 0 : 1;
@@ -39,8 +41,6 @@ static bool				init_asym_p(t_parse *p)
 	i = -1;
 	while (++i < 13)
 		p->a.o[i] = 0;
-	p->a.pi = NULL;
-	p->a.po = NULL;
 	if (!ft_strcmp("genrsa", p->cmd.name))
 	{
 		p->a.mod_nb = 64;
@@ -118,16 +118,19 @@ void					free_p(t_parse *p)
 	p->out_file = NULL;
 	p->h.o[1] = 0;
 	p->h.o[4] = 0;
-	if (p->cmd.type == 2 && p->s.arg[3].p)
-		free(p->s.arg[3].p);
-	p->s.arg[3].p = NULL;
-	if (p->cmd.type == 0 && p->a.pi)
-		free(p->a.pi);
-	p->a.pi = NULL;
-	if (p->cmd.type == 0 && p->a.po)
-		free(p->a.po);
-	p->a.po = NULL;
-	if (p->cmd.type == 0 && p->a.rsak)
-		free(p->a.rsak);
-	p->a.rsak = NULL;
+
+	if (p->cmd.type == 0 || p->cmd.type == 2)
+	{
+		int	i = -1;	
+		while (++i < 4)
+		{
+			p->s.arg[i].set = false;
+			if (p->s.arg[i].p)
+				free(p->s.arg[i].p);
+			p->s.arg[i].p = NULL;
+		}
+		if (p->cmd.type == 0 && p->a.rsak)
+			free(p->a.rsak);
+		p->a.rsak = NULL;
+	}
 }

@@ -53,7 +53,8 @@ SRC = src/main.c\
 		src/asym/sieve.c\
 		src/asym/find_prime.c\
 		src/asym/genrsa.c\
-		src/asym/read_write_rsak.c\
+		src/asym/read_rsak.c\
+		src/asym/write_rsak.c\
 		src/asym/rsa.c\
 		src/asym/rsautl.c\
 		src/csprng.c\

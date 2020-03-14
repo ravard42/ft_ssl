@@ -10,7 +10,7 @@ KCYN="\x1B[36;1m"
 KWHT="\x1B[37;1m"
 
 
-#MAKING FT_SSL EXEC
+#>>>> MAKING ./FT_SSL >>>>>
 make_dir="/home/ravard/projets/42/ft_ssl"
 
 echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
@@ -24,56 +24,136 @@ else
 echo -e "${KRED}error in ft_ssl compilation      $KNRM\n"
 fi
 cp $make_dir/ft_ssl ./ 
+#<<<< MAKING ./FT_SSL <<<<<<
 
+
+#>>>>> INPUT PARSER >>>>>
+# available tests
+test_type[0]='genrsa'
+test_type[1]='rsa_inprider'
+test_type[2]='rsa_inpripem'
+test_type[3]='rsa_inprienc'
+test_type[4]='rsa_inpubder'
+test_type[5]='rsa_inpubpem'
+nb_type=6
 # $1 : type of the test
-# "genrsa" | ? [...]
+for ((id = 0; id < nb_type; ++id)); do
+if [[ $1 == ${test_type[$id]} ]]; then break; fi
+done
 
-#-----GENRSA TEST-----
+if (( id == nb_type )); then
+echo -ne "${KYEL}usage: sh launch.sh "
+for ((i = 0; i < nb_type - 1; i++ )); do echo -n "${test_type[$i]}|"; done
+echo -e "${test_type[$i]}$KRNM"
+exit
+fi
 
-if [[ $1 == genrsa ]];then
+#test_nb_arg[0]=3
+#test_usage[0]="usage: sh launch.sh genrsa numbits numberOfTests\n"
+#test_nb_arg[1]=3
+#test_usage[1]="usage: sh launch.sh rsa_in_pri_der numbits numberOfTests\n"
+#test_nb_arg[2]=3
+#test_usage[2]="usage: sh launch.sh rsa_in_pri_pem numbits numberOfTests\n"
+#test_nb_arg[3]=3
+#test_usage[3]="usage: sh launch.sh rsa_in_pri_pem_enc numbits numberOfTests\n"
+#if (( test_nb_arg[id] != $# )); then
+#echo -e "${KYEL}${test_usage[$id]}$KRNM"
+#exit
+#fi
+
+if (( $# != 3 )); then
+echo -e "${KYEL}usage: sh launch.sh ${test_type[$id]} numbits numberOfTests\n$KRNM"
+exit
+fi
+
 # $2 : size of modulus in bits
+numbits=$2
 # $3 : numb of tests
-if (($# != 3));then
-echo -e "${KYEL}usage: sh launch.sh genrsa numbits numberOfTests\n$KRNM"
-else
+nb_tests=$3
+#<<<<< INPUT PARSER <<<<<<
 
-i=0
-OK=0
-COL=$KYEL
+#>>>>> TEST TAB >>>>>>
 
-while ((i < $3));do
-
-#DER
-#./ft_ssl genrsa $2 > rsak.der
-#openssl rsa -check -inform DER -in rsak.der | grep ok
-
-#PEM
-./ft_ssl genrsa $2 > rsak.pem
+genrsa() {
+./ft_ssl genrsa $numbits > rsak.pem
 openssl rsa -check -in rsak.pem | grep ok
+}
 
-if (($? == 0));then
-((OK += 1))
-fi
+rsa_inprider() {
+openssl genrsa $numbits | openssl rsa -outform DER -out prider.ref
+
+openssl rsa -in prider.ref -inform DER -text -noout > text.openssl
+./ft_ssl rsa -in prider.ref -inform DER -text > text.ft_ssl
+
+diff text.openssl text.ft_ssl
+}
+
+rsa_inpripem() {
+openssl genrsa -out pripem.ref $numbits
+
+openssl rsa -in pripem.ref -text -noout > text.openssl
+./ft_ssl rsa -in pripem.ref -text > text.ft_ssl
+
+diff text.openssl text.ft_ssl
+}
+
+rsa_inprienc() {
+pw="4charmin$RANDOM"
+openssl genrsa $numbits | openssl rsa -des -passout pass:$pw -out prienc.ref
+
+openssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.openssl
+./ft_ssl rsa -in prienc.ref -passin pass:$pw  -text -modulus > text.ft_ssl
+
+diff text.openssl text.ft_ssl
+}
+
+rsa_inpubder() {
+openssl genrsa $numbits | openssl rsa -outform DER -pubout -out pubder.ref
+
+openssl rsa -in pubder.ref -inform DER -pubin -text -noout > text.openssl
+./ft_ssl rsa -in pubder.ref -inform DER -pubin -text > text.ft_ssl
+
+diff text.openssl text.ft_ssl
+}
+
+rsa_inpubpem() {
+openssl genrsa $numbits | openssl rsa -pubout -out pubpem.ref
+
+openssl rsa -in pubpem.ref -pubin -text -noout > text.openssl
+./ft_ssl rsa -in pubpem.ref -pubin -text > text.ft_ssl
+
+diff text.openssl text.ft_ssl
+}
+
+test_tab[0]=genrsa
+test_tab[1]=rsa_inprider
+test_tab[2]=rsa_inpripem
+test_tab[3]=rsa_inprienc
+test_tab[4]=rsa_inpubder
+test_tab[5]=rsa_inpubpem
+
+#<<<<< TEST TAB <<<<<<
+
+
+#>>>>>> TEST CORE >>>>>>
+i=0
+ok=0
+col=$KYEL
+
+
+while ((i < $nb_tests));do
+${test_tab[$id]}
+
+if (($? == 0)); then ((ok += 1)); fi
 ((i += 1))
-
-if ((i != OK));then
-COL=$KRED
-fi
-echo -ne "									${COL}${OK}/$3${KNRM}"
+if ((i != ok)); then col=$KRED; fi
+echo -ne "									${col}${ok}/${nb_tests}${KNRM}"
 echo -ne "\r"
 done
 
-if ((i == OK));then
-COL=$KGRN
-fi
-echo -e "									${COL}${OK}/$3${KNRM}"
-rm rsak.pem rsak.der
+if ((i == ok)); then col=$KGRN; fi
+echo -e "									${col}${ok}/${nb_tests}${KNRM}"
 
-fi
-elif [[ $1 == rsa ]];then
-echo "not done yet"
-elif [[ $1 == rsautl ]];then
-echo "not done yet"
-else
-echo -e "${KYEL}sh launch.sh genrsa|rsa|rsautl\n$KRNM"
-fi
+#<<<<<< TEST CORE <<<<<<
+
+ls | grep -v launch.sh | xargs rm

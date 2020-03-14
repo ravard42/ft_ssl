@@ -36,13 +36,13 @@ static int		set_arg(t_parse *p, int id, char *arg)
 {
 	if (id == 0)
 	{
-		if (!(hstr_to_64_t(p->s.arg[0].x, p->cmd.nb_k, arg)))
+		if (!(hstr_to_64_t(p->s.arg[0].x, p->cmd.nb_k, arg, true)))
 			return (0);
 		format_key(&p->s, p->cmd.nb_k);
 	}
 	else if (id == 1 || id == 2)
 	{
-		if (!(hstr_to_64_t(p->s.arg[id].x, 1, arg)))
+		if (!(hstr_to_64_t(p->s.arg[id].x, 1, arg, true)))
 			return (0);
 	}
 	else if (id == 3)

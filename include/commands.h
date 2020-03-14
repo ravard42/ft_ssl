@@ -76,7 +76,7 @@ static const			t_cmd g_cmds[] = {
 	{0, "genrsa", -1, -1, genrsa_parser,
 		{false, false, false}, 3, genrsa, NULL, NULL},
 	{0, "rsa", -1, -1, rsa_parser,
-		{false, false, false}, 0, rsa, NULL, NULL},
+		{true, true, true}, 1, rsa, cbc_e, cbc_d},
 	{0, "rsautl", -1, -1, rsautl_parser,
 		{false, false, false}, 0, rsautl, NULL, NULL},
 	{1, "md5", 0, 16, hash_parser,

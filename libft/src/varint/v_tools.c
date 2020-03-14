@@ -116,26 +116,33 @@ uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
 	return (0);
 }
 
+/*
+**	ft_dprintf(2, "%s|%hhd|%hd:\n", name, v->sign, v->len);
+*/
+
 void			v_print(char *name, t_varint *v)
 {
+	int8_t		k;
 	int16_t		i;
-	int8_t		j;
 
 	if (!v_check(v, NULL, NULL, "print"))
 		return ;
-	ft_dprintf(2, "%s|%hhd|%hd:\n", name, v->sign, v->len);
-	i = v->len - 1;
-	while (i >= 0)
+	ft_dprintf(1, "%s:\n", name);
+	if (v->x[v->len - 1] & 0x80)
+		ft_dprintf(1, "    00:");
+	k = (v->x[v->len - 1] & 0x80) ? 1 : 0;
+	i = v->len;
+	while (--i >= 0)
 	{
-		ft_dprintf(2, "    ");
-		j = -1;
-		while (++j < 15 && i - j >= 0)
-		{
-			ft_dprintf(2, "%02x", v->x[i - j]);
-			if (i - (j + 1) >= 0)
-				ft_dprintf(2, ":");
-		}
-		i -= 15;	
-		ft_dprintf(2, "\n");
+			if (k == 0)
+				ft_dprintf(1, "    ");
+			ft_dprintf(1, "%02x", v->x[i]);
+			if (i == 0)
+				break;
+			ft_dprintf(1, ":");
+			k++;
+			if ((k %= 15) == 0)
+				ft_dprintf(1, "\n");
 	}
+	ft_dprintf(1, "\n");
 }

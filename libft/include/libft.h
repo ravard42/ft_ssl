@@ -89,7 +89,8 @@ void				*ft_memrcpy(void *dst, const void *src, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				ft_putchar(char c);
 void				ft_putnchar(char *ptr, size_t len);
-void				ft_puthex(void *p, int64_t len, bool newline);
+void				ft_puthex(void *p, int64_t len, bool capitalize,  bool newline);
+void				ft_putrhex(void *p, int64_t len, bool capitalize, bool newline);
 void				ft_putstr(char *str);
 size_t				ft_strlen(const char *s);
 size_t				ft_wstrlen(wchar_t *wc);
@@ -109,7 +110,7 @@ int					ft_atoi(const char *str);
 int					ft_hexatoi(const char *str);
 bool				ft_is_decimal(char *str);
 char				ft_toupper(char c);
-uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str);
+uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str, bool yel_msg);
 char				**malloc_empty_str_tab(void);
 int					free_ok(void *ptr);
 int					free_split(char **tab);
@@ -118,7 +119,10 @@ char				*rm_multi_whitespace(char *str);
 int					get_next_line(int fd, char **line);
 void				*ft_rand(void *dest, size_t len);
 uint64_t			ft_range(uint64_t src, uint64_t min, uint64_t max);
-int					ft_read(t_read *r, char *file);
+int				ft_read(t_read *r, char *file);
+int64_t			ft_nxt_line(t_read *r, int64_t offset);
+int64_t			ft_grep_line(char *str, t_read *r, int64_t offset);
+
 /*
 **	ft_printf
 */

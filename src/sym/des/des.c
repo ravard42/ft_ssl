@@ -26,7 +26,7 @@ static int			malloc_e(t_parse *p, int64_t q)
 	return (1);
 }
 
-static int			enc(t_parse *p, int64_t q)
+int					des_enc(t_parse *p, int64_t q)
 {
 	if (p->cmd.needed[2] && !des_padding(p, q))
 		return (0);
@@ -37,7 +37,7 @@ static int			enc(t_parse *p, int64_t q)
 	return (1);
 }
 
-static int			dec(t_parse *p, int64_t q)
+int					des_dec(t_parse *p, int64_t q)
 {
 	if (!(p->w.msg = (char *)ft_memalloc(sizeof(char) * 8 * (q + 1))))
 		return (0);
@@ -59,9 +59,9 @@ int					des(t_parse *p)
 	if (!check_k_v(p))
 		return (0);
 	q = p->r.len / 8 - p->i[1];
-	if (!p->s.o[1] && !enc(p, q))
+	if (!p->s.o[1] && !des_enc(p, q))
 		return (0);
-	else if (p->s.o[1] && !dec(p, q))
+	else if (p->s.o[1] && !des_dec(p, q))
 		return (0);
 	if (!p->s.o[1] && p->s.o[4] && !opt_a_e(p))
 		return (0);

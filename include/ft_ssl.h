@@ -103,7 +103,6 @@
 
 
 //# define EVP_BYTES_TO_KEY md5_pbkdf
-
 # define EVP_BYTES_TO_KEY sha256_pbkdf
 
 typedef struct		s_write
@@ -183,11 +182,15 @@ typedef struct		s_sym
 
 static const t_varint	g_f4 = {1, 3, {1, 0, 1}};
 
+# define PEM_PUB_BEG "-----BEGIN PUBLIC KEY-----\n"
+# define PEM_PUB_END "-----END PUBLIC KEY-----\n"
+# define PEM_PRI_BEG "-----BEGIN RSA PRIVATE KEY-----\n"
+# define PEM_ENC_HEAD "Proc-Type: 4,ENCRYPTED\nDEK-Info: DES-CBC," 
+# define PEM_PRI_END "-----END RSA PRIVATE KEY-----\n"
+
 typedef struct		s_asym
 {
 	uint8_t			o[13];
-	char				*pi;
-	char				*po;
 	int16_t			mod_nb;
 	t_varint			*rsak;
 }					t_asym;
@@ -210,10 +213,10 @@ typedef struct		s_asym
 **
 **
 **	OTHER ASYM ATT
-**		pi					: -passin arg
-**		po					: -passout arg
 ** 	mod_nb 			: modulus number of bits
 ** 	rsa key order 	: version, n, e, d, p, q, dp, dq, qinv
+**
+**	¿-passin|-passout args? : we'll use p->s.arg[0].p for -passin and p->s.arg[1].p for -passout 
 */
 
 typedef struct		s_rng
@@ -313,6 +316,8 @@ int					b64(t_parse *p);
 ** des
 */
 int					des(t_parse *p);
+int					des_dec(t_parse *p, int64_t q);
+int					des_enc(t_parse *p, int64_t q);
 int					check_out(t_parse *p);
 int					check_k_v(t_parse *p);
 char				*des_padding(t_parse *p, int64_t q);
@@ -369,6 +374,7 @@ int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
 bool					sieve(t_varint *n);
 t_varint				find_prime(int16_t nb, int16_t len, t_rng *rng);
+int					read_rsak(t_parse *p);
 int					write_rsak(t_parse *p);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);

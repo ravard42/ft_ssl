@@ -1,21 +1,6 @@
 #include "ft_ssl.h"
 
 /*
-**	About read_rsak
-**
-**	ASN1 DER DECODING prototype: t_varint	*v_asn1_int_seq_der_d(int *nb_varint, t_read *r)
-**
-**	t_read *r must contain a valid DER interger sequence
-** nb_varint could be 9
-**
-*/
-
-//int						read_rsak(t_parse *p)
-//{
-//	
-//}
-
-/*
 **	About write_rsak
 **
 **	ASN1 DER ENCODING prototype: int	v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)

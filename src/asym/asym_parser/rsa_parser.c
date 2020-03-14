@@ -110,17 +110,18 @@ void		t_asym_print(t_parse *p)
 	ft_printf("in = %0.16p\n", p->in_file);
 	if (p->in_file)
 		ft_printf("*in = %s\n", p->in_file);
+	ft_printf("p->r.msg : %s\n", p->r.msg);
 	ft_printf("out = %0.16p\n", p->out_file);
 	if (p->out_file)
 		ft_printf("*out = %s\n", p->out_file);
 	for (int i = 0; i < 13; i++)
 		ft_printf("o[%d] = %d\n", i, p->a.o[i]);	
-	ft_printf("pi = %0.16p\n", p->a.pi);
-	if (p->a.pi)
-		ft_printf("*pi = %s\n", p->a.pi);
-	ft_printf("po = %0.16p\n", p->a.po);
-	if (p->a.po)
-		ft_printf("*po = %s\n", p->a.po);
+	ft_printf("p->s.arg[0].p = %0.16p\n", p->s.arg[0].p);
+	if (p->s.arg[0].p)
+		ft_printf("*p->s.arg[0].p = %s\n", p->s.arg[0].p);
+	ft_printf("p->s.arg[1].p = %0.16p\n", p->s.arg[1].p);
+	if (p->s.arg[1].p)
+		ft_printf("*p->s.arg[1].p = %s\n", p->s.arg[1].p);
 	ft_printf("mod_nb = %hd\n", p->a.mod_nb);	
 	ft_printf("rsak = %0.16p\n", p->a.rsak);	
 }
@@ -137,17 +138,19 @@ int				rsa_parser(t_parse *p, int argc, char **argv)
 			return (-3);
 		if ((p->a.o[2] == 1 || p->a.o[3] == 1) && !form_parser(p, argc, argv))
 			return (-3);
-		if (!p->a.pi && p->a.o[4] && !(p->a.pi = pw_parser(p, argc, argv)))
+		if (!p->s.arg[0].p && p->a.o[4] && !(p->s.arg[0].p = pw_parser(p, argc, argv)))
 			return (-3);
-		if (!p->a.po && p->a.o[5] && !(p->a.po = pw_parser(p, argc, argv)))
+		if (!p->s.arg[1].p && p->a.o[5] && !(p->s.arg[1].p = pw_parser(p, argc, argv)))
 			return (-3);
 	}
 	if (ft_read(&p->r, p->in_file) < 0)
 		return (-3);
-	if (p->a.o[6] && !p->a.po && !(p->a.po = set_pass(true)))
+	if (p->a.o[6] && !p->s.arg[1].p && !(p->s.arg[1].p = set_pass(true)))
 		return (-3);
 
 //	t_asym_print(p);
+
+
 
 	return (1);
 }

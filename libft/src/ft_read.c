@@ -59,18 +59,18 @@ static int		fill_linked_list(t_read *origin, int fd)
 static void		merge_list(t_read *r, t_read *origin)
 {
 	t_read	*current;
-	int		i;
+	int		offset;
 
 	current = origin;
-	i = 0;
+	offset = 0;
 	while (current->next)
 	{
-		ft_memcpy(r->msg + i * READ_BUFF_SIZE, current->msg, current->len);
+		ft_memcpy(r->msg + offset, current->msg, current->len);
+		offset += current->len;
 		current = current->next;
 		free(current->prev->msg);
-		if (i != 0)
+		if (current->prev != origin)
 			free(current->prev);
-		i++;
 	}
 	free(current);
 }

@@ -19,7 +19,7 @@ char				ft_toupper(char c)
 	return (c);
 }
 
-static int			verif(char *buff, int64_t len, char *str)
+static int			verif(char *buff, int64_t len, char *str, bool yel_msg)
 {
 	int	i;
 
@@ -35,11 +35,12 @@ static int			verif(char *buff, int64_t len, char *str)
 	}
 	if (i != len)
 	{
-		ft_dprintf(2, "%shex string is too short, \
+		if (yel_msg)
+			ft_dprintf(2, "%shex string is too short, \
 padding with zero bytes to length%s\n", KYEL, KNRM);
 		return (i);
 	}
-	else if (ft_strlen(str) > (uint64_t)len)
+	else if (ft_strlen(str) > (uint64_t)len && yel_msg)
 		ft_dprintf(2, "%stoo long hex string, ignoring excess%s\n", KYEL, KNRM);
 	return (len);
 }
@@ -74,20 +75,29 @@ static void			load_x(uint64_t *x, int64_t len, char *str)
 }
 
 /*
+**
+**	hstr_to_64_t:
+**
+**	load a number of len_64 * 8 bytes described by an hexadecimal string into uint64_t *
+**
 ** if (x == NULL) => on alloue dynamiquement la mémoire
 ** if (x != NULL) => on fait confiance à l'utilisateur
 **							pour fournir une zone mémoire pouvant
 **							accueillir au moins len_64 * 8 bytes
 **							(sinon segfault ...)
+**
+**	NB : bytes are loaded one by one so little endian systems will change the input value
+**
 */
 
-uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str)
+
+uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str, bool yel_msg)
 {
 	char		buff[len_64 * 8 * 2];
 	int64_t		len;
 
 	ft_memset(buff, 0, len_64 * 8 * 2);
-	if ((len = verif(buff, len_64 * 8 * 2, str)) == -1)
+	if ((len = verif(buff, len_64 * 8 * 2, str, yel_msg)) == -1)
 		return (NULL);
 	if (x == NULL && !(x = (uint64_t *)ft_memalloc(sizeof(uint64_t) * len_64)))
 		return (NULL);

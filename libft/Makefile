@@ -31,6 +31,7 @@ SRC =	src/ft_memalloc.c\
 		src/get_next_line.c\
 		src/ft_rand.c\
 		src/ft_read.c\
+		src/t_read_tools.c\
 		src/ft_printf/ft_printf.c\
 		src/ft_printf/ft_sprintf.c\
 		src/ft_printf/ft_dprintf.c\
