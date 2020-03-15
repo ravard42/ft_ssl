@@ -40,6 +40,8 @@ int						genrsa(t_parse *p)
 	t_varint		p_min_1;
 	t_varint		q_min_1;
 
+//	ft_dprintf(2, "numbits = %d\n", p->a.mod_nb);
+
 	p->a.rsak[0] = g_v[0];
 	ft_dprintf(2, GENRSA_RUNNING, p->a.mod_nb);
 	p->a.rsak[4] = set_rsa_prime(p->a.mod_nb - p->a.mod_nb / 2, &p->rng);
@@ -64,5 +66,5 @@ int						genrsa(t_parse *p)
 //		v_print(name, p->a.rsak + i);
 //	}
 
-	return (write_rsak(p));
+	return (write_rsak(p, 9));
 }

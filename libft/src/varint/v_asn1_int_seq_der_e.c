@@ -20,7 +20,7 @@
 **  h[x][5] = add sign byte (or not) between header and value
 */
 
-static int8_t	put_header(uint8_t *h, uint8_t type, unsigned int len)
+int8_t	put_der_header(uint8_t *h, uint8_t type, unsigned int len)
 {
 	if (len > 0xffff
 		&& ft_dprintf(2, "%s%s%s", KRED, V_DER_2_BIG, KNRM))
@@ -55,7 +55,7 @@ static int		set_sub_header(uint8_t *h, t_varint v)
 
 	mask = 0x80;
 	h[5] = v.x[v.len - 1] & mask ? 1 : 0;
-	if (put_header(h, 0x02, h[5] + v.len) == -1)
+	if (put_der_header(h, 0x02, h[5] + v.len) == -1)
 		return (-1);
 	tot_len = h[0] + h[5] + v.len;
 	return (tot_len);
@@ -94,7 +94,7 @@ int				v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
 	while (++i < nb_varint
 		&& (tmp = set_sub_header(h[i + 1], v[i])) != -1)
 		seq_len += tmp;
-	if (tmp == -1 || put_header(h[0], 0x30, seq_len) == -1)
+	if (tmp == -1 || put_der_header(h[0], 0x30, seq_len) == -1)
 		return (-1);
 	if (!(r->msg = (char *)ft_memalloc(sizeof(char) * (h[0][0] + seq_len + 1)))
 		&& ft_dprintf(2, "%smalloc error%s\n", KRED, KNRM))

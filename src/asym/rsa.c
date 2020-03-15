@@ -34,7 +34,7 @@ void						text(int8_t nb_v, t_parse *p)
 
 int						rsa(t_parse *p)
 {
-	int8_t	nb_v;
+	int	nb_v;
 
 	if (!(nb_v = read_rsak(p)))
 		return (0);
@@ -42,8 +42,8 @@ int						rsa(t_parse *p)
 		text(nb_v, p);
 	if (p->a.o[10] && ft_dprintf(1, "Modulus="))
 		ft_putrhex(p->a.rsak[1].x, p->a.rsak[1].len, true, true);
-//	if (!p->a.o[11])
-//	write_rsak(p);
+	if (!p->a.o[11])
+		write_rsak(p, nb_v);
 
 	return (0);
 }

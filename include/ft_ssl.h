@@ -375,7 +375,7 @@ int					genrsa(t_parse *p);
 bool					sieve(t_varint *n);
 t_varint				find_prime(int16_t nb, int16_t len, t_rng *rng);
 int					read_rsak(t_parse *p);
-int					write_rsak(t_parse *p);
+int					write_rsak(t_parse *p, int nb_v);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
 /*

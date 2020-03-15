@@ -153,6 +153,9 @@ int						read_rsak(t_parse *p)
 	p->a.rsak = v_asn1_int_seq_der_d(&nb_v, &p->r);
 	if (!p->a.rsak && ft_dprintf(2, "%srsa key loading error%s\n", KRED, KNRM))
 		return (0);
+	free(p->r.msg);
+	p->r.msg = NULL;
+	free(p->w.msg);
+	p->w.msg = NULL;
 	return (nb_v);
-	
 }

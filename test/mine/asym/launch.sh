@@ -35,7 +35,8 @@ test_type[2]='rsa_inpripem'
 test_type[3]='rsa_inprienc'
 test_type[4]='rsa_inpubder'
 test_type[5]='rsa_inpubpem'
-nb_type=6
+test_type[6]='rsa_pipepubder'
+nb_type=7
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -125,12 +126,23 @@ openssl rsa -in pubpem.ref -pubin -text -noout > text.openssl
 diff text.openssl text.ft_ssl
 }
 
+rsa_pipepubder() {
+openssl genrsa $numbits | openssl rsa -pubout -outform DER -out pubder.ref
+
+./ft_ssl rsa -pubin -inform DER -in pubder.ref -pubout -outform DER -out pubder.ft_ssl
+
+diff pubder.ref pubder.ft_ssl
+
+
+}
+
 test_tab[0]=genrsa
 test_tab[1]=rsa_inprider
 test_tab[2]=rsa_inpripem
 test_tab[3]=rsa_inprienc
 test_tab[4]=rsa_inpubder
 test_tab[5]=rsa_inpubpem
+test_tab[6]=rsa_pipepubder
 
 #<<<<< TEST TAB <<<<<<
 
