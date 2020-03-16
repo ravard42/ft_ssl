@@ -182,11 +182,8 @@ typedef struct		s_sym
 
 static const t_varint	g_f4 = {1, 3, {1, 0, 1}};
 
-# define PEM_PUB_BEG "-----BEGIN PUBLIC KEY-----\n"
-# define PEM_PUB_END "-----END PUBLIC KEY-----\n"
-# define PEM_PRI_BEG "-----BEGIN RSA PRIVATE KEY-----\n"
+
 # define PEM_ENC_HEAD "Proc-Type: 4,ENCRYPTED\nDEK-Info: DES-CBC," 
-# define PEM_PRI_END "-----END RSA PRIVATE KEY-----\n"
 
 typedef struct		s_asym
 {

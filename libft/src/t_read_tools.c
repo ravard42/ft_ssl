@@ -44,7 +44,7 @@ int64_t		ft_nxt_line(t_read *r, int64_t offset)
 **	-2 for offset input error
 */
 
-int64_t		ft_grep_line(char *str, t_read *r, int64_t offset)
+int64_t		ft_grep_line(const char *str, t_read *r, int64_t offset)
 {
 	int64_t	len;
 

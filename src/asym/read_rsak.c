@@ -1,5 +1,12 @@
 #include "ft_ssl.h"
 
+static const char			*g_beg_end_str[] = {
+	"-----BEGIN RSA PRIVATE KEY-----\n",
+	"-----BEGIN PUBLIC KEY-----\n",
+	"-----END RSA PRIVATE KEY-----\n",
+	"-----END PUBLIC KEY-----\n"
+};
+
 /*
 ** handle_header
 **
@@ -41,18 +48,18 @@ static int		check_enc_header(int64_t *offset, t_parse *p)
 int		grep_pem(t_parse *p)
 {
 	int64_t	offset[2];
-	char		*str;
+//	char		*str;
 
 	offset[0] = 0;
-	str = (p->a.o[7]) ? PEM_PUB_BEG : PEM_PRI_BEG;
-	if ((offset[0] = ft_grep_line(str, &p->r, offset[0])) < 0)
+//	str = (p->a.o[7]) ? PEM_PUB_BEG : PEM_PRI_BEG;
+	if ((offset[0] = ft_grep_line(g_beg_end_str[p->a.o[7]], &p->r, offset[0])) < 0)
 		return (0);
 	if ((offset[0] = ft_nxt_line(&p->r, offset[0])) <= 0)
 		return (0);
 	if (!p->a.o[7] && check_enc_header(offset, p) == -1)
 		return (0);
-	str = (p->a.o[7]) ? PEM_PUB_END : PEM_PRI_END;
-	if ((offset[1] = ft_grep_line(str, &p->r, offset[0])) < 0)
+//	str = (p->a.o[7]) ? PEM_PUB_END : PEM_PRI_END;
+	if ((offset[1] = ft_grep_line(g_beg_end_str[2 + p->a.o[7]], &p->r, offset[0])) < 0)
 		return (0);
 	ft_memcpy(p->r.msg, p->r.msg + offset[0], offset[1] - offset[0]);
 	p->r.msg[offset[1] - offset[0]] = 0;

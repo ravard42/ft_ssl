@@ -121,7 +121,7 @@ void				*ft_rand(void *dest, size_t len);
 uint64_t			ft_range(uint64_t src, uint64_t min, uint64_t max);
 int				ft_read(t_read *r, char *file);
 int64_t			ft_nxt_line(t_read *r, int64_t offset);
-int64_t			ft_grep_line(char *str, t_read *r, int64_t offset);
+int64_t			ft_grep_line(const char *str, t_read *r, int64_t offset);
 
 /*
 **	ft_printf

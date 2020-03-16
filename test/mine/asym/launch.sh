@@ -36,7 +36,10 @@ test_type[3]='rsa_inprienc'
 test_type[4]='rsa_inpubder'
 test_type[5]='rsa_inpubpem'
 test_type[6]='rsa_pipepubder'
-nb_type=7
+test_type[7]='rsa_pipepubpem'
+test_type[8]='rsa_pipeprider'
+test_type[9]='rsa_pipepripem'
+nb_type=10
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -84,7 +87,7 @@ rsa_inprider() {
 openssl genrsa $numbits | openssl rsa -outform DER -out prider.ref
 
 openssl rsa -in prider.ref -inform DER -text -noout > text.openssl
-./ft_ssl rsa -in prider.ref -inform DER -text > text.ft_ssl
+./ft_ssl rsa -in prider.ref -inform DER -text -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
@@ -93,7 +96,7 @@ rsa_inpripem() {
 openssl genrsa -out pripem.ref $numbits
 
 openssl rsa -in pripem.ref -text -noout > text.openssl
-./ft_ssl rsa -in pripem.ref -text > text.ft_ssl
+./ft_ssl rsa -in pripem.ref -text -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
@@ -103,7 +106,7 @@ pw="4charmin$RANDOM"
 openssl genrsa $numbits | openssl rsa -des -passout pass:$pw -out prienc.ref
 
 openssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.openssl
-./ft_ssl rsa -in prienc.ref -passin pass:$pw  -text -modulus > text.ft_ssl
+./ft_ssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
@@ -112,7 +115,7 @@ rsa_inpubder() {
 openssl genrsa $numbits | openssl rsa -outform DER -pubout -out pubder.ref
 
 openssl rsa -in pubder.ref -inform DER -pubin -text -noout > text.openssl
-./ft_ssl rsa -in pubder.ref -inform DER -pubin -text > text.ft_ssl
+./ft_ssl rsa -in pubder.ref -inform DER -pubin -text -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
@@ -121,19 +124,47 @@ rsa_inpubpem() {
 openssl genrsa $numbits | openssl rsa -pubout -out pubpem.ref
 
 openssl rsa -in pubpem.ref -pubin -text -noout > text.openssl
-./ft_ssl rsa -in pubpem.ref -pubin -text > text.ft_ssl
+./ft_ssl rsa -in pubpem.ref -pubin -text -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
 
 rsa_pipepubder() {
-openssl genrsa $numbits | openssl rsa -pubout -outform DER -out pubder.ref
+openssl genrsa -out pripem.ref $numbits
+openssl rsa -in pripem.ref -pubout -outform DER -out pubder.ref
 
 ./ft_ssl rsa -pubin -inform DER -in pubder.ref -pubout -outform DER -out pubder.ft_ssl
+# PRIV IN
+#./ft_ssl rsa -in pripem.ref -pubout -outform DER -out pubder.ft_ssl
 
 diff pubder.ref pubder.ft_ssl
+}
 
+rsa_pipepubpem() {
+openssl genrsa -out pripem.ref $numbits
+openssl rsa -in pripem.ref -pubout -out pubpem.ref
 
+./ft_ssl rsa -pubin -in pubpem.ref -pubout -out pubpem.ft_ssl
+# PRIV IN
+#./ft_ssl rsa -in pripem.ref -pubout -out pubpem.ft_ssl
+
+diff pubpem.ref pubpem.ft_ssl
+}
+
+rsa_pipeprider() {
+openssl genrsa $numbits | openssl rsa -outform DER -out prider.ref
+
+./ft_ssl rsa -inform DER -in prider.ref -outform DER -out prider.ft_ssl
+
+diff prider.ref prider.ft_ssl
+}
+
+rsa_pipepripem() {
+openssl genrsa -out pripem.ref $numbits
+
+./ft_ssl rsa -in pripem.ref -out pripem.ft_ssl
+
+diff pripem.ref pripem.ft_ssl
 }
 
 test_tab[0]=genrsa
@@ -143,6 +174,9 @@ test_tab[3]=rsa_inprienc
 test_tab[4]=rsa_inpubder
 test_tab[5]=rsa_inpubpem
 test_tab[6]=rsa_pipepubder
+test_tab[7]=rsa_pipepubpem
+test_tab[8]=rsa_pipeprider
+test_tab[9]=rsa_pipepripem
 
 #<<<<< TEST TAB <<<<<<
 
