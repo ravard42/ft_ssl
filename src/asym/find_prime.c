@@ -107,12 +107,14 @@ static bool			prob_prim_test(t_varint *n, t_rng *rng)
 **		where len is the lower len that can contain nb-bit
 **	2]	we make it odd turning LSB to one
 **	3] we apply a bitmask on the head of v
-**		which set bits of index nb - 1 and nb - 2 to 1 and 0 respectively and all uppers to 0
+**		which set bits of index nb-1, nb-2, nb-3 to 1, 0, 0 respectively and all uppers to 0
 **
 **	NB : 64 <= mod_nb <= 4096
 **		  so 32 <= nb <= 2048
 **		  and v >= 0x80000001 (remark: v is bigger than all g_prime numbers)
-**		  we set bit of index nb - 2 to 0 cause we don't want sieve to return an nb + 1 bit lenght number 
+**		  we set bit of index nb-2 and nb-3 to 0 cause
+**				1] we don't want sieve to return an nb+1 bit lenght number (nb-2 == 0) 
+**				2] modulus has always valid length (nb-3=0)
 */
 
 void				v_mask(t_varint *v, int16_t nb)
@@ -122,19 +124,18 @@ void				v_mask(t_varint *v, int16_t nb)
 
 	v->x[0] |= 0x1;
 	upper_msb_id = (nb - 1) % V_BIT_LEN;
-	if (upper_msb_id == 0)
+	if (upper_msb_id == 0 || upper_msb_id == 1)
 	{
-		v->x[v->len - 1] = 1;
-		v->x[v->len - 2] &= 0x7f;
+		v->x[v->len - 1] = (upper_msb_id == 0) ? 1 : 2;
+		v->x[v->len - 2] &= (upper_msb_id == 0 ) ? 0x3f : 0x7f;
 	}
 	else
 	{
-		v->x[v->len - 1] &= (0xff >> (7 - upper_msb_id));
-		mask = 1 << upper_msb_id;
-		v->x[v->len - 1] |= mask;
-		mask >>= 1;
-		mask = ~mask; 
-		v->x[v->len - 1] &= mask;
+		v->x[v->len - 1] |= (1 << upper_msb_id);
+		v->x[v->len - 1] <<= (7 - upper_msb_id);
+		v->x[v->len - 1] >>= (7 - upper_msb_id);
+		mask = 3 << (upper_msb_id - 2);
+		v->x[v->len - 1] &= ~mask;
 	}
 }
 

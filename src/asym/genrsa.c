@@ -1,12 +1,4 @@
 #include "ft_ssl.h"
-//
-//static void				v_print_hex(t_varint *v)
-//{
-//	for(int i = v->len - 1; i != 0; i--)
-//		ft_dprintf(2, "%s%02lx%s", KGRN, v->x[i], KNRM);
-//	ft_dprintf(2, "%s%02lx\n%s", KGRN, v->x[0], KNRM);
-//}
-//
 
 static t_varint				set_rsa_prime(int16_t nb, t_rng *rng)
 {
@@ -35,16 +27,12 @@ static t_varint				set_rsa_prime(int16_t nb, t_rng *rng)
 
 int						genrsa(t_parse *p)
 {
-//	ft_printf("input rand file for PRNG seeding : %s\n", p->in_file);
-//	ft_printf("output file : %s\n", p->out_file);
 	t_varint		p_min_1;
 	t_varint		q_min_1;
 
-//	ft_dprintf(2, "numbits = %d\n", p->a.mod_nb);
-
 	p->a.rsak[0] = g_v[0];
 	ft_dprintf(2, GENRSA_RUNNING, p->a.mod_nb);
-	p->a.rsak[4] = set_rsa_prime(p->a.mod_nb - p->a.mod_nb / 2, &p->rng);
+	p->a.rsak[4] = set_rsa_prime(p->a.mod_nb - p->a.mod_nb / 2 + 1, &p->rng);
 	p_min_1 = v_sub(p->a.rsak[4], g_v[1], false);
 	p->a.rsak[5] = set_rsa_prime(p->a.mod_nb / 2, &p->rng);
 	while (v_cmp(p->a.rsak + 4, "-eq", p->a.rsak + 5, false))	
@@ -57,14 +45,5 @@ int						genrsa(t_parse *p)
 	p->a.rsak[6] = v_mod(p->a.rsak[3], p_min_1, true, false);
 	p->a.rsak[7] = v_mod(p->a.rsak[3], q_min_1, true, false);
 	p->a.rsak[8] = v_inv(p->a.rsak[5], p->a.rsak[4], false);
-
-//	char	name[5] = {'v', '[', '0', ']', 0};
-//	for (int i = 0; i < 9; i++)
-//	{
-//		v_print_hex(p->a.rsak + i);
-//		name[2] = '0' + i;
-//		v_print(name, p->a.rsak + i);
-//	}
-
 	return (write_rsak(p, 9));
 }

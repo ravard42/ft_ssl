@@ -70,12 +70,8 @@ int						write_rsak(t_parse *p, int nb_v)
 			return (0);
 
 	}
-
-
-//	if (p->a.o[8] && v_asn1_int_seq_der_e(&p->r, p->a.rsak, 2) != 1)
-//		return (0);
-//	else if (!p->a.o[8] && v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9) != 1)
-//		return (0);
+	else if (v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9) != 1)
+		return (0);
 
 //	if (p->a.o[8] )	
 

@@ -14,7 +14,7 @@ void						text(int8_t nb_v, t_parse *p)
 	if (nb_v == 2)
 	{
 		ft_dprintf(1, "RSA Public-Key: (%hd bit)\n", v_msb_id(p->a.rsak) + 1);
-		v_print("Modulus", p->a.rsak);
+		v_print(1, "Modulus", p->a.rsak);
 		ft_dprintf(1, "Exponent: 65537 (0x10001)\n");
 	}
 	else if (nb_v == 9)
@@ -26,7 +26,7 @@ void						text(int8_t nb_v, t_parse *p)
 			if (i == 1)
 				ft_dprintf(1, "publicExponent: 65537 (0x10001)\n");
 			else
-				v_print(v_name[i], p->a.rsak + i + 1);
+				v_print(1, v_name[i], p->a.rsak + i + 1);
 		}
 	}
 }
