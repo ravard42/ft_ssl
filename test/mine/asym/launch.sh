@@ -39,7 +39,8 @@ test_type[6]='rsa_pipepubder'
 test_type[7]='rsa_pipepubpem'
 test_type[8]='rsa_pipeprider'
 test_type[9]='rsa_pipepripem'
-nb_type=10
+test_type[10]='rsa_full'
+nb_type=11
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -76,24 +77,30 @@ numbits=$2
 nb_tests=$3
 #<<<<< INPUT PARSER <<<<<<
 
-#>>>>> TEST TAB >>>>>>
+#>>>>> TESTS >>>>>>
+
 
 genrsa() {
 ./ft_ssl genrsa $numbits > rsak.pem
-openssl rsa -check -in rsak.pem | grep ok
+openssl rsa -check -in rsak.pem | grep ok >/dev/null
 }
+
+err512="don't use key size < 512"
 
 rsa_inprider() {
 openssl genrsa $numbits | openssl rsa -outform DER -out prider.ref
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 openssl rsa -in prider.ref -inform DER -text -noout > text.openssl
 ./ft_ssl rsa -in prider.ref -inform DER -text -noout > text.ft_ssl
+
 
 diff text.openssl text.ft_ssl
 }
 
 rsa_inpripem() {
 openssl genrsa -out pripem.ref $numbits
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 openssl rsa -in pripem.ref -text -noout > text.openssl
 ./ft_ssl rsa -in pripem.ref -text -noout > text.ft_ssl
@@ -104,6 +111,7 @@ diff text.openssl text.ft_ssl
 rsa_inprienc() {
 pw="4charmin$RANDOM"
 openssl genrsa $numbits | openssl rsa -des -passout pass:$pw -out prienc.ref
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 openssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.openssl
 ./ft_ssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.ft_ssl
@@ -113,6 +121,7 @@ diff text.openssl text.ft_ssl
 
 rsa_inpubder() {
 openssl genrsa $numbits | openssl rsa -outform DER -pubout -out pubder.ref
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 openssl rsa -in pubder.ref -inform DER -pubin -text -noout > text.openssl
 ./ft_ssl rsa -in pubder.ref -inform DER -pubin -text -noout > text.ft_ssl
@@ -122,6 +131,7 @@ diff text.openssl text.ft_ssl
 
 rsa_inpubpem() {
 openssl genrsa $numbits | openssl rsa -pubout -out pubpem.ref
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 openssl rsa -in pubpem.ref -pubin -text -noout > text.openssl
 ./ft_ssl rsa -in pubpem.ref -pubin -text -noout > text.ft_ssl
@@ -131,6 +141,7 @@ diff text.openssl text.ft_ssl
 
 rsa_pipepubder() {
 openssl genrsa -out pripem.ref $numbits
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 openssl rsa -in pripem.ref -pubout -outform DER -out pubder.ref
 
 ./ft_ssl rsa -pubin -inform DER -in pubder.ref -pubout -outform DER -out pubder.ft_ssl
@@ -142,6 +153,7 @@ diff pubder.ref pubder.ft_ssl
 
 rsa_pipepubpem() {
 openssl genrsa -out pripem.ref $numbits
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 openssl rsa -in pripem.ref -pubout -out pubpem.ref
 
 ./ft_ssl rsa -pubin -in pubpem.ref -pubout -out pubpem.ft_ssl
@@ -153,6 +165,7 @@ diff pubpem.ref pubpem.ft_ssl
 
 rsa_pipeprider() {
 openssl genrsa $numbits | openssl rsa -outform DER -out prider.ref
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 ./ft_ssl rsa -inform DER -in prider.ref -outform DER -out prider.ft_ssl
 
@@ -161,45 +174,51 @@ diff prider.ref prider.ft_ssl
 
 rsa_pipepripem() {
 openssl genrsa -out pripem.ref $numbits
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
 ./ft_ssl rsa -in pripem.ref -out pripem.ft_ssl
 
 diff pripem.ref pripem.ft_ssl
 }
 
-test_tab[0]=genrsa
-test_tab[1]=rsa_inprider
-test_tab[2]=rsa_inpripem
-test_tab[3]=rsa_inprienc
-test_tab[4]=rsa_inpubder
-test_tab[5]=rsa_inpubpem
-test_tab[6]=rsa_pipepubder
-test_tab[7]=rsa_pipepubpem
-test_tab[8]=rsa_pipeprider
-test_tab[9]=rsa_pipepripem
+#rsa_desout() {
+#
+#}
+#
+#rsa_check() {
+#
+#}
 
-#<<<<< TEST TAB <<<<<<
+rsa_full() {
+for ((j=1;j<10;++j));do
+sh launch.sh ${test_type[$j]} $numbits $nb_tests
+done
+ls | grep -v launch.sh | xargs rm
+exit
+}
+
+#<<<<< TESTS <<<<<<
 
 
-#>>>>>> TEST CORE >>>>>>
+#>>>>>> MAIN >>>>>>
 i=0
 ok=0
 col=$KYEL
 
 
 while ((i < $nb_tests));do
-${test_tab[$id]}
+${test_type[$id]} 2>/dev/null
 
 if (($? == 0)); then ((ok += 1)); fi
 ((i += 1))
 if ((i != ok)); then col=$KRED; fi
-echo -ne "									${col}${ok}/${nb_tests}${KNRM}"
+echo -ne "									${col}${test_type[$id]}:	${ok}/${nb_tests}${KNRM}"
 echo -ne "\r"
 done
 
 if ((i == ok)); then col=$KGRN; fi
-echo -e "									${col}${ok}/${nb_tests}${KNRM}"
+echo -e "									${col}${test_type[$id]}:	${ok}/${nb_tests}${KNRM}"
 
-#<<<<<< TEST CORE <<<<<<
+#<<<<<< MAIN <<<<<<
 
 ls | grep -v launch.sh | xargs rm

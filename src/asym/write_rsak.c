@@ -49,6 +49,24 @@ static int			add_der_pub_offset(t_parse *p)
 	return (1);
 }
 
+static int			der_enc(t_parse *p, int nb_v)
+{
+	int		ret;
+
+	p->a.o[8] = (nb_v == 2) ? 1 : p->a.o[8];
+	if (p->a.o[8])
+	{
+		ret = (nb_v == 2) ? v_asn1_int_seq_der_e(&p->r, p->a.rsak, 2) :
+			v_asn1_int_seq_der_e(&p->r, p->a.rsak + 1, 2);
+		if (ret != 1 && ft_dprintf(2, "%spub der enc error%s\n", KRED, KNRM))
+			return (0);
+		if (!add_der_pub_offset(p))
+			return (0);
+	}
+	else if (v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9) != 1)
+		return (0);
+}
+
 
 /*
 **	About write_rsak
@@ -64,22 +82,8 @@ static int			add_der_pub_offset(t_parse *p)
 
 int						write_rsak(t_parse *p, int nb_v)
 {
-	int		ret;
-
-	p->a.o[8] = (nb_v == 2) ? 1 : p->a.o[8];
-	if (p->a.o[8])
-	{
-		ret = (nb_v == 2) ? v_asn1_int_seq_der_e(&p->r, p->a.rsak, 2) :
-			v_asn1_int_seq_der_e(&p->r, p->a.rsak + 1, 2);
-		if (ret != 1 && ft_dprintf(2, "%spub der enc error%s\n", KRED, KNRM))
-			return (0);
-		if (!add_der_pub_offset(p))
-			return (0);
-
-	}
-	else if (v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9) != 1)
+	if (!der_enc(p, nb_v))
 		return (0);
-
 	if (p->out_file)
       p->w.fd = open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
    else
