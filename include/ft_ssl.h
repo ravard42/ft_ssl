@@ -313,11 +313,11 @@ int					b64(t_parse *p);
 ** des
 */
 int					des(t_parse *p);
-int					des_dec(t_parse *p, int64_t q);
-int					des_enc(t_parse *p, int64_t q);
+int					des_dec(t_parse *p);
+int					des_enc(t_parse *p);
 int					check_out(t_parse *p);
 int					check_k_v(t_parse *p);
-char				*des_padding(t_parse *p, int64_t q);
+char				*des_padding(t_parse *p);
 int64_t				des_unpadding(t_write *w);
 int					opt_a_e(t_parse *p);
 int					opt_a_d(t_parse *p);
@@ -348,20 +348,20 @@ int					pbkdf(t_parse *p, bool verify, char *salt);
 /*
 ** des/mode
 */
-int					ecb_e(t_parse *p, int64_t q);
-int					ecb_d(t_parse *p, int64_t q);
-int					cbc_e(t_parse *p, int64_t q);
-int					cbc_d(t_parse *p, int64_t q);
-int					ofb_e_d(t_parse *p, int64_t q);
-int					cfb_e(t_parse *p, int64_t q);
-int					cfb_d(t_parse *p, int64_t q);
-int					ecb3_e(t_parse *p, int64_t q);
-int					ecb3_d(t_parse *p, int64_t q);
-int					cbc3_e(t_parse *p, int64_t q);
-int					cbc3_d(t_parse *p, int64_t q);
-int					ofb3_e_d(t_parse *p, int64_t q);
-int					cfb3_e(t_parse *p, int64_t q);
-int					cfb3_d(t_parse *p, int64_t q);
+int					ecb_e(t_parse *p);
+int					ecb_d(t_parse *p);
+int					cbc_e(t_parse *p);
+int					cbc_d(t_parse *p);
+int					ofb_e_d(t_parse *p);
+int					cfb_e(t_parse *p);
+int					cfb_d(t_parse *p);
+int					ecb3_e(t_parse *p);
+int					ecb3_d(t_parse *p);
+int					cbc3_e(t_parse *p);
+int					cbc3_d(t_parse *p);
+int					ofb3_e_d(t_parse *p);
+int					cfb3_e(t_parse *p);
+int					cfb3_d(t_parse *p);
 /*
 ** ASYM
 */

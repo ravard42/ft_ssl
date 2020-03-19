@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-int					ofb3_e_d(t_parse *p, int64_t q)
+int					ofb3_e_d(t_parse *p)
 {
 	uint64_t	v[2];
 	int64_t		r;
@@ -21,7 +21,7 @@ int					ofb3_e_d(t_parse *p, int64_t q)
 	r = p->r.len % 8;
 	v[0] = *p->s.arg[1].x;
 	i = -1;
-	while (++i < q)
+	while (++i < p->r.len / 8 - p->i[1])
 	{
 		v[0] = des3_block_e(v[0], &p->s);
 		v[1] = v[0] ^ *((uint64_t *)p->r.msg + p->i[1] + i);

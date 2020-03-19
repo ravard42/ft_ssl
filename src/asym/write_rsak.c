@@ -65,6 +65,7 @@ static int			der_enc(t_parse *p, int nb_v)
 	}
 	else if (v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9) != 1)
 		return (0);
+	return (1);
 }
 
 

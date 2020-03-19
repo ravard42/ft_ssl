@@ -12,14 +12,14 @@
 
 #include "ft_ssl.h"
 
-int					cbc_e(t_parse *p, int64_t q)
+int					cbc_e(t_parse *p)
 {
 	uint64_t	v[2];
 	int64_t		i;
 
 	v[0] = *p->s.arg[1].x;
 	i = -1;
-	while (++i < q + 1)
+	while (++i < p->r.len / 8)
 	{
 		v[0] = des_block_e(*((uint64_t *)p->r.msg + i) ^ v[0], &p->s);
 		ft_memcpy(p->w.msg + p->w.len, v, 8);
@@ -28,14 +28,14 @@ int					cbc_e(t_parse *p, int64_t q)
 	return (0);
 }
 
-int					cbc_d(t_parse *p, int64_t q)
+int					cbc_d(t_parse *p)
 {
 	uint64_t	v[2];
 	int64_t		i;
 
 	v[0] = *p->s.arg[1].x;
 	i = -1;
-	while (++i < q)
+	while (++i < p->r.len / 8 - p->i[1])
 	{
 		v[1] = *((uint64_t *)p->r.msg + p->i[1] + i);
 		v[0] = des_block_d(v[1], &p->s) ^ v[0];

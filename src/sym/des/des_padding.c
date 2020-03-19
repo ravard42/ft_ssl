@@ -12,12 +12,12 @@
 
 #include "ft_ssl.h"
 
-char			*des_padding(t_parse *p, int64_t q)
+char			*des_padding(t_parse *p)
 {
 	t_read	tmp;
 	uint8_t	r;
 
-	tmp.len = 8 * (q + 1);
+	tmp.len = 8 * (p->r.len / 8 + 1);
 	r = p->r.len % 8;
 	if (!(tmp.msg = (char *)ft_memalloc(sizeof(char) * tmp.len)))
 		return (NULL);

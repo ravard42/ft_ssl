@@ -84,7 +84,7 @@ static int	pem_des_dec(t_parse *p)
 	p->s.arg[1].set = true;
 	if (!opt_a_d(p))
 		return (0);
-	if (!des_dec(p, p->r.len / 8))
+	if (!des_dec(p))
 		return (0);
 	free(p->r.msg);
 	p->r.msg = p->w.msg;

@@ -31,17 +31,27 @@ void						text(int8_t nb_v, t_parse *p)
 	}
 }
 
-
-int						rsa(t_parse *p)
+void					print_opt(int8_t nb_v, t_parse *p)
 {
-	int	nb_v;
+	int8_t					mod_id;
 
-	if (!(nb_v = read_rsak(p)))
-		return (0);
 	if (p->a.o[9])
 		text(nb_v, p);
 	if (p->a.o[10] && ft_dprintf(1, "Modulus="))
-		ft_putrhex(p->a.rsak[1].x, p->a.rsak[1].len, true, true);
+	{
+		mod_id = (nb_v == 2) ? 0 : 1;
+		ft_putrhex(p->a.rsak[mod_id].x, p->a.rsak[mod_id].len, 3);
+	}	
+	
+}
+
+int						rsa(t_parse *p)
+{
+	int		nb_v;
+
+	if (!(nb_v = read_rsak(p)))
+		return (0);
+	print_opt(nb_v, p);
 	if (!p->a.o[11])
 		write_rsak(p, nb_v);
 	return (0);

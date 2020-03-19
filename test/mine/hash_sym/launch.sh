@@ -138,4 +138,4 @@ echo -e "${COL}${cmd:5} : ${OK}/$#${KNRM}"
 
 done
 
-rm my_ssl.enc openssl.enc my_ssl.dec
+sh clear.sh

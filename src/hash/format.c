@@ -33,7 +33,7 @@ static void		handle_opts(t_parse *p, t_hash *hash)
 
 	(void)ternary;
 	if (p->h.o[2])
-		ft_puthex(hash->h, p->cmd.hash_hex_len, false, true);
+		ft_puthex(hash->h, p->cmd.hash_hex_len, 5);
 	else
 	{
 		if (!p->h.o[3])
@@ -41,11 +41,11 @@ static void		handle_opts(t_parse *p, t_hash *hash)
 			toupper_stdout(p->cmd.name);
 			ternary = (p->h.o[4]) ? ft_printf("(\"%s\")= ", p->r.msg)
 				: ft_printf("(%s)= ", p->in_file);
-			ft_puthex(hash->h, p->cmd.hash_hex_len, false, true);
+			ft_puthex(hash->h, p->cmd.hash_hex_len, 5);
 		}
 		else
 		{
-			ft_puthex(hash->h, p->cmd.hash_hex_len, false, false);
+			ft_puthex(hash->h, p->cmd.hash_hex_len, 4);
 			ternary = (p->h.o[4]) ? ft_printf(" \"%s\"\n", p->r.msg)
 				: ft_printf(" %s\n", p->in_file);
 		}
@@ -60,7 +60,7 @@ void			print_format(t_parse *p, t_hash *hash)
 	{
 		if (p->h.o[1])
 			ft_printf("%s", p->r.msg);
-		ft_puthex(hash->h, p->cmd.hash_hex_len, false, true);
+		ft_puthex(hash->h, p->cmd.hash_hex_len, 5);
 	}
 	p->i[2]++;
 	p->h.o[0] = (p->in_file) ? 1 : 0;

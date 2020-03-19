@@ -102,8 +102,8 @@ rsa_inpripem() {
 openssl genrsa -out pripem.ref $numbits
 if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
-openssl rsa -in pripem.ref -text -noout > text.openssl
-./ft_ssl rsa -in pripem.ref -text -noout > text.ft_ssl
+openssl rsa -in pripem.ref -text -modulus -noout > text.openssl
+./ft_ssl rsa -in pripem.ref -text -modulus -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
@@ -113,8 +113,8 @@ pw="4charmin$RANDOM"
 openssl genrsa $numbits | openssl rsa -des -passout pass:$pw -out prienc.ref
 if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
-openssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.openssl
-./ft_ssl rsa -in prienc.ref -passin pass:$pw  -text -modulus -noout > text.ft_ssl
+openssl rsa -in prienc.ref -passin pass:$pw  -text -noout > text.openssl
+./ft_ssl rsa -in prienc.ref -passin pass:$pw  -text -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
@@ -133,8 +133,8 @@ rsa_inpubpem() {
 openssl genrsa $numbits | openssl rsa -pubout -out pubpem.ref
 if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
 
-openssl rsa -in pubpem.ref -pubin -text -noout > text.openssl
-./ft_ssl rsa -in pubpem.ref -pubin -text -noout > text.ft_ssl
+openssl rsa -in pubpem.ref -pubin -text -modulus -noout > text.openssl
+./ft_ssl rsa -in pubpem.ref -pubin -text -modulus -noout > text.ft_ssl
 
 diff text.openssl text.ft_ssl
 }
