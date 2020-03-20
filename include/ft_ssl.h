@@ -183,7 +183,7 @@ typedef struct		s_sym
 static const t_varint	g_f4 = {1, 3, {1, 0, 1}};
 
 
-# define PEM_ENC_HEAD "Proc-Type: 4,ENCRYPTED\nDEK-Info: DES-CBC," 
+# define PEM_ENC_HEADER "Proc-Type: 4,ENCRYPTED\nDEK-Info: DES-CBC," 
 
 typedef struct		s_asym
 {

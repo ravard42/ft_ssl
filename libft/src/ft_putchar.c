@@ -12,18 +12,18 @@
 
 #include "libft.h"
 
-void			ft_putchar(char c)
+void			ft_putchar(int fd, char c)
 {
 	int	i;
 
-	i = write(1, &c, 1);
+	i = write(fd, &c, 1);
 	(void)i;
 }
 
-void			ft_putnchar(char *ptr, size_t len)
+void			ft_putnchar(int fd, char *ptr, size_t len)
 {
 	int	i;
 
-	i = write(1, ptr, len);
+	i = write(fd, ptr, len);
 	(void)i;
 }

@@ -39,8 +39,10 @@ test_type[6]='rsa_pipepubder'
 test_type[7]='rsa_pipepubpem'
 test_type[8]='rsa_pipeprider'
 test_type[9]='rsa_pipepripem'
-test_type[10]='rsa_full'
-nb_type=11
+test_type[10]='rsa_desout'
+test_type[11]='rsa_check'
+test_type[12]='rsa_full'
+nb_type=13
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -181,16 +183,24 @@ if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1;
 diff pripem.ref pripem.ft_ssl
 }
 
-#rsa_desout() {
-#
-#}
-#
-#rsa_check() {
-#
-#}
+rsa_desout() {
+openssl genrsa -out pripem.ref $numbits
+if (($? != 0));then echo -ne "${KRED}${err512}${KNRM}"; echo -ne "\r"; return 1; fi
+
+pw="4charmin$RANDOM"
+./ft_ssl rsa -in pripem.ref -des -passout pass:$pw | openssl rsa -passin pass:$pw -out pripem.ft_ssl
+
+diff pripem.ref pripem.ft_ssl
+}
+
+rsa_check() {
+echo -ne "${KRED}to be computed${KNRM}"
+echo -ne "\r"
+return 1
+}
 
 rsa_full() {
-for ((j=1;j<10;++j));do
+for ((j=1;j<12;++j));do
 sh launch.sh ${test_type[$j]} $numbits $nb_tests
 done
 ls | grep -v launch.sh | xargs rm

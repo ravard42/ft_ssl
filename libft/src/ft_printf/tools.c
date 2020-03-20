@@ -14,7 +14,7 @@
 
 void			ft_exit(char *error)
 {
-	ft_putstr(error);
+	ft_putstr(1, error);
 	exit(0);
 }
 

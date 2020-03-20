@@ -20,7 +20,7 @@ static int		check_enc_header(int64_t *offset, t_parse *p)
 {
 	char		*str;
 
-	str = PEM_ENC_HEAD;
+	str = PEM_ENC_HEADER;
 	if ((offset[1] = ft_grep_line(str, &p->r, offset[0])) == offset[0])
 	{
 		offset[0] += ft_strlen(str);

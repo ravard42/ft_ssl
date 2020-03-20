@@ -106,27 +106,6 @@ static char		*pw_parser(t_parse *p, int argc, char **argv)
 static const char		*g_rsa_usg[] = {IN, OUT, IF, OF, PI, PO, ENC, PBI, PBO, T, M, N, C, ""};
 static const char		*g_rsa_opt[] = {"-in", "-out", "-inform", "-outform", "-passin", "-passout", "-des", "-pubin", "-pubout", "-text", "-modulus", "-noout", "-check", ""};
 
-void		t_asym_print(t_parse *p)
-{
-	ft_printf("in = %0.16p\n", p->in_file);
-	if (p->in_file)
-		ft_printf("*in = %s\n", p->in_file);
-	ft_printf("p->r.msg : %s\n", p->r.msg);
-	ft_printf("out = %0.16p\n", p->out_file);
-	if (p->out_file)
-		ft_printf("*out = %s\n", p->out_file);
-	for (int i = 0; i < 13; i++)
-		ft_printf("o[%d] = %d\n", i, p->a.o[i]);	
-	ft_printf("p->s.arg[0].p = %0.16p\n", p->s.arg[0].p);
-	if (p->s.arg[0].p)
-		ft_printf("*p->s.arg[0].p = %s\n", p->s.arg[0].p);
-	ft_printf("p->s.arg[1].p = %0.16p\n", p->s.arg[1].p);
-	if (p->s.arg[1].p)
-		ft_printf("*p->s.arg[1].p = %s\n", p->s.arg[1].p);
-	ft_printf("mod_nb = %hd\n", p->a.mod_nb);	
-	ft_printf("rsak = %0.16p\n", p->a.rsak);	
-}
-
 int				rsa_parser(t_parse *p, int argc, char **argv)
 {
 	while (++p->i[0] < argc)
@@ -148,10 +127,5 @@ int				rsa_parser(t_parse *p, int argc, char **argv)
 		return (-3);
 	if (p->a.o[6] && !p->s.arg[1].p && !(p->s.arg[1].p = set_pass(true)))
 		return (-3);
-
-//	t_asym_print(p);
-
-
-
 	return (1);
 }

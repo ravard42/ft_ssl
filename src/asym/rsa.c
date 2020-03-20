@@ -40,7 +40,7 @@ void					print_opt(int8_t nb_v, t_parse *p)
 	if (p->a.o[10] && ft_dprintf(1, "Modulus="))
 	{
 		mod_id = (nb_v == 2) ? 0 : 1;
-		ft_putrhex(p->a.rsak[mod_id].x, p->a.rsak[mod_id].len, 3);
+		ft_putrhex(1, p->a.rsak[mod_id].x, p->a.rsak[mod_id].len, 3);
 	}	
 	
 }
