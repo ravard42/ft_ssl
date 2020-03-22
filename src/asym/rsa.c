@@ -42,8 +42,24 @@ void					print_opt(int8_t nb_v, t_parse *p)
 		mod_id = (nb_v == 2) ? 0 : 1;
 		ft_putrhex(1, p->a.rsak[mod_id].x, p->a.rsak[mod_id].len, 3);
 	}	
-	
 }
+
+static void			check_opt(t_parse *p)
+{
+	ft_dprintf(1, "true : %d\n", true);
+	ft_dprintf(1, "false : %d\n", false);
+	ft_dprintf(1, "%d\n", prob_prim_test(p->a.rsak + 4, &p->rng));
+	ft_dprintf(1, "%d\n", prob_prim_test(p->a.rsak + 5, &p->rng));
+	v_inc(p->a.rsak + 4, false);
+	ft_dprintf(1, "%d\n", prob_prim_test(p->a.rsak + 4, &p->rng));
+}
+
+/*
+**	o[9] : 1 for -text, else 0
+**	o[10] : 1 for -modulus, else 0
+**	o[11] : 1 for -noout, else 0
+**	o[12] : 1 for -check, else 0
+*/
 
 int						rsa(t_parse *p)
 {
@@ -52,6 +68,8 @@ int						rsa(t_parse *p)
 	if (!(nb_v = read_rsak(p)))
 		return (0);
 	print_opt(nb_v, p);
+	if (p->a.o[12] && nb_v == 9)
+		check_opt(p);
 	if (!p->a.o[11])
 		write_rsak(p, nb_v);
 	return (0);

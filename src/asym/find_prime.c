@@ -73,7 +73,7 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 **		to store intermediate results to compute s
 */
 
-static bool			prob_prim_test(t_varint *n, t_rng *rng)
+bool					prob_prim_test(t_varint *n, t_rng *rng)
 {
 	t_varint	n_min_1;
 	t_varint	s[2];

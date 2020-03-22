@@ -118,7 +118,15 @@ t_varint				*v_asn1_int_seq_der_d(int *nb_varint, t_read *r)
 	ret = (t_varint *)malloc(sizeof(t_varint) * *nb_varint);
 	cur = &ori;
 	while ((cur = cur->nxt) != NULL)
+	{
 		ret[cur->id] = v_load(cur->st, cur->len);
+		if (is_g_v(3, ret + cur->id))
+		{
+			free(ret);
+			free_der_d(&ori);
+			return (NULL);
+		}
+	}
 	free_der_d(&ori);
 	return (ret);
 }

@@ -370,6 +370,7 @@ int					rsa_parser(t_parse *p, int argc, char **argv);
 int					rsautl_parser(t_parse *p, int argc, char **argv);
 int					genrsa(t_parse *p);
 bool					sieve(t_varint *n);
+bool					prob_prim_test(t_varint *n, t_rng *rng);
 t_varint				find_prime(int16_t nb, int16_t len, t_rng *rng);
 int					read_rsak(t_parse *p);
 int					write_rsak(t_parse *p, int nb_v);
