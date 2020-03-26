@@ -19,6 +19,10 @@
 ** and not the number of bits 
 **
 ** v_msb_id need valid varint len!
+**
+** binary decomposition:
+** a = 1 * 2^n +  a_n-1 * 2^(n - 1) + ... + 2^0 * a_0
+** msb_id(a) = (a != 0) ? n : -1
 */
 
 int16_t					v_msb_id(t_varint *v)

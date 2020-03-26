@@ -44,9 +44,9 @@ static bool				init_asym_p(t_parse *p)
 	if (!ft_strcmp("genrsa", p->cmd.name))
 	{
 		p->a.mod_nb = 64;
-		if ((V_MAX_LEN < 8 || V_MAX_LEN > 512)
-			&& ft_dprintf(2, "%s%s%s", KRED, V_GENRSA_STACK_ERR, KNRM))
-		return (false);
+//		if ((V_MAX_LEN < 8 || V_MAX_LEN > 512)
+//			&& ft_dprintf(2, "%s%s%s", KRED, V_GENRSA_STACK_ERR, KNRM))
+//		return (false);
 		if (!(p->a.rsak = (t_varint *)ft_memalloc(sizeof(t_varint) * 9))
 			&& ft_dprintf(2, "%srsak malloc error%s\n", KRED, KNRM))
 			return (false);

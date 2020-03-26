@@ -51,7 +51,7 @@ SRC = src/main.c\
 		src/asym/asym_parser/rsa_parser.c\
 		src/asym/asym_parser/rsautl_parser.c\
 		src/asym/sieve.c\
-		src/asym/find_prime.c\
+		src/asym/prob_prime_test.c\
 		src/asym/genrsa.c\
 		src/asym/read_rsak.c\
 		src/asym/write_rsak.c\

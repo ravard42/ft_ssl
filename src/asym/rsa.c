@@ -44,14 +44,15 @@ void					print_opt(int8_t nb_v, t_parse *p)
 	}	
 }
 
+// check len of input key to prevent overflow in check_opt
 static void			check_opt(t_parse *p)
 {
 	ft_dprintf(1, "true : %d\n", true);
 	ft_dprintf(1, "false : %d\n", false);
-	ft_dprintf(1, "%d\n", prob_prim_test(p->a.rsak + 4, &p->rng));
-	ft_dprintf(1, "%d\n", prob_prim_test(p->a.rsak + 5, &p->rng));
+	ft_dprintf(1, "%d\n", prob_prime_test(p->a.rsak + 4, &p->rng, false));
+	ft_dprintf(1, "%d\n", prob_prime_test(p->a.rsak + 5, &p->rng, false));
 	v_inc(p->a.rsak + 4, false);
-	ft_dprintf(1, "%d\n", prob_prim_test(p->a.rsak + 4, &p->rng));
+	ft_dprintf(1, "%d\n", prob_prime_test(p->a.rsak + 4, &p->rng, false));
 }
 
 /*

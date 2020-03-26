@@ -24,7 +24,7 @@
 */
 
 # define V_ERR				"g_v_r has been called\n"
-# define V_MAX_LEN_ERR	"V_MAX_LEN must be a multiple of 8 and <= 4096\nexit ...\n"
+# define V_MAX_LEN_ERR	"V_MAX_LEN must be a multiple of 8 s.t 0 < V_MAX_LEN <= 4096\nexit ...\n"
 # define V_LEN_ERR 			"v.len <= 0 or v.len > MAX_LEN\n"
 # define V_COR_LEN 			"corrupted varint : len and data doesn't match\n"
 # define V_BAD_SIGN 		"sign must be -1 or 1\n"
@@ -36,7 +36,7 @@
 # define V_EXP_OVFL			"overflow in v_exp, increase V_MAX_LEN\n"
 # define V_EXP_LIM			"exponent lim value overtaken in v_exp\n"
 # define V_EXPMOD_OVFL		"overflow in v_expmod, increase V_MAX_LEN\n"
-# define V_EEA_OVFL			"overflow in v_eea (v_inv), increase V_MAX_LEN\n"
+# define V_EEA_OVFL			"overflow in v_eea or v_inv, increase V_MAX_LEN\n"
 # define V_DIV_BY_0 		"division by 0\n"
 # define V_INV_MOD_ERR 		"elem not inversible for this modulo\n"
 # define V_DER_INT_SEQ_ONLY	"asn1 der alg only handle sequence of integers\n"
@@ -54,7 +54,7 @@
 */
 
 # define V_BIT_LEN			8
-# define V_MAX_LEN		 	512
+# define V_MAX_LEN		 	72
 
 /*
 ** must be a mutliple of 8 and <= 4096 (32768 bits)
@@ -153,7 +153,7 @@ t_varint					v_mod(t_varint dend, t_varint sor, bool eucl,
 t_varint					v_expmod(t_varint v, t_varint e, t_varint mod,
 		bool check);
 t_varint					v_gcd(t_varint a, t_varint b, bool check);
-void						v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check);
+t_varint					*v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check);
 t_varint					v_inv(t_varint v, t_varint mod, bool check);
 t_varint					v_crt(t_varint v, t_varint e, t_varint p,
 		t_varint q);

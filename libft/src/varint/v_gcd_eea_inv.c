@@ -44,23 +44,21 @@ t_varint		v_gcd(t_varint a, t_varint b, bool check)
 /*
 ** V_EEA OVFL NOTE
 **
-** we know that final resultat (coef_r0, coef_r0 + 1) can be contained in the same varint size that inputs
+** we know that final resultat (coef_r0, coef_r0 + 1) can be stored in the same varint len than max(a.len, b.len)
 ** however when processing v_mul algo in eea it could overflow in the way we handle carry (32-bit * 32-bit in 64-bit)
 ** (cf v_mul algo -> u64 = (uint64_t *)((uint32_t *)ret->x + i + j);)
-** let alen32, blen32 and maxlen32 that represent the number of uint32_t chunk necessary to contained respectively a, b and V_MAX_LEN chunks 
-**	we want max32 >= alen32 + blen32
+**	2 more uint32_t chuncks are needed to compute it
 */
 
 bool			v_eea_check(t_varint *v[3])
 {
-	int64_t	len32[3];
+	int64_t	len32[2];
 
-	len32[0] = v[0]->len / 4;
-	len32[0] += (v[0]->len % 4) ? 1 : 0;
-	len32[1] = v[1]->len / 4;
-	len32[1] += (v[1]->len % 4) ? 1 : 0;
-	len32[2] = V_MAX_LEN / 4;
-	if (len32[0] + len32[1] > len32[2]
+	len32[0] = (v[0]->len >= v[1]->len) ? v[0]->len : v[1]->len;
+	len32[0] /= 4;
+	len32[0] += 2;
+	len32[1] = V_MAX_LEN / 4;
+	if (len32[0] > len32[1]
 		&& ft_dprintf(2, "%s%s%s", KRED, V_EEA_OVFL, KNRM))
 		return (false);
 	return (true);
@@ -88,14 +86,14 @@ static void	process(t_varint *coef_r0, t_varint *coef_r1, t_varint *r)
 ** coef_r1[2]	: coef alpha et beta de r[1]
 */
 
-void			v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check)
+t_varint 		*v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check)
 {
 	int8_t	sign[3];
 	t_varint	r[2];
 	t_varint	coef_r1[2];
 
 	if (check && !v_check(&a, &b, NULL, "eea"))
-		return ;
+		return NULL;
 	sign[2] = v_sort(&a, &b, sign);
 	r[0] = a;
 	r[1] = b;
@@ -112,7 +110,8 @@ void			v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check)
 		r[0] = coef_r0[0];
 		coef_r0[0] = coef_r0[1];
 		coef_r0[1] = r[0];
-	}	
+	}
+	return (coef_r0);
 }
 
 /*

@@ -67,7 +67,8 @@ t_varint		v_add_pos(t_varint a, t_varint b)
 		u64[0]++;
 		u64[1]++;
 	}
-	*u64[0] += carry;
+	if (len < V_MAX_LEN / 8)
+		*u64[0] += carry;
 	v_len(&a, 8 * len + carry);
 	return (a);
 }

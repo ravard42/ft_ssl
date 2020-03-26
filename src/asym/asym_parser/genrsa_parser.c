@@ -12,10 +12,10 @@ static int		numbits(char *nb)
 		return(-1);
 	ret = (int16_t)ft_atoi(nb);
 	if (ret < 64
-		&& ft_dprintf(2, "%smodulus numbits too small%s\n", KRED, KNRM))
+		&& ft_dprintf(2, "%smodulus numbits must be >= 64%s\n", KRED, KNRM))
 		return (-1);
-	else if (ret > 8192
-		&& ft_dprintf(2, "%smodulus numbits too big%s\n", KRED, KNRM))
+	else if (ret > 4096
+		&& ft_dprintf(2, "%smodulus numbits must be <= 4096%s\n", KRED, KNRM))
 		return (-1);
 	return (ret);
 }

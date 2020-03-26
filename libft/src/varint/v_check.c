@@ -16,7 +16,7 @@ static bool				v_len_check(t_varint *v)
 {
 	int16_t		tmp;
 
-	if ((V_MAX_LEN % 8 != 0 || V_MAX_LEN > 4096)
+	if ((V_MAX_LEN <= 0 || V_MAX_LEN % 8 != 0 || V_MAX_LEN > 4096)
 		&& ft_dprintf(2, "%s%s%s", KRED, V_MAX_LEN_ERR, KNRM))
 		exit(0);
 	if ((v->len <= 0 || v->len > V_MAX_LEN)

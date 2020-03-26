@@ -12,29 +12,25 @@
 
 #include "libft.h"
 
-/*
-** binary decomposition
-** a = 1 * 2^n +  a_n-1 * 2^(n - 1) + ... + 2^0 * a_0
-** b = 1 * 2^m +  b_m-1 * 2^(m - 1) + ... + 2^0 * b_0
-**
-** msb_id(a) = (a != 0) ? n : -1
-** msb_id(b) = (b != 0) ? m : -1
-*/
 
 /*
 **	V_MUL OVFL NOTE
 **
-** msb_id(a * b) <= n + m
+**	we know result can be stored in a varint v s.t:
+** v.len = a.len + b.len
+** however we need 2 more uint32_t chuncks because of the way we compute data with uint64_t ptr (cf process func)
+** 
 */
 
 bool			v_mul_check(t_varint *v[3])
 {
-	int16_t	msb[3];
+	int64_t	len32[2];
 
-	msb[0] = v_msb_id(v[0]);
-	msb[1] = v_msb_id(v[1]);
-	msb[2] = msb[0] + msb[1];
-	if (1 + msb[2] / V_BIT_LEN > V_MAX_LEN
+	len32[0] = v[0]->len + v[1]->len;
+	len32[0] /= 4;
+	len32[0] += 2;
+	len32[1] = V_MAX_LEN / 4;
+	if (len32[0] > len32[1]
 		&& ft_dprintf(2, "%s%s%s", KRED, V_MUL_OVFL, KNRM))
 		return (false);
 	return (true);
