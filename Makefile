@@ -8,7 +8,8 @@ FLAGS = -Wall -Wextra -g -fsanitize=address
 #FLAGS = -Wall -Wextra -O2
 
 SRC = src/main.c\
-		src/parser/init_free.c\
+		src/parser/init.c\
+		src/parser/free.c\
 		src/parser/cmd_opt_parser.c\
 		src/parser/cmd_opt_usage.c\
 		src/parser/arg_parser.c\

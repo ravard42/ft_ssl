@@ -25,11 +25,8 @@ int	main(int argc, char **argv)
 	t_parse			p;
 	int				tmp;
 
-	if (argc == 1
-		|| (tmp = init_p(&p, argv[1])) == -1)
+	if (argc == 1 || !init_p(&p, argv[1], 31))
 		return (cmd_usage());
-	if (tmp == 0)
-		return (0);
 	while ((tmp = p.cmd.parser(&p, argc, argv)))
 	{
 		if (tmp == -3 || tmp == -2)
@@ -39,6 +36,6 @@ int	main(int argc, char **argv)
 		if (!p.cmd.run(&p))
 			break ;
 	}
-	free_p(&p);
+	free_p(&p, 31);
 	return (0);
 }

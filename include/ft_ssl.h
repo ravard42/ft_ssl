@@ -235,10 +235,10 @@ typedef struct		s_parse
 {
 	t_cmd			cmd;
 	uint8_t			i[3];
-	t_read			r;
 	char			*in_file;
-	t_write			w;
+	t_read			r;
 	char			*out_file;
+	t_write			w;
 	t_hash			h;
 	t_sym			s;
 	t_asym			a;
@@ -263,8 +263,8 @@ int					str_parser(t_parse *p, char *arg);
 int					fd_parser(t_parse *p, char *arg);
 int					cmd_usage(void);
 int					opt_usage(char *title, const char **usg);
-int					init_p(t_parse *p, char *cmd);
-void				free_p(t_parse *p);
+bool					init_p(t_parse *p, char *cmd, uint8_t init_opt);
+void				free_p(t_parse *p, uint8_t free_opt);
 /*
 ** HASH CRYPTOGRAPHY
 */

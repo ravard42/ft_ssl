@@ -26,6 +26,6 @@ int		md5(t_parse *p)
 		multi_bswap32(p->h.h, 4);
 	if (!p->h.pbkdf)
 		print_format(p, &p->h);
-	free_p(p);
+	free_p(p, 3);
 	return (1);
 }

@@ -18,11 +18,12 @@ typedef struct s_parse	t_parse;
 typedef struct			s_cmd
 {
 	int8_t			type;
-	char			name[15];
-	char			endian;
-	char			hash_hex_len;
+	char				name[15];
+//	uint8_t			init_opt;
+	char				endian;
+	char				hash_hex_len;
 	int				(*parser)(t_parse *, int, char **);
-	bool			needed[3];
+	bool				needed[3];
 	uint8_t			nb_k;
 	int				(*run)(t_parse *);
 	int				(*run_e)(t_parse *);
@@ -30,18 +31,17 @@ typedef struct			s_cmd
 }						t_cmd;
 
 /*
+**	ABOUT t_cmd ATTRIBUTES:
+**
 **	type == 0 <=> Standard command
 **	type == 1 <=> Message Digest command
 **	type == 2 <=> Cipher command
-*/
-
-/*
-**needed <=> args which need to be feed at running
-**needed[0] : key
-**needed[1] : initial vector (64bit dans tous les cas)
-**needed[2] : padding (only for sym cmd)
-**nb_k == 1 <=> 64bit key needed : 56 used
-**nb_k == 3	<=> 192bit key needed : 168 used
+** needed 	<=> args which need to be feed at running
+** needed[0] :  key
+** needed[1] :  initial vector (64bit dans tous les cas)
+** needed[2] :  padding (only for sym cmd)
+** nb_k == 1 <=> 64bit key needed : 56 used
+** nb_k == 3 <=> 192bit key needed : 168 used
 */
 
 int						hash_parser(t_parse *p, int argc, char **argv);

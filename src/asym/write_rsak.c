@@ -73,10 +73,8 @@ static int			des_pbkdf(t_parse *p)
 	t_parse tmp;
 
 	ft_dprintf(p->w.fd, PEM_ENC_HEADER);
-	if ((p->rng.fd = open("/dev/urandom", O_RDONLY)) == -1
-		&& ft_dprintf(2, "%sopen rng seed file error%s\n", KRED, KNRM))
+	if (!prng(p->s.arg[2].x, 8, &p->rng))
 		return (0);
-	prng(p->s.arg[2].x, 8, &p->rng);
 	p->s.arg[2].set = true;
 	ft_puthex(p->w.fd, p->s.arg[2].x, 8, 7);
 	ft_dprintf(p->w.fd, "\n");
@@ -93,7 +91,7 @@ static int			des_pbkdf(t_parse *p)
 	return (1);
 }
 
-static int			des_encrypt(t_parse *p, int nb_v)
+static int			des_enc_b64(t_parse *p, int nb_v)
 {
 	//openssl don't output this err_msg, it just ignore -des and output a pubpem
 	if (nb_v != 9 
@@ -137,7 +135,7 @@ int						write_rsak(t_parse *p, int nb_v)
 	else
 	{
 		ft_dprintf(p->w.fd, g_beg_end_str[p->a.o[8]]);
-		if (p->a.o[6] && !des_encrypt(p, nb_v))
+		if (p->a.o[6] && !des_enc_b64(p, nb_v))
 				return (0);
 		else if (!p->a.o[6] && run_b64_e(p) == -2)
 			return (0);

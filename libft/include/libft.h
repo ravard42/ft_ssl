@@ -114,6 +114,7 @@ uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str, bool yel_msg);
 char				**malloc_empty_str_tab(void);
 int					free_ok(void *ptr);
 int					free_split(char **tab);
+void				free_if(void **ptr);
 char				*rm_begin_whitespace(char *str);
 char				*rm_multi_whitespace(char *str);
 int					get_next_line(int fd, char **line);

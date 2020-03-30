@@ -89,10 +89,8 @@ int				b64(t_parse *p)
 {
 	int			ret;
 
-	if (p->out_file)
-		p->w.fd = open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else
-		p->w.fd = 1;
+	p->w.fd = (p->out_file) ?
+		open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644) : 1;
 	if (p->w.fd == -1
 		&& ft_dprintf(2, "%sout_file opening error\n%s", KRED, KNRM))
 		return (0);
@@ -101,6 +99,5 @@ int				b64(t_parse *p)
 	if (ret == -2)
 		return (0);
 	write(p->w.fd, p->w.msg, p->w.len);
-	free_p(p);
 	return (ret);
 }

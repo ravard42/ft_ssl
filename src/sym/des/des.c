@@ -66,6 +66,5 @@ int					des(t_parse *p)
 	if (!p->s.o[1] && p->s.o[4] && !opt_a_e(p))
 		return (0);
 	write(p->w.fd, p->w.msg, p->w.len);
-	free_p(p);
 	return (0);
 }

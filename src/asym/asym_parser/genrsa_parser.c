@@ -20,17 +20,28 @@ static int		numbits(char *nb)
 	return (ret);
 }
 
-static bool		open_fd_rng(t_parse *p)
+static bool		seed_with_file(t_parse *p)
 {
-	p->in_file = (p->in_file) ? p->in_file : ft_strdup("/dev/urandom");
+	close(p->rng.fd);
 	if ((p->rng.fd = open(p->in_file, O_RDONLY)) == -1
 		&& ft_dprintf(2, "%sopen rng seed file error%s\n", KRED, KNRM))
 		return (false);
 	return (true);
 }
 
+static bool		init_rsak(t_asym *a)
+{
+	if (!(a->rsak = (t_varint *)ft_memalloc(sizeof(t_varint) * 9))
+		&& ft_dprintf(2, "%srsak malloc error%s\n", KRED, KNRM))
+		return (false);
+	return (true);
+}
+
+
 int				genrsa_parser(t_parse *p, int argc, char **argv)
 {
+	if (!init_rsak(&p->a))
+		return (-2);
 	while (++p->i[0] < argc)
 	{
 		if (p->i[0] == argc - 1)
@@ -50,7 +61,7 @@ int				genrsa_parser(t_parse *p, int argc, char **argv)
 					return (-2);
 		}
 	}
-	if (!open_fd_rng(p))
+	if (p->in_file && !seed_with_file(p))
 		return (-3);
 	return (1);
 }

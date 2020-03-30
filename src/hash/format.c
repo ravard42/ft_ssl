@@ -64,4 +64,6 @@ void			print_format(t_parse *p, t_hash *hash)
 	}
 	p->i[2]++;
 	p->h.o[0] = (p->in_file) ? 1 : 0;
+	p->h.o[1] = 0;
+	p->h.o[4] = 0;
 }

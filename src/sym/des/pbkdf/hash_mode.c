@@ -14,7 +14,7 @@
 
 int				sha256_pbkdf(t_parse *tmp, t_parse *p)
 {
-	init_p(tmp, "sha256");
+	init_p(tmp, "sha256", 3);
 	tmp->h.pbkdf = true;
 	tmp->r.len = ft_strlen(p->s.arg[3].p) + 8;
 	tmp->r.msg = ft_memalloc(sizeof(char) * (tmp->r.len));
@@ -27,7 +27,7 @@ int				sha256_pbkdf(t_parse *tmp, t_parse *p)
 
 static int		nxt_md5_pbkdf_round(t_parse *tmp, uint32_t *h_tmp, t_parse *p)
 {
-	init_p(tmp, "md5");
+	init_p(tmp, "md5", 3);
 	tmp->h.pbkdf = true;
 	tmp->r.len = 16 + ft_strlen(p->s.arg[3].p) + 8;
 	tmp->r.msg = ft_memalloc(sizeof(char) * (tmp->r.len));
@@ -43,7 +43,7 @@ int				md5_pbkdf(t_parse *tmp, t_parse *p)
 {
 	uint32_t	h_tmp[4];
 
-	init_p(tmp, "md5");
+	init_p(tmp, "md5", 3);
 	tmp->h.pbkdf = true;
 	tmp->r.len = ft_strlen(p->s.arg[3].p) + 8;
 	tmp->r.msg = ft_memalloc(sizeof(char) * (tmp->r.len));

@@ -38,3 +38,10 @@ int			free_split(char **tab)
 	free(tab);
 	return (1);
 }
+
+void		free_if(void **ptr)
+{
+	if (*ptr != NULL)
+		free(*ptr);
+	*ptr = NULL;
+}

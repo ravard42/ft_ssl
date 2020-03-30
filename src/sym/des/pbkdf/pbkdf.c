@@ -38,23 +38,14 @@ char					*set_pass(bool verify)
 
 static int			set_salt(t_parse *p, char *salt)
 {
-	int fd;
-
 	if (salt)
 	{
 		if (p->r.len < 16)
 			return (0);
 		ft_memcpy(p->s.arg[2].x, salt, 8);
 	}
-	else
-	{
-		if ((fd = open("/dev/urandom", O_RDONLY)) == -1
-			&& ft_dprintf(2, "%sopen /dev/urandom error in pbkdf%s\n", KRED, KNRM))
-			return (0);
-		if (read(fd, &p->s.arg[2].x, 8) == -1
-			&& ft_dprintf(2, "%sread error in pbkdf%s\n", KRED, KNRM))
-			return (0);
-	}
+	else if (!prng(p->s.arg[2].x, 8, &p->rng))
+		return (0);
 	p->s.arg[2].set = true;
 	return (1);
 }
