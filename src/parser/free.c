@@ -26,9 +26,9 @@ void			free_a(t_asym *a, bool freee)
 {
 	if (!freee)
 		return ;
-	if (a->rsak)
-		free(a->rsak);
-	a->rsak = NULL;
+	free_if((void **)&a->rsak);
+	free_if((void **)&a->data.msg);
+	a->data.len = 0;
 }
 
 void			free_rng(t_rng *rng, bool freee)
@@ -61,12 +61,6 @@ void			free_p(t_parse *p, uint8_t free_opt)
 {
 	if (free_opt & 1)
 	{
-//		if (p->in_file)
-//			free(p->in_file);
-//		p->in_file = NULL;
-//		if (p->r.msg)
-//			free(p->r.msg);
-//		p->r.msg = NULL;
 		free_if((void **)&p->in_file);
 		free_if((void **)&p->r.msg);
 		p->r.len = 0;
@@ -75,13 +69,7 @@ void			free_p(t_parse *p, uint8_t free_opt)
 			close(p->w.fd);
 		p->w.fd = -1;
 		free_if((void **)&p->w.msg);
-//		if (p->w.msg)
-//			free(p->w.msg);
-//		p->w.msg = NULL;
 		p->w.len = 0;
-//		if (p->out_file)
-//			free(p->out_file);
-//		p->out_file = NULL;
 	}
 //	free_h(&p->h, free_opt & 2);
 	free_s(&p->s, free_opt & 4);

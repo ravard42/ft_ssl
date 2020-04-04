@@ -31,7 +31,7 @@ void						text(t_parse *p, int nb_v)
 	}
 }
 
-void					print_opt(t_parse *p, int nb_v)
+void					print_opts(t_parse *p, int nb_v)
 {
 	int					mod_id;
 
@@ -86,7 +86,7 @@ int						rsa(t_parse *p)
 
 	if (!(nb_v = read_rsak(p)))
 		return (0);
-	print_opt(p, nb_v);
+	print_opts(p, nb_v);
 	if (p->a.o[12])
 	{
 		err = 0;

@@ -61,6 +61,7 @@
 # define PO "-passout, des password for writing is the next arg (encrypt)"
 # define ENC "-des, encrypt private key with des before writing it\n  (pbkdf is used, if -passout not present, user will be prompted for a pass phrase)"
 # define PBI "-pubin, private key is read by default on -in, with this option a public key is read instead"
+# define PBI2 "-pubin, private key is read by default on -inkey, with this option a public key is read instead"
 # define PBO "-pubout, private key is output by default on -out, with this option a public key is output instead"
 # define T "-text, print key components and key encoded version"
 # define M "-modulus, print out the value of the modulus of the key"
@@ -199,6 +200,7 @@ typedef struct		s_asym
 	uint8_t			o[13];
 	int16_t			mod_nb;
 	t_varint			*rsak;
+	t_read			data;
 }					t_asym;
 
 /*
@@ -219,10 +221,10 @@ typedef struct		s_asym
 **
 **
 **	OTHER ASYM ATT
-** 	mod_nb 			: modulus number of bits
-** 	rsa key order 	: version, n, e, d, p, q, dp, dq, qinv
-**
-**	¿-passin|-passout args? : we'll use p->s.arg[0].p for -passin and p->s.arg[1].p for -passout 
+** 	mod_nb 						: modulus number of bits
+** 	rsa private key order 	: version, n, e, d, p, q, dp, dq, qinv
+**		rsa public key order		: n, e
+**	NB: we use rsak[0] to compute encryption and decryption
 */
 
 typedef struct		s_rng

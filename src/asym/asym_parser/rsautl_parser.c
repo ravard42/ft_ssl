@@ -1,30 +1,69 @@
 #include "ft_ssl.h"
 
 /*
-** rsa key order : version, n, e, d, p, q, dp, dq, qinv
+**	io_parser
+**
+** -in|-out|-inkey file
+**	a]	-in		:	we use p->a.data to store -in arg
+**	b]	-out		:	we use p->out_file to load -out arg file name.
+**	c] -inkey	:	here we use p->in_file and p->r to load -inkey key.pem
+**						endeed it will be more convenient to use read_rsak in the same way that rsa command
 */
 
-static const char		*g_rsau_usg[] = {IN, OUT, IK, PBI, RSA_E, RSA_D, HEXD, ""};
-static const char		*g_rsau_opt[] = {"-in", "-out", "-inkey", "-pubin", "-encrypt", "-decrypt", "hexdump", ""};
+static bool		in_parser(t_parse *p, int argc, char **argv)
+{
+	if (++p->i[0] >= argc
+		&& ft_dprintf(2, "%s-in needs arg%s\n", KRED, KNRM))
+		return (false);
+	if (ft_read(&p->a.data, argv[0]) < 0
+		&& ft_dprintf(2, "%s-in parser error%s\n", KRED, KNRM))
+		return (false);
+	return (true);
+}
+
+static bool		out_parser(t_parse *p, int argc, char **argv)
+{
+	if (++p->i[0] >= argc
+		&& ft_dprintf(2, "%s-out needs arg%s\n", KRED, KNRM))
+		return (false);
+	if (!(p->out_file = ft_strdup(argv[p->i[0]]))
+		&& ft_dprintf(2, "%s-out parser error%s\n", KRED, KNRM))
+		return (false);
+	return (true);
+}
+
+static bool		inkey_parser(t_parse *p, int argc, char **argv)
+{
+	if (++p->i[0] >= argc
+		&& ft_dprintf(2, "%s-inkey needs arg%s\n", KRED, KNRM))
+		return (false);
+	if ((!(p->in_file = ft_strdup(argv[p->i[0]]))
+		|| ft_read(&p->r, p->in_file) < 0)
+		&& ft_dprintf(2, "%s-inkey parser error%s\n", KRED, KNRM))
+		return (false);
+	return (true);
+
+}
+
+static const char		*g_rsau_opt[] = {"-in", "-out", "-inkey", "-pubin", "-encrypt", "-decrypt", "-hexdump", ""};
+static const char		*g_rsau_usg[] = {IN, OUT, IK, PBI2, RSA_E, RSA_D, HEXD, ""};
 
 int				rsautl_parser(t_parse *p, int argc, char **argv)
 {
 	while (++p->i[0] < argc)
 	{
-		if (argv[p->i[0]][0] != '-'
-			&& ft_dprintf(2, "%serror: '%s' bad input argument%s\n",
-				KRED, argv[p->i[0]], KNRM))
-			return (opt_usage("rsautl opts", g_rsau_usg));
 		if (!opt_parser(p, g_rsau_opt, argv[p->i[0]]))
 			return (opt_usage("rsautl opts", g_rsau_usg));
-//		if ((!p->in_file && p->s.o[2])
-//				|| (!p->out_file && p->s.o[3])
-//				|| (!p->s.arg[0].set && p->s.o[5])
-//				|| (!p->s.arg[1].set && p->s.o[6])
-//				|| (!p->s.arg[2].set && p->s.o[7])
-//				|| (!p->s.arg[3].set && p->s.o[8]))
-//			if (!load_args(p, argv[++p->i[0]]))
-//				return (0);
+		if (!p->w.msg && p->a.o[0] && !in_parser(p, argc, argv))
+			return (-3);
+		if (!p->out_file && p->a.o[1] && !out_parser(p, argc, argv))
+			return (-3);
+		if (!p->in_file && p->a.o[2] && !inkey_parser(p, argc, argv))
+			return (-3);
 	}
-	return (0);
+	if (!p->in_file && ft_dprintf(2, "%sno keyfile specified%s\n", KRED, KNRM))
+		return (-3);
+	if (p->a.data.msg == NULL && ft_read(&p->a.data, NULL) < 0)
+		return (-3);
+	return (1);
 }

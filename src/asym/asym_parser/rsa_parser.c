@@ -103,8 +103,8 @@ static char		*pw_parser(t_parse *p, int argc, char **argv)
 	return (load_pw(mode, argv[p->i[0]] + 5));
 }
 
-static const char		*g_rsa_usg[] = {IN, OUT, IF, OF, PI, PO, ENC, PBI, PBO, T, M, N, C, ""};
 static const char		*g_rsa_opt[] = {"-in", "-out", "-inform", "-outform", "-passin", "-passout", "-des", "-pubin", "-pubout", "-text", "-modulus", "-noout", "-check", ""};
+static const char		*g_rsa_usg[] = {IN, OUT, IF, OF, PI, PO, ENC, PBI, PBO, T, M, N, C, ""};
 
 int				rsa_parser(t_parse *p, int argc, char **argv)
 {
@@ -112,15 +112,20 @@ int				rsa_parser(t_parse *p, int argc, char **argv)
 	{
 		if (!opt_parser(p, g_rsa_opt, argv[p->i[0]]))
 			return (opt_usage("rsa opts", g_rsa_usg));
-		if (!p->in_file && p->a.o[0] && !(p->in_file = io_parser(p, argc, argv)))
+		if (!p->in_file && p->a.o[0]
+			&& !(p->in_file = io_parser(p, argc, argv)))
 			return (-3);
-		if (!p->out_file && p->a.o[1] && !(p->out_file = io_parser(p, argc, argv)))
+		if (!p->out_file && p->a.o[1]
+			&& !(p->out_file = io_parser(p, argc, argv)))
 			return (-3);
-		if ((p->a.o[2] == 1 || p->a.o[3] == 1) && !form_parser(p, argc, argv))
+		if ((p->a.o[2] == 1 || p->a.o[3] == 1)
+			&& !form_parser(p, argc, argv))
 			return (-3);
-		if (!p->s.arg[0].p && p->a.o[4] && !(p->s.arg[0].p = pw_parser(p, argc, argv)))
+		if (!p->s.arg[0].p && p->a.o[4]
+			&& !(p->s.arg[0].p = pw_parser(p, argc, argv)))
 			return (-3);
-		if (!p->s.arg[1].p && p->a.o[5] && !(p->s.arg[1].p = pw_parser(p, argc, argv)))
+		if (!p->s.arg[1].p && p->a.o[5]
+			&& !(p->s.arg[1].p = pw_parser(p, argc, argv)))
 			return (-3);
 	}
 	if (ft_read(&p->r, p->in_file) < 0)

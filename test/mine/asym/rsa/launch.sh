@@ -40,9 +40,8 @@ test_type[7]='rsa_pipepubpem'
 test_type[8]='rsa_pipeprider'
 test_type[9]='rsa_pipepripem'
 test_type[10]='rsa_desout'
-test_type[11]='rsa_check'
-test_type[12]='rsa_full'
-nb_type=13
+test_type[11]='rsa_full'
+nb_type=12
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -55,19 +54,6 @@ echo -e "${test_type[$i]}$KRNM"
 exit
 fi
 
-#test_nb_arg[0]=3
-#test_usage[0]="usage: sh launch.sh genrsa numbits numberOfTests\n"
-#test_nb_arg[1]=3
-#test_usage[1]="usage: sh launch.sh rsa_in_pri_der numbits numberOfTests\n"
-#test_nb_arg[2]=3
-#test_usage[2]="usage: sh launch.sh rsa_in_pri_pem numbits numberOfTests\n"
-#test_nb_arg[3]=3
-#test_usage[3]="usage: sh launch.sh rsa_in_pri_pem_enc numbits numberOfTests\n"
-#if (( test_nb_arg[id] != $# )); then
-#echo -e "${KYEL}${test_usage[$id]}$KRNM"
-#exit
-#fi
-
 if (( $# != 3 )); then
 echo -e "${KYEL}usage: sh launch.sh ${test_type[$id]} numbits numberOfTests\n$KRNM"
 exit
@@ -79,7 +65,7 @@ numbits=$2
 nb_tests=$3
 #<<<<< INPUT PARSER <<<<<<
 
-#>>>>> TESTS >>>>>>
+#>>>>> TEST FUNCTIONS >>>>>>
 
 
 genrsa() {
@@ -193,21 +179,15 @@ pw="4charmin$RANDOM"
 diff pripem.ref pripem.ft_ssl
 }
 
-rsa_check() {
-echo -ne "${KRED}to be computed${KNRM}"
-echo -ne "\r"
-return 1
-}
-
 rsa_full() {
-for ((j=1;j<12;++j));do
+for ((j=1;j<11;++j));do
 sh launch.sh ${test_type[$j]} $numbits $nb_tests
 done
 ls | grep -v launch.sh | xargs rm
 exit
 }
 
-#<<<<< TESTS <<<<<<
+#<<<<< TEST FUNCTIONS <<<<<<
 
 
 #>>>>>> MAIN >>>>>>

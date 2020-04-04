@@ -56,6 +56,8 @@ static void			init_a(t_asym *a, bool init)
 		a->o[i] = 0;
 	a->mod_nb = 64;
 	a->rsak = NULL;
+	a->data.msg = NULL;
+	a->data.len = 0;
 }
 
 static void		init_rng(t_rng *rng, bool init)

@@ -1,7 +1,5 @@
 #include "ft_ssl.h"
 
-static const char		*g_grsa_usg[] = {RAND, OUT, NB, ""};
-static const char		*g_grsa_opt[] = {"-rand", "-out", ""};
 
 static int		numbits(char *nb)
 {
@@ -36,6 +34,9 @@ static bool		init_rsak(t_asym *a)
 		return (false);
 	return (true);
 }
+
+static const char		*g_grsa_opt[] = {"-rand", "-out", ""};
+static const char		*g_grsa_usg[] = {RAND, OUT, NB, ""};
 
 
 int				genrsa_parser(t_parse *p, int argc, char **argv)
