@@ -74,6 +74,14 @@
 # define ERR_GENRSA_LEN "%sV_MAX_LEN must be >= %d for this key size%s\n"
 # define GENRSA_RUNNING "Generating RSA private key, %hd bit long modulus (2 primes)\n"
 
+#define R_CHECK_0 		"%sOnly private keys can be checked%s\n"
+#define R_CHECK_1 		"%sRSA key error: p not prime%s\n"
+#define R_CHECK_2 		"%sRSA key error: q not prime%s\n"
+#define R_CHECK_3 		"%sRSA key error: d e not congruent to 1%s\n"
+#define R_CHECK_4 		"%sRSA key error: dmp1 not congruent to d%s\n"
+#define R_CHECK_5 		"%sRSA key error: dmq1 not congruent to d%s\n"
+#define R_CHECK_6 		"%sRSA key error: iqmp not inverse of q%s\n"
+#define CHECK_SUCCESS	"%sRSA key ok%s\n"
 
 /*
 ** ERROR MSGS

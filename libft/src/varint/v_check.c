@@ -24,7 +24,7 @@ static bool				v_len_check(t_varint *v)
 		return (false);
 	tmp = v->len;
 	v_len(v, V_MAX_LEN);
-	if (v->len != tmp && ft_dprintf(2, "%s%s%s\n", KRED, V_COR_LEN, KNRM))
+	if (v->len != tmp && ft_dprintf(2, V_COR_LEN, KRED, KNRM))
 		return (false);
 	return (true);
 }

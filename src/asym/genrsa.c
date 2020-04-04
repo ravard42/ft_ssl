@@ -88,14 +88,14 @@ static t_varint				set_rsa_prime(int16_t nb, t_rng *rng)
 
 int						genrsa(t_parse *p)
 {
-	int16_t		v_len;
+	int16_t		verif_len;
 	t_varint		p_min_1;
 	t_varint		q_min_1;
 
-	v_len = p->a.mod_nb / 8;
-	v_len += (p->a.mod_nb % 64) ? (8 - v_len % 8) + 8 : 8;
-	if (v_len > V_MAX_LEN
-		&& ft_dprintf(2, ERR_GENRSA_LEN, KRED, v_len, KNRM))
+	verif_len = p->a.mod_nb / 8;
+	verif_len += (p->a.mod_nb % 64) ? (8 - verif_len % 8) + 8 : 8;
+	if (verif_len > V_MAX_LEN
+		&& ft_dprintf(2, ERR_GENRSA_LEN, KRED, verif_len, KNRM))
 		return (0);
 	p->a.rsak[0] = g_v[0];
 	ft_dprintf(2, GENRSA_RUNNING, p->a.mod_nb);

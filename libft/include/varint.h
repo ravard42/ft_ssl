@@ -20,13 +20,16 @@
 */
 
 /*
-** ERROR MSGS
+** ERROR MSGS 
+**
+** LOT OF WORK TO BE DONE HERE:
+**	take V_COR_LEN as example
 */
 
 # define V_ERR				"g_v_r has been called\n"
 # define V_MAX_LEN_ERR	"V_MAX_LEN must be a multiple of 8 s.t 0 < V_MAX_LEN <= 4096\nexit ...\n"
 # define V_LEN_ERR 			"v.len <= 0 or v.len > MAX_LEN\n"
-# define V_COR_LEN 			"corrupted varint : len and data doesn't match\n"
+# define V_COR_LEN 			"%scorrupted varint : len and data doesn't match%s\n"
 # define V_BAD_SIGN 		"sign must be -1 or 1\n"
 # define V_NEG_POW 			"neg pow not handle\n"
 # define V_BAD_SUB 			"a < b in v_pos_sub\n"
