@@ -34,7 +34,7 @@
 # define KWHT  "\x1B[37;1m"
 
 /*
-** OPTION USAGE
+** USAGE MSGS
 */
 # define U "%susage%s: ./ft_ssl %scommand %s[opts]%s [args]\n"
 # define P "-p, echo STDIN to STDOUT and append the checksum to STDOUT"
@@ -72,9 +72,18 @@
 # define RSA_D "-decrypt, decrypt with private key"
 # define HEXD	"-hexdump, hex dump output"
 
-# define ERR_GENRSA_LEN "%sV_MAX_LEN must be >= %d for this key size%s\n"
 # define GENRSA_RUNNING "Generating RSA private key, %hd bit long modulus (2 primes)\n"
 
+#define CHECK_SUCCESS	"%sRSA key ok%s\n"
+
+/*
+** ERROR MSGS 
+** LOT OF WORK TO BE DONE HERE:
+**	find your error msg style starting with varint.h error msgs
+** and stay convenient here with it
+*/
+
+# define ERR_GENRSA_LEN "%sV_MAX_LEN must be >= %d for this key size%s\n"
 #define R_CHECK_0 		"%sOnly private keys can be checked%s\n"
 #define R_CHECK_1 		"%sRSA key error: p not prime%s\n"
 #define R_CHECK_2 		"%sRSA key error: q not prime%s\n"
@@ -82,11 +91,6 @@
 #define R_CHECK_4 		"%sRSA key error: dmp1 not congruent to d%s\n"
 #define R_CHECK_5 		"%sRSA key error: dmq1 not congruent to d%s\n"
 #define R_CHECK_6 		"%sRSA key error: iqmp not inverse of q%s\n"
-#define CHECK_SUCCESS	"%sRSA key ok%s\n"
-
-/*
-** ERROR MSGS
-*/
 
 /*
 ** varint len <= 4096 (32768 bits) (cf varint.h)
@@ -224,7 +228,6 @@ typedef struct		s_asym
 ** 	mod_nb 						: modulus number of bits
 ** 	rsa private key order 	: version, n, e, d, p, q, dp, dq, qinv
 **		rsa public key order		: n, e
-**	NB: we use rsak[0] to compute encryption and decryption
 */
 
 typedef struct		s_rng

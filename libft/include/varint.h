@@ -23,7 +23,7 @@
 ** ERROR MSGS 
 **
 ** LOT OF WORK TO BE DONE HERE:
-**	take V_COR_LEN as example
+**	take V_COR_LEN or ERR_DER_LEN as example
 */
 
 # define V_ERR				"g_v_r has been called\n"
@@ -45,7 +45,7 @@
 # define V_DER_INT_SEQ_ONLY	"asn1 der alg only handle sequence of integers\n"
 # define V_DER_2_BIG		"asn1 der header len must be <= 0xffff)\n"
 # define V_DER_COR			"der file corrupted\n"
-# define V_DER_OVFL 			"can't store asn1_der number, increase V_MAX_LEN\n"
+# define ERR_DER_LEN "%scan't store asn1_der number, V_MAX_LEN must be >= %d%s\n"
 
 /*
 ** END ERR MSGS (to be improved)
@@ -57,7 +57,7 @@
 */
 
 # define V_BIT_LEN			8
-# define V_MAX_LEN		 	72
+# define V_MAX_LEN		 	272
 
 /*
 ** must be a mutliple of 8 and <= 4096 (32768 bits)
@@ -125,6 +125,7 @@ bool						is_g_v(int8_t i, t_varint *v);
 void						v_len(t_varint *v, int16_t start_chunk);
 t_varint					v_init(char sign, uint8_t *src, int16_t len);
 void						v_print(int fd, char *name, t_varint *v);
+void						v_hexdump(int fd, t_varint *v);
 int16_t						v_msb_id(t_varint *v);
 t_varint					v_abs(t_varint v);
 t_varint					*v_inc(t_varint *a, bool check);

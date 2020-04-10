@@ -1,13 +1,12 @@
 #include "ft_ssl.h"
 
 
-static char *v_name[] = {"modulus",
+static char 	*v_name[] = {"modulus",
 						"publicExponent", "privateExponent",
 						"prime1", "prime2", "exponent1", "exponent2",
 						"coefficient"};
 
-
-void						text(t_parse *p, int nb_v)
+static void		text(t_parse *p, int nb_v)
 {
 	int	i;
 
@@ -31,7 +30,7 @@ void						text(t_parse *p, int nb_v)
 	}
 }
 
-void					print_opts(t_parse *p, int nb_v)
+static void		print_opts(t_parse *p, int nb_v)
 {
 	int					mod_id;
 
@@ -45,7 +44,7 @@ void					print_opts(t_parse *p, int nb_v)
 }
 
 // check len of input key to prevent overflow in check_opt
-static void			check_opt(int *err, t_parse *p, int nb_v)
+static void		check_opt(int *err, t_parse *p, int nb_v)
 {
 	t_varint		tmp[7];
 

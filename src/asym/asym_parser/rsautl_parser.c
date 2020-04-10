@@ -15,7 +15,7 @@ static bool		in_parser(t_parse *p, int argc, char **argv)
 	if (++p->i[0] >= argc
 		&& ft_dprintf(2, "%s-in needs arg%s\n", KRED, KNRM))
 		return (false);
-	if (ft_read(&p->a.data, argv[0]) < 0
+	if (ft_read(&p->a.data, argv[p->i[0]]) < 0
 		&& ft_dprintf(2, "%s-in parser error%s\n", KRED, KNRM))
 		return (false);
 	return (true);

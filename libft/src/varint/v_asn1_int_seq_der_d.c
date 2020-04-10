@@ -88,7 +88,7 @@ static t_varint			v_load(uint8_t *src, int len)
 	t_varint	ret;
 
 	if (len > V_MAX_LEN
-		&& ft_dprintf(2, "%s%s%s", KRED, V_DER_OVFL, KNRM))
+		&& ft_dprintf(2, ERR_DER_LEN, KRED, len, KNRM))
 		return (g_v[3]);
 	ret = g_v[0];
 	i = len;

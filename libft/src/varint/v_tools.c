@@ -115,34 +115,3 @@ uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
 	}
 	return (0);
 }
-
-/*
-**	ft_dprintf(2, "%s|%hhd|%hd:\n", name, v->sign, v->len);
-*/
-
-void			v_print(int fd, char *name, t_varint *v)
-{
-	int8_t		k;
-	int16_t		i;
-
-	if (!v_check(v, NULL, NULL, "print"))
-		return ;
-	ft_dprintf(fd, "%s:\n", name);
-	if (v->x[v->len - 1] & 0x80)
-		ft_dprintf(fd, "    00:");
-	k = (v->x[v->len - 1] & 0x80) ? 1 : 0;
-	i = v->len;
-	while (--i >= 0)
-	{
-			if (k == 0)
-				ft_dprintf(fd, "    ");
-			ft_dprintf(fd, "%02x", v->x[i]);
-			if (i == 0)
-				break;
-			ft_dprintf(fd, ":");
-			k++;
-			if ((k %= 15) == 0)
-				ft_dprintf(fd, "\n");
-	}
-	ft_dprintf(fd, "\n");
-}

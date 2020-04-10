@@ -62,6 +62,8 @@ SRC =	src/ft_memalloc.c\
 		src/varint/v_crt.c\
 		src/varint/v_asn1_int_seq_der_e.c\
 		src/varint/v_asn1_int_seq_der_d.c\
+		src/varint/v_print_hexdump.c\
+
 
 OBJ = $(SRC:.c=.o)
 INCLUDE = ./include/
