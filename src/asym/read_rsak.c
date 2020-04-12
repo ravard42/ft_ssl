@@ -158,11 +158,10 @@ int						read_rsak(t_parse *p)
 		p->r.len -= offset;
 	}
 	p->a.rsak = v_asn1_int_seq_der_d(&nb_v, &p->r);
-	if (!p->a.rsak && ft_dprintf(2, "%srsa key loading error%s\n", KRED, KNRM))
+	if ((!p->a.rsak || (nb_v != 2 && nb_v != 9))
+		&& ft_dprintf(2, "%srsa key loading error%s\n", KRED, KNRM))
 		return (0);
-	free(p->r.msg);
-	p->r.msg = NULL;
-	free(p->w.msg);
-	p->w.msg = NULL;
+	free_if((void **)&p->r.msg);
+	free_if((void **)&p->w.msg);
 	return (nb_v);
 }

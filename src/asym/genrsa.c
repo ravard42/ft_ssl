@@ -50,7 +50,7 @@ static t_varint			find_prime(int16_t nb, int16_t len, t_rng *rng, bool check)
 	is_prime = false;
 	while (!is_prime)
 	{
-		if (!prng(rand_v, len, rng))
+		if (!prng(rand_v, len, rng, 2))
 			return (g_v[3]);
 		v = v_init(1, rand_v, len);
 		v_mask(&v, nb);

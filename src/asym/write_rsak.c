@@ -73,7 +73,7 @@ static int			des_pbkdf(t_parse *p)
 	t_parse tmp;
 
 	ft_dprintf(p->w.fd, PEM_ENC_HEADER);
-	if (!prng(p->s.arg[2].x, 8, &p->rng))
+	if (!prng(p->s.arg[2].x, 8, &p->rng, 0))
 		return (0);
 	p->s.arg[2].set = true;
 	ft_puthex(p->w.fd, p->s.arg[2].x, 8, 7);

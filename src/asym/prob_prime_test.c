@@ -27,7 +27,7 @@ static t_varint		v_rand_a(t_varint n, t_rng *rng)
 	uint8_t				rand_a[n.len];
 	t_varint			a;
 
-	prng(rand_a, n.len, rng);
+	prng(rand_a, n.len, rng, 0);
 	if (n.len == 1)
 		rand_a[0] = ft_range(rand_a[0], 2, n.x[0] - 1);
 	else

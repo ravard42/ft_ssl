@@ -207,21 +207,23 @@ typedef struct		s_asym
 	t_read			data;
 }					t_asym;
 
-/*
-** ASYM OPTIONS
-** o[0] : -rand (genrsa) -in (rsa|rsautl)
-** o[1] : -out
-**	o[2] : -inform (0 for PEM, 2 for DER)
-**	o[3] : -outform (0 for PEM, 2 for DER)
-**	o[4] : 1 for -passin, else 0
-**	o[5] : 1 for -passout, else 0
-**	o[6] : 1 for -des, else 0
-**	o[7] : 1 for -pubin, else 0
-**	o[8] : 1 for -pubout, else 0
-**	o[9] : 1 for -text, else 0
-**	o[10] : 1 for -modulus, else 0
-**	o[11] : 1 for -noout, else 0
-**	o[12] : 1 for -check, else 0
+/*	ASYM OPTIONS
+**							GENRSA	RSA				RSAUTL
+** o[0] :	 			-rand 	-in 				-in
+** o[1] : 				-out		-out				-out
+**	o[2] : 							-inform			-inkey
+**									{PEM:0, DER:2}
+**	o[3] : 							-outform			-pubin
+**									{PEM:0, DER:2)
+**	o[4] :							-passin			-encrypt
+**	o[5] :							-passout			-decrypt
+**	o[6] :							-des				-hexdump
+**	o[7] :							-pubin
+**	o[8] :							-pubout
+**	o[9] :							-text
+**	o[10] : 							-modulus
+**	o[11] : 							-noout
+**	o[12] : 							-check
 **
 **
 **	OTHER ASYM ATT
@@ -392,5 +394,5 @@ int					rsautl(t_parse *p);
 /*
 ** csprng.c
 */
-void				*prng(void *dest, size_t len, t_rng *r);
+void				*prng(void *dest, size_t len, t_rng *r, uint8_t opts);
 #endif

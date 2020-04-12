@@ -44,7 +44,7 @@ static int			set_salt(t_parse *p, char *salt)
 			return (0);
 		ft_memcpy(p->s.arg[2].x, salt, 8);
 	}
-	else if (!prng(p->s.arg[2].x, 8, &p->rng))
+	else if (!prng(p->s.arg[2].x, 8, &p->rng, 0))
 		return (0);
 	p->s.arg[2].set = true;
 	return (1);

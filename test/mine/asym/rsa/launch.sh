@@ -29,19 +29,18 @@ cp $make_dir/ft_ssl ./
 
 #>>>>> INPUT PARSER >>>>>
 # available tests
-test_type[0]='genrsa'
-test_type[1]='rsa_inprider'
-test_type[2]='rsa_inpripem'
-test_type[3]='rsa_inprienc'
-test_type[4]='rsa_inpubder'
-test_type[5]='rsa_inpubpem'
-test_type[6]='rsa_pipepubder'
-test_type[7]='rsa_pipepubpem'
-test_type[8]='rsa_pipeprider'
-test_type[9]='rsa_pipepripem'
-test_type[10]='rsa_desout'
-test_type[11]='rsa_full'
-nb_type=12
+test_type[0]='rsa_inprider'
+test_type[1]='rsa_inpripem'
+test_type[2]='rsa_inprienc'
+test_type[3]='rsa_inpubder'
+test_type[4]='rsa_inpubpem'
+test_type[5]='rsa_pipepubder'
+test_type[6]='rsa_pipepubpem'
+test_type[7]='rsa_pipeprider'
+test_type[8]='rsa_pipepripem'
+test_type[9]='rsa_desout'
+test_type[10]='rsa_full'
+nb_type=11
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -66,12 +65,6 @@ nb_tests=$3
 #<<<<< INPUT PARSER <<<<<<
 
 #>>>>> TEST FUNCTIONS >>>>>>
-
-
-genrsa() {
-./ft_ssl genrsa $numbits > rsak.pem
-openssl rsa -check -in rsak.pem | grep ok >/dev/null
-}
 
 err512="don't use key size < 512"
 
@@ -180,7 +173,7 @@ diff pripem.ref pripem.ft_ssl
 }
 
 rsa_full() {
-for ((j=1;j<11;++j));do
+for ((j=0;j<10;++j));do
 sh launch.sh ${test_type[$j]} $numbits $nb_tests
 done
 ls | grep -v launch.sh | xargs rm
