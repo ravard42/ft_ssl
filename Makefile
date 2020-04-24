@@ -2,16 +2,14 @@ CC = gcc
 NAME = ft_ssl
 
 #FLAGS = -Wall -Wextra -Werror
-#FLAGS = -Wall -Wextra -Werror
 FLAGS = -Wall -Wextra -g -fsanitize=address
-#FLAGS = -Wall -Wextra -ggdb
 #FLAGS = -Wall -Wextra -O2
 
 SRC = src/main.c\
-		src/parser/init.c\
-		src/parser/free.c\
-		src/parser/cmd_opt_parser.c\
-		src/parser/cmd_opt_usage.c\
+		src/init.c\
+		src/free.c\
+		src/parser/cmd_parser.c\
+		src/parser/opt_parser.c\
 		src/parser/arg_parser.c\
 		src/hash/hash_parser.c\
 		src/hash/hash_padding.c\

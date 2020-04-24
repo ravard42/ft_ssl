@@ -17,7 +17,7 @@ int		sha256(t_parse *p)
 	int64_t			i;
 
 	if (!hash_padding(p))
-		return (0);
+		return (-1);
 	i = 0;
 	sha256_init(&p->h);
 	while (i < p->w.len / 64)

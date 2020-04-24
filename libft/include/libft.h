@@ -86,11 +86,15 @@ void				*ft_memalloc(size_t size);
 void				ft_memset(char *b, char c, size_t len);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 void				*ft_memrcpy(void *dst, const void *src, size_t n);
+void				*ft_memshift(void *p, ssize_t len, ssize_t jump);
+void				*ft_memrev(void *p, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
+
 void				ft_putchar(int fd, char c);
 void				ft_putnchar(int fd, char *ptr, size_t len);
 void				ft_puthex(int fd, void *p, int64_t len, uint8_t opts);
 void				ft_putrhex(int fd, void *p, int64_t len, uint8_t opts);
+void				ft_hexdump(int fd, void *p, size_t len);
 void				ft_putstr(int fd, char *str);
 size_t				ft_strlen(const char *s);
 size_t				ft_wstrlen(wchar_t *wc);

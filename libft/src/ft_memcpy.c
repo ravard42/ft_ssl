@@ -12,6 +12,10 @@
 
 #include "libft.h"
 
+/*
+** WARNING:  dst and src must not overlap! (cf ft_memshift for that)
+*/
+
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	unsigned char	*str1;

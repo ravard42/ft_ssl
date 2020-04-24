@@ -35,7 +35,7 @@ int16_t					v_msb_id(t_varint *v)
 	while (j != -1 && !(v->x[v->len - 1] >> j & 1))
 		j--;
 	if (j == -1
-		&& ft_dprintf(2, V_COR_LEN, KRED, KNRM))
+		&& ft_dprintf(2, V_ERR_LEN_1, KRED, KNRM))
 		return (-1);
 	j += (v->len - 1) * V_BIT_LEN;
 	return (j);

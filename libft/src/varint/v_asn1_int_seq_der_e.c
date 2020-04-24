@@ -23,7 +23,7 @@
 int8_t	put_der_header(uint8_t *h, uint8_t type, unsigned int len)
 {
 	if (len > 0xffff
-		&& ft_dprintf(2, "%s%s%s", KRED, V_DER_2_BIG, KNRM))
+		&& ft_dprintf(2, V_ERR_DER_2BIG, KRED, KNRM))
 		return (-1);
 	ft_memset((char *)h, 0, 5);
 	h[1] = type;
@@ -82,7 +82,7 @@ void				write_data(t_read *r, uint8_t h[][6], t_varint *v, int nb_varint)
 **	NB: *r must be blank (r->msg not allocated)
 */
 
-int				v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
+bool				v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
 {
 	unsigned int	seq_len;
 	int				i;
@@ -95,10 +95,10 @@ int				v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
 		&& (tmp = set_sub_header(h[i + 1], v[i])) != -1)
 		seq_len += tmp;
 	if (tmp == -1 || put_der_header(h[0], 0x30, seq_len) == -1)
-		return (-1);
+		return (false);
 	if (!(r->msg = (char *)ft_memalloc(sizeof(char) * (h[0][0] + seq_len + 1)))
 		&& ft_dprintf(2, "%smalloc error%s\n", KRED, KNRM))
-		return (-2);
+		return (false);
 	write_data(r, h, v, nb_varint);
-	return (1);
+	return (true);
 }

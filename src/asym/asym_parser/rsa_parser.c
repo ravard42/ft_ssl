@@ -114,23 +114,23 @@ int				rsa_parser(t_parse *p, int argc, char **argv)
 			return (opt_usage("rsa opts", g_rsa_usg));
 		if (!p->in_file && p->a.o[0]
 			&& !(p->in_file = io_parser(p, argc, argv)))
-			return (-3);
+			return (-2);
 		if (!p->out_file && p->a.o[1]
 			&& !(p->out_file = io_parser(p, argc, argv)))
-			return (-3);
+			return (-2);
 		if ((p->a.o[2] == 1 || p->a.o[3] == 1)
 			&& !form_parser(p, argc, argv))
-			return (-3);
+			return (-2);
 		if (!p->s.arg[0].p && p->a.o[4]
 			&& !(p->s.arg[0].p = pw_parser(p, argc, argv)))
-			return (-3);
+			return (-2);
 		if (!p->s.arg[1].p && p->a.o[5]
 			&& !(p->s.arg[1].p = pw_parser(p, argc, argv)))
-			return (-3);
+			return (-2);
 	}
 	if (ft_read(&p->r, p->in_file) < 0)
-		return (-3);
+		return (-2);
 	if (p->a.o[6] && !p->s.arg[1].p && !(p->s.arg[1].p = set_pass(true)))
-		return (-3);
+		return (-2);
 	return (1);
 }

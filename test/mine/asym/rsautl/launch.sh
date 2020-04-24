@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#NEW test_script_structure cf function_args.sh in ~/language/scriptShell/learning-bash
+
 KNRM="\x1B[0m"
 KRED="\x1B[31;1m"
 KGRN="\x1B[32;1m"
@@ -14,7 +16,6 @@ make_dir="/home/ravard/projets/42/ft_ssl"
 
 echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
 echo -ne "\r"
-#make -C $make_dir  re > /dev/null 2>&1
 #make -C $make_dir  re
 make -C $make_dir  
 if (($? == 0));then
@@ -25,13 +26,33 @@ fi
 cp $make_dir/ft_ssl ./ 
 #<<<< MAKING ./FT_SSL <<<<<<
 
+ft_exit ()
+{
+ls | grep -v launch.sh | xargs rm
+exit
+}
+
+
 #>>>>> INPUT PARSER >>>>>
 # available tests
-test_type[0]='raw_enc'
-test_nbarg[0]=4
-test_usage[0]='sh launch.sh raw_enc key_len file_len nb_tests'
+# no padding enc
+test_type[0]='expmod_raw_enc'
+test_nbarg[0]=3
+test_usage[0]='sh launch.sh expmod_raw_enc key_len nb_tests'
+# no padding pipe enc dec
+test_type[1]='expmod_raw_encdec'
+test_nbarg[1]=3
+test_usage[1]='sh launch.sh expmod_raw_encdec key_len nb_tests'
+# PKCS#1 v1.5 padding pipe enc dec 
+test_type[2]='expmod_pad_encdec'
+test_nbarg[2]=3
+test_usage[2]='sh launch.sh expmod_pad_encdec key_len nb_tests'
+# CRT enc dec exponential modular computation
+test_type[3]='crt'
+test_nbarg[3]=3
+test_usage[3]='sh launch.sh crt key_len nb_tests'
 
-nb_type=1
+nb_type=4
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -41,32 +62,85 @@ if (( id == nb_type )); then
 echo -ne "${KYEL}usage: sh launch.sh "
 for ((i = 0; i < nb_type - 1; i++ )); do echo -n "${test_type[$i]}|"; done
 echo -e "${test_type[$i]}$KRNM"
-ls | grep -v launch.sh | xargs rm
-exit
+ft_exit
 fi
 
 if (( test_nbarg[id] != $# )); then
 echo -e "${KYEL}${test_usage[$id]}$KRNM"
-ls | grep -v launch.sh | xargs rm
-exit
+ft_exit
 fi
 
 #<<<<< INPUT PARSER <<<<<<
 
 #>>>>> TEST FUNCTIONS >>>>>>
+err64="don't use key size < 64"
+err512="don't use key size < 512"
 
-raw_enc() {
-#cf function_args.sh in ~/language/scriptShell/learning-bash
-key_len=$2
-file_len=$3
+expmod_raw_enc() {
+key_bit_len=$2
+key_byte_len=$((1 + (key_bit_len - 1) / 8))
+./ft_ssl genrsa -out key.pem $key_bit_len 
+if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
+#openssl genrsa -out key.pem $key_bit_len 2>/dev/null
+#if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
 
-./ft_ssl genrsa -out key.pem $key_len 2>/dev/null
-head -c $file_len /dev/urandom > file
+echo -ne "\x00" > data.ref
+data_byte_len=$((key_byte_len - 1))
+head -c $data_byte_len /dev/urandom >> data.ref
 
-./ft_ssl rsa -in key.pem -modulus -noout
-hexdump -ve '1/1 "%0.2x"' file
-echo ""
-openssl rsautl -in file -inkey key.pem -encrypt -raw -hexdump #> /dev/null
+
+./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt -raw -out data_enc.ft_ssl
+openssl rsautl -in data.ref -inkey key.pem -encrypt -raw -out data_enc.openssl
+diff data_enc.ft_ssl data_enc.openssl >/dev/null 2>&1
+
+}
+
+expmod_raw_encdec() {
+key_bit_len=$2
+key_byte_len=$((1 + (key_bit_len - 1) / 8))
+./ft_ssl genrsa -out key.pem $key_bit_len 
+if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
+#openssl genrsa -out key.pem $key_bit_len 2>/dev/null
+#if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
+
+echo -ne "\x00" > data.ref
+data_byte_len=$((key_byte_len - 1))
+head -c $data_byte_len /dev/urandom >> data.ref
+
+./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt -raw  | ./ft_ssl rsautl -inkey key.pem -decrypt -raw -out data.ft_ssl
+diff data.ref data.ft_ssl >/dev/null 2>&1
+
+}
+
+expmod_pad_encdec() {
+key_bit_len=$2
+key_byte_len=$((1 + (key_bit_len - 1) / 8))
+echo -e "${KYEL}(key_bit_len, key_byte_len) = ($key_bit_len, $key_byte_len)$KNRM"
+if ((key_byte_len < 11)); then
+echo -e "${KRED}key_byte_len must be >= 11$KNRM"
+ft_exit
+fi
+./ft_ssl genrsa -out key.pem $key_bit_len 
+if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
+#openssl genrsa -out key.pem $key_bit_len 2>/dev/null
+#if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
+
+data_byte_len=$((RANDOM % (key_byte_len - 11 + 1)))
+echo -e "${KCYN}data_byte_len = $data_byte_len ---> randomely chosen to be at least 11 byte smaller than key_byte_len$KNRM"
+head -c $data_byte_len /dev/urandom > data.ref
+
+./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt  | ./ft_ssl rsautl -inkey key.pem -decrypt -out data.ft_ssl
+diff data.ref data.ft_ssl >/dev/null 2>&1
+
+#if (($? != 0));then
+#
+#hexdump -ve '1/1 "%02x"'  data.ref
+#echo ""
+#hexdump -ve '1/1 "%02x"'  data.ft_ssl
+#echo ""
+#
+#ft_exit
+#fi
 
 }
 
@@ -79,7 +153,7 @@ col=$KYEL
 nb_tests=${@: -1}
 
 while ((i < nb_tests)); do
-	${test_type[$id]} "$@" #2>/dev/null
+	${test_type[$id]} "$@" 2>/dev/null
 
 if (($? == 0)); then ((ok += 1)); fi
 ((i += 1))
@@ -92,5 +166,4 @@ if ((i == ok)); then col=$KGRN; fi
 echo -e "									${col}${test_type[$id]}:	${ok}/${nb_tests}${KNRM}"
 #<<<<<< MAIN <<<<<<
 
-ls | grep -v launch.sh | xargs rm
-
+ft_exit

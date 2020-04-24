@@ -12,8 +12,8 @@
 
 #include "ft_ssl.h"
 
-static const char		*g_hash_usg[] = {P, Q, R, S, ""};
 static const char		*g_hash_opt[] = {"-p", "-q", "-r", "-s", ""};
+static const char		*g_hash_usg[] = {P, Q, R, S, ""};
 
 int			hash_parser(t_parse *p, int argc, char **argv)
 {

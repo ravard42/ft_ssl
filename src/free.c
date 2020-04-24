@@ -28,7 +28,7 @@ void			free_a(t_asym *a, bool freee)
 		return ;
 	free_if((void **)&a->rsak);
 	free_if((void **)&a->data.msg);
-	a->data.len = 0;
+	a->data.len = -1;
 }
 
 void			free_rng(t_rng *rng, bool freee)
@@ -63,13 +63,13 @@ void			free_p(t_parse *p, uint8_t free_opt)
 	{
 		free_if((void **)&p->in_file);
 		free_if((void **)&p->r.msg);
-		p->r.len = 0;
+		p->r.len = -1;
 		free_if((void **)&p->out_file);
 		if (p->w.fd > 1)
 			close(p->w.fd);
 		p->w.fd = -1;
 		free_if((void **)&p->w.msg);
-		p->w.len = 0;
+		p->w.len = -1;
 	}
 //	free_h(&p->h, free_opt & 2);
 	free_s(&p->s, free_opt & 4);

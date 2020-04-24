@@ -96,7 +96,7 @@ int						genrsa(t_parse *p)
 	verif_len += (p->a.mod_nb % 64) ? (8 - verif_len % 8) + 8 : 8;
 	if (verif_len > V_MAX_LEN
 		&& ft_dprintf(2, ERR_GENRSA_LEN, KRED, verif_len, KNRM))
-		return (0);
+		return (-1);
 	p->a.rsak[0] = g_v[0];
 	ft_dprintf(2, GENRSA_RUNNING, p->a.mod_nb);
 	p->a.rsak[4] = set_rsa_prime(p->a.mod_nb - p->a.mod_nb / 2 + 1, &p->rng);

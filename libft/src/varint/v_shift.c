@@ -8,10 +8,12 @@
 bool			v_lshift_check(t_varint *v[3])
 {
 	int64_t	msb;
+	int16_t	byte_len;
 
 	msb = v_msb_id(v[0]) + 1;
-	if (1 + msb / V_BIT_LEN > V_MAX_LEN
-		&& ft_dprintf(2, "%s%s%s", KRED, V_LSHIFT_OVFL, KNRM))
+	byte_len = 1 + msb / V_BIT_LEN;
+	if (byte_len > V_MAX_LEN
+		&& ft_dprintf(2, V_ERR_LSHIFT_OVFL, KRED, byte_len, KNRM))
 		return (false);
 	return (true);
 }

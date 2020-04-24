@@ -17,7 +17,7 @@ bool			is_g_v(int8_t i, t_varint *v)
 	if (i == 3)
 	{
 		if (v->sign != -1 && v->sign != 1
-			&& ft_dprintf(2, "%s%s%s", KRED, V_ERR, KNRM))
+			&& ft_dprintf(2, V_ERR, KRED, KNRM))
 			return (true);
 		return (false);
 	}
@@ -58,11 +58,10 @@ t_varint		v_init(char sign, uint8_t *src, int16_t len)
 	t_varint		v;
 	int16_t		i;
 
-	if (sign != -1 && sign != 1
-		&& ft_dprintf(2, "%s%s%s", KRED, V_BAD_SIGN, KNRM))
+	if (sign != -1 && sign != 1)
 		return (g_v[3]);
 	if ((len <= 0 || len > V_MAX_LEN)
-		&& ft_dprintf(2, "%s%s%s", KRED, V_LEN_ERR, KNRM))
+		&& ft_dprintf(2, V_ERR_LEN_0, KRED, KNRM))
 		return (g_v[3]);
 	v = g_v[0];
 	v.sign = sign;
@@ -114,4 +113,35 @@ uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
 		return (1);
 	}
 	return (0);
+}
+
+/*
+**	ft_dprintf(2, "%s|%hhd|%hd:\n", name, v->sign, v->len);
+*/
+
+void			v_print(int fd, char *name, t_varint *v, bool check)
+{
+	int8_t		k;
+	int16_t		i;
+
+	ft_dprintf(fd, "%s:\n", name);
+	if (check && !v_check(v, NULL, NULL, "print"))
+		return ;
+	if (v->x[v->len - 1] & 0x80)
+		ft_dprintf(fd, "    00:");
+	k = (v->x[v->len - 1] & 0x80) ? 1 : 0;
+	i = v->len;
+	while (--i >= 0)
+	{
+			if (k == 0)
+				ft_dprintf(fd, "    ");
+			ft_dprintf(fd, "%02x", v->x[i]);
+			if (i == 0)
+				break;
+			ft_dprintf(fd, ":");
+			k++;
+			if ((k %= 15) == 0)
+				ft_dprintf(fd, "\n");
+	}
+	ft_dprintf(fd, "\n");
 }

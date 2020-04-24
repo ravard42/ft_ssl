@@ -13,29 +13,49 @@
 #include "ft_ssl.h"
 
 /*
-** tmp == -3 => parsing error -> exit
-**	tmp == -2 => malloc error -> exit
-**	tmp == -1 => parsing error -> handle next arg (hash func only)
-**	tmp == 0 => no more arg to be computed -> exit
-**	tmp == 1 => all is OK -> run cmd
+**	main return status:
+**	0 : all works fine
+**	1 : init fatal error (bad cmd)
+**	2 : parsing error (hash only)
+**	3 : parsing fatal error 
+**	4 : cmd fatal error
+*/
+
+/*
+**	parser return status:
+**	-2 : fatal error 	-> exit
+**	-1 : error 			-> handle next arg (hash func only)
+**	0 	: no more arg	->	exit
+**	1 	: arg loaded 	-> run cmd
+*/
+
+/*
+**	cmd return status:
+**	-1 : fatal error 	-> exit
+**	0 	: cmd success	->	exit
+**	1 	: cmd sucess 	-> parser
 */
 
 int	main(int argc, char **argv)
 {
 	t_parse			p;
-	int				tmp;
+	int				p_ret;
+	int				c_ret;
+	int				ret;
 
 	if (argc == 1 || !init_p(&p, argv[1], 31))
 		return (cmd_usage());
-	while ((tmp = p.cmd.parser(&p, argc, argv)))
+	ret = 0;
+	while ((p_ret = p.cmd.parser(&p, argc, argv)))
 	{
-		if (tmp == -3 || tmp == -2)
+		if (p_ret == -2 && (ret = 3))
 			break ;
-		else if (tmp == -1)
+		else if (p_ret == -1 && (ret = 2))
 			continue;
-		if (!p.cmd.run(&p))
+		c_ret = p.cmd.run(&p);
+		if ((c_ret == -1 && (ret = 4)) || c_ret == 0)
 			break ;
 	}
 	free_p(&p, 31);
-	return (0);
+	return (ret);
 }

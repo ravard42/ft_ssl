@@ -57,7 +57,7 @@ static void			init_a(t_asym *a, bool init)
 	a->mod_nb = 64;
 	a->rsak = NULL;
 	a->data.msg = NULL;
-	a->data.len = 0;
+	a->data.len = -1;
 }
 
 static void		init_rng(t_rng *rng, bool init)
@@ -98,11 +98,11 @@ bool						init_p(t_parse *p, char *cmd, uint8_t init_opt)
 		p->i[2] = 0;
 		p->in_file = NULL;
 		p->r.msg = NULL;
-		p->r.len = 0;
+		p->r.len = -1;
 		p->out_file = NULL;
 		p->w.fd = -1;
 		p->w.msg = NULL;
-		p->w.len = 0;
+		p->w.len = -1;
 	}
 	init_h(&p->h, init_opt & 2);
 	init_s(&p->s, init_opt & 4);

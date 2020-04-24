@@ -1,6 +1,5 @@
 #include "ft_ssl.h"
 
-
 static int		numbits(char *nb)
 {
 	int16_t		ret;
@@ -48,7 +47,7 @@ int				genrsa_parser(t_parse *p, int argc, char **argv)
 		if (p->i[0] == argc - 1)
 		{
 			if ((p->a.mod_nb = numbits(argv[p->i[0]])) == -1)
-				return (-3);
+				return (-2);
 		}
 		else
 		{
@@ -63,6 +62,6 @@ int				genrsa_parser(t_parse *p, int argc, char **argv)
 		}
 	}
 	if (p->in_file && !seed_with_file(p))
-		return (-3);
+		return (-2);
 	return (1);
 }

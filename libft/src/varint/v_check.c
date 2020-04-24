@@ -17,14 +17,14 @@ static bool				v_len_check(t_varint *v)
 	int16_t		tmp;
 
 	if ((V_MAX_LEN <= 0 || V_MAX_LEN % 8 != 0 || V_MAX_LEN > 4096)
-		&& ft_dprintf(2, "%s%s%s", KRED, V_MAX_LEN_ERR, KNRM))
+		&& ft_dprintf(2, V_ERR_MAXLEN, KRED, KNRM))
 		exit(0);
 	if ((v->len <= 0 || v->len > V_MAX_LEN)
-		&& ft_dprintf(2, "%s%s%s", KRED, V_LEN_ERR, KNRM))
+		&& ft_dprintf(2, V_ERR_LEN_0, KRED, KNRM))
 		return (false);
 	tmp = v->len;
 	v_len(v, V_MAX_LEN);
-	if (v->len != tmp && ft_dprintf(2, V_COR_LEN, KRED, KNRM))
+	if (v->len != tmp && ft_dprintf(2, V_ERR_LEN_1, KRED, KNRM))
 		return (false);
 	return (true);
 }

@@ -12,11 +12,11 @@
 
 #include "ft_ssl.h"
 
-static const char		*g_sym_usg[] = {E, D, I, O,
-	DES, A, K, V, SALT, PW, ""};
-
 static const char		*g_sym_opt[] = {"-e", "-d", "-i", "-o", "-a",
 	"-k", "-v", "-s", "-p", ""};
+
+static const char		*g_sym_usg[] = {E, D, I, O,
+	DES, A, K, V, SALT, PW, ""};
 
 void			format_key(t_sym *s, uint8_t nb_k)
 {
@@ -82,18 +82,18 @@ static int		arg_feed_verif(t_parse *p)
 	if ((p->s.arg[0].set || p->s.arg[1].set) && p->s.arg[2].set
 		&& ft_dprintf(2, "%scan't use -k/-v and -s at the same time%s\n",
 			KRED, KNRM))
-		return (-3);
+		return (-2);
 	if (!p->s.o[1])
 	{
 		if (p->cmd.needed[0] && !p->s.arg[0].set && !pbkdf(p, true, NULL))
-			return (-3);
+			return (-2);
 		if (p->cmd.needed[1] && !p->s.arg[1].set
 			&& ft_dprintf(2, "%sInitialization vector undefined%s\n",
 				KRED, KNRM))
-			return (-3);
+			return (-2);
 	}
 	if (!p->in_file && !fd_parser(p, NULL))
-		return (-3);
+		return (-2);
 	return (1);
 }
 
@@ -110,7 +110,7 @@ int				sym_parser(t_parse *p, int argc, char **argv)
 				|| (!p->s.arg[2].set && p->s.o[7])
 				|| (!p->s.arg[3].set && p->s.o[8]))
 			if (!load_args(p, argv[++p->i[0]]))
-				return (-3);
+				return (-2);
 	}
 	return (arg_feed_verif(p));
 }

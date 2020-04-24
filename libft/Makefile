@@ -1,16 +1,18 @@
 CC = gcc
 #FLAGS = -Wall -Wextra -Werror
-#FLAGS = -Wall -Wextra -O2
 FLAGS = -Wall -Wextra -fsanitize=address -g
-#FLAGS = -Wall -Wextra -g
+#FLAGS = -Wall -Wextra -O2
 
 NAME = libft.a
 SRC =	src/ft_memalloc.c\
 		src/ft_memset.c\
 		src/ft_memcpy.c\
+		src/ft_memshift.c\
+		src/ft_memrev.c\
 		src/ft_memcmp.c\
 		src/ft_putchar.c\
 		src/ft_puthex.c\
+		src/ft_hexdump.c\
 		src/ft_putstr.c\
 		src/ft_strlen.c\
 		src/ft_strcpy.c\
@@ -59,10 +61,8 @@ SRC =	src/ft_memalloc.c\
 		src/varint/v_div_mod.c\
 		src/varint/v_expmod.c\
 		src/varint/v_gcd_eea_inv.c\
-		src/varint/v_crt.c\
 		src/varint/v_asn1_int_seq_der_e.c\
 		src/varint/v_asn1_int_seq_der_d.c\
-		src/varint/v_print_hexdump.c\
 
 
 OBJ = $(SRC:.c=.o)

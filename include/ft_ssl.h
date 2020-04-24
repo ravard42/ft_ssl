@@ -70,7 +70,9 @@
 # define IK "-inkey val, input key"
 # define RSA_E "-encrypt, encrypt with public key"
 # define RSA_D "-decrypt, decrypt with private key"
-# define HEXD	"-hexdump, hex dump output"
+# define HEXD	"-hexdump, hex dump the output data"
+# define RAW	"-raw, no padding applied (default PKCS#1 v1.5)"
+
 
 # define GENRSA_RUNNING "Generating RSA private key, %hd bit long modulus (2 primes)\n"
 
@@ -83,7 +85,11 @@
 ** and stay convenient here with it
 */
 
+
+
+# define ERR_OUT_FD 		"%sout_file opening error%s\n"
 # define ERR_GENRSA_LEN "%sV_MAX_LEN must be >= %d for this key size%s\n"
+# define ERR_CHECK_LEN "%sV_MAX_LEN must be >= %d for checking this this key size%s\n"
 #define R_CHECK_0 		"%sOnly private keys can be checked%s\n"
 #define R_CHECK_1 		"%sRSA key error: p not prime%s\n"
 #define R_CHECK_2 		"%sRSA key error: q not prime%s\n"
@@ -91,6 +97,16 @@
 #define R_CHECK_4 		"%sRSA key error: dmp1 not congruent to d%s\n"
 #define R_CHECK_5 		"%sRSA key error: dmq1 not congruent to d%s\n"
 #define R_CHECK_6 		"%sRSA key error: iqmp not inverse of q%s\n"
+#define	ERR_OPT_0		"%sNo key file specified%s\n"
+#define	ERR_OPT_1		"%s-encrypt|-decrypt missing%s\n"
+# define ERR_ENC_0 		"%sdata too small for key size%s\n"
+# define ERR_ENC_1		"%sdata too large for key size%s\n"
+# define ERR_ENC_2 		"%sdata too large for modulus%s\n"
+# define ERR_DEC_0 		"%sonly private key can decrypt%s\n"
+# define ERR_UNPAD_0 	"%sunpadding error 0%s\n"
+# define ERR_UNPAD_1 	"%sunpadding error 1%s\n"
+
+# define ERR_DATA_LEN 	"%sdata too large, V_MAX_LEN must be >= %d%s\n"
 
 /*
 ** varint len <= 4096 (32768 bits) (cf varint.h)
@@ -218,7 +234,7 @@ typedef struct		s_asym
 **	o[4] :							-passin			-encrypt
 **	o[5] :							-passout			-decrypt
 **	o[6] :							-des				-hexdump
-**	o[7] :							-pubin
+**	o[7] :							-pubin			-raw
 **	o[8] :							-pubout
 **	o[9] :							-text
 **	o[10] : 							-modulus

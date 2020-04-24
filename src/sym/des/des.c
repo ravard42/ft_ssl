@@ -54,17 +54,17 @@ int					des_dec(t_parse *p)
 int					des(t_parse *p)
 {
 	if (!check_out(p))
-		return (0);
+		return (-1);
 	if (p->s.o[1] && p->s.o[4] && !opt_a_d(p))
-		return (0);
+		return (-1);
 	if (!check_k_v(p))
-		return (0);
+		return (-1);
 	if (!p->s.o[1] && !des_enc(p))
-		return (0);
+		return (-1);
 	else if (p->s.o[1] && !des_dec(p))
-		return (0);
+		return (-1);
 	if (!p->s.o[1] && p->s.o[4] && !opt_a_e(p))
-		return (0);
+		return (-1);
 	write(p->w.fd, p->w.msg, p->w.len);
 	return (0);
 }

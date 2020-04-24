@@ -13,6 +13,10 @@
 #include "libft.h"
 
 /*
+** Chinese remainder theorem speed up
+*/
+
+/*
 ** V_CRT OVLF NOTE
 **
 ** to be done
@@ -33,11 +37,14 @@
 **	 	7			h
 */
 
-t_varint		v_crt(t_varint v, t_varint e, t_varint p, t_varint q)
+t_varint		v_crt(t_varint *data, t_varint *rsak)
 {
 	t_varint				n;
 	t_varint				crt[8];
 
+	ft_dprintf(2, "IN CRT\n");
+	if (!v_check(data, rsak + 3, rsak + 1, "expmod"))
+		return (g_v[3]);
 	n = v_mul(p, q, true);
 // can't add bool check here, already 4 param
 // i'll see when i'll go back on this crt function 

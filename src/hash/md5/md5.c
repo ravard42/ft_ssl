@@ -17,7 +17,7 @@ int		md5(t_parse *p)
 	int64_t		i;
 
 	if (!hash_padding(p))
-		return (0);
+		return (-1);
 	i = 0;
 	md5_init(&p->h);
 	while (i < p->w.len / 64)

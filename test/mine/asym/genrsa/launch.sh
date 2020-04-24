@@ -26,6 +26,12 @@ fi
 cp $make_dir/ft_ssl ./ 
 #<<<< MAKING ./FT_SSL <<<<<<
 
+ft_exit ()
+{
+ls | grep -v launch.sh | xargs rm
+exit
+}
+
 
 #>>>>> INPUT PARSER >>>>>
 
@@ -40,9 +46,11 @@ nb_tests=$3
 #<<<<< INPUT PARSER <<<<<<
 
 #>>>>> TEST FUNCTIONS >>>>>>
+err64="don't use key size < 64"
 
 genrsa() {
 ./ft_ssl genrsa $numbits > rsak.pem
+if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
 openssl rsa -check -in rsak.pem | grep ok >/dev/null
 }
 
@@ -66,5 +74,4 @@ if ((i == ok)); then col=$KGRN; fi
 echo -e "									${col}genrsa:	${ok}/${nb_tests}${KNRM}"
 
 #<<<<<< MAIN <<<<<<
-
-ls | grep -v launch.sh | xargs rm
+ft_exit

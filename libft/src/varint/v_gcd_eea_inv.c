@@ -59,7 +59,7 @@ bool			v_eea_check(t_varint *v[3])
 	len32[0] += 2;
 	len32[1] = V_MAX_LEN / 4;
 	if (len32[0] > len32[1]
-		&& ft_dprintf(2, "%s%s%s", KRED, V_EEA_OVFL, KNRM))
+		&& ft_dprintf(2, V_ERR_EEA_OVFL, KRED, len32[0] * 4, KNRM))
 		return (false);
 	return (true);
 }
@@ -130,7 +130,7 @@ t_varint		v_inv(t_varint v, t_varint mod, bool check)
 		return (g_v[3]);
 	gcd = v_gcd(v, mod, false);
 	if (!is_g_v(1, &gcd)
-		&& ft_dprintf(2, "%s%s%s", KRED, V_INV_MOD_ERR, KNRM))
+		&& ft_dprintf(2, V_ERR_INV, KRED, KNRM))
 		return (g_v[3]);
 	v_eea(tmp, v, mod, false);
 	if (tmp[0].sign == -1)

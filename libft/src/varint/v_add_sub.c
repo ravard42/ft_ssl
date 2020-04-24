@@ -34,13 +34,15 @@
 bool			v_add_check(t_varint *v[3])
 {
 	int16_t	msb[3];
+	int16_t	byte_len;
 
 	msb[0] = v_msb_id(v[0]);
 	msb[1] = v_msb_id(v[1]);
 	msb[2] = (msb[0] >= msb[1]) ? msb[0] : msb[1];
 	msb[2] += v[0]->sign == v[1]->sign ? 1 : 0;
-	if (1 + msb[2] / V_BIT_LEN > V_MAX_LEN
-		&& ft_dprintf(2, "%s%s%s", KRED, V_ADD_OVFL, KNRM))
+	byte_len = 1 + msb[2] / V_BIT_LEN;
+	if (byte_len > V_MAX_LEN
+		&& ft_dprintf(2, V_ERR_ADD_OVFL, KRED, byte_len, KNRM))
 		return (false);
 	return (true);
 }

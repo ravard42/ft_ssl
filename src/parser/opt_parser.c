@@ -12,36 +12,27 @@
 
 #include "ft_ssl.h"
 
-/*
-** beginning to end0 	: Standard commands
-** between end0 and end1 : Message Digest commands
-** between end1 and end2 : Cipher commands
-*/
-
-static const char	*g_cmd_name[] = {
-	"genrsa", "rsa",
-	"\x1B[36;1mrsautl (to be computed)", "end0",
-	"md5", "sha256", "end1",
-	"base64", "des-ecb", "des-cbc", "des", "des-ofb", "des-cfb",
-	"des-ede3", "des-ede3-cbc", "des3", "des-ede3-ofb", "des-ede3-cfb", "end2"
-};
-
-int				cmd_usage(void)
+bool				opt_parser(t_parse *p, const char **opts, char *arg)
 {
-	int				i;
+	int8_t			i;
+	int8_t			j;
 
-	ft_dprintf(2, U, KGRN, KWHT, KBLU, KYEL, KWHT);
+	j = -1;
 	i = -1;
-	ft_dprintf(2, "\n%sStandard commands%s:\n", KBLU, KNRM);
-	while (ft_strcmp("end0", g_cmd_name[++i]))
-		ft_dprintf(2, " %s\n", g_cmd_name[i]);
-	ft_dprintf(2, "\n%sMessage Digest commands%s:\n", KBLU, KNRM);
-	while (ft_strcmp("end1", g_cmd_name[++i]))
-		ft_dprintf(2, " %s\n", g_cmd_name[i]);
-	ft_dprintf(2, "\n%sCipher commands%s:\n", KBLU, KNRM);
-	while (ft_strcmp("end2", g_cmd_name[++i]))
-		ft_dprintf(2, " %s\n", g_cmd_name[i]);
-	return (1);
+	while (ft_strcmp(opts[++i], "")
+		&& (j = ft_strcmp(opts[i], arg)))
+		;
+	if (j == 0)
+	{
+		if (p->cmd.type == 0)
+			return (p->a.o[i] = 1);
+		else if (p->cmd.type == 1)
+			return (p->h.o[i + 1] = 1);
+		else if (p->cmd.type == 2)
+			return (p->s.o[i] = 1);
+	}
+	ft_dprintf(2, "%s\"%s\" invalid option%s\n", KRED, arg, KNRM);
+	return (false);
 }
 
 int				opt_usage(char *title, const char **usg)
@@ -52,5 +43,5 @@ int				opt_usage(char *title, const char **usg)
 	ft_dprintf(2, "%s%s%s:\n", KYEL, title, KNRM);
 	while (ft_strcmp(usg[++i], ""))
 		ft_dprintf(2, " %s\n", usg[i]);
-	return (-3);
+	return (-2);
 }

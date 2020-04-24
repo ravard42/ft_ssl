@@ -12,6 +12,7 @@
 
 static bool		in_parser(t_parse *p, int argc, char **argv)
 {
+	p->a.o[0] = 0;
 	if (++p->i[0] >= argc
 		&& ft_dprintf(2, "%s-in needs arg%s\n", KRED, KNRM))
 		return (false);
@@ -23,6 +24,7 @@ static bool		in_parser(t_parse *p, int argc, char **argv)
 
 static bool		out_parser(t_parse *p, int argc, char **argv)
 {
+	p->a.o[1] = 0;
 	if (++p->i[0] >= argc
 		&& ft_dprintf(2, "%s-out needs arg%s\n", KRED, KNRM))
 		return (false);
@@ -34,6 +36,7 @@ static bool		out_parser(t_parse *p, int argc, char **argv)
 
 static bool		inkey_parser(t_parse *p, int argc, char **argv)
 {
+	p->a.o[2] = 0;
 	if (++p->i[0] >= argc
 		&& ft_dprintf(2, "%s-inkey needs arg%s\n", KRED, KNRM))
 		return (false);
@@ -45,8 +48,8 @@ static bool		inkey_parser(t_parse *p, int argc, char **argv)
 
 }
 
-static const char		*g_rsau_opt[] = {"-in", "-out", "-inkey", "-pubin", "-encrypt", "-decrypt", "-hexdump", ""};
-static const char		*g_rsau_usg[] = {IN, OUT, IK, PBI2, RSA_E, RSA_D, HEXD, ""};
+static const char		*g_rsau_opt[] = {"-in", "-out", "-inkey", "-pubin", "-encrypt", "-decrypt", "-hexdump", "-raw"};
+static const char		*g_rsau_usg[] = {IN, OUT, IK, PBI2, RSA_E, RSA_D, HEXD, RAW, ""};
 
 int				rsautl_parser(t_parse *p, int argc, char **argv)
 {
@@ -54,16 +57,21 @@ int				rsautl_parser(t_parse *p, int argc, char **argv)
 	{
 		if (!opt_parser(p, g_rsau_opt, argv[p->i[0]]))
 			return (opt_usage("rsautl opts", g_rsau_usg));
-		if (!p->w.msg && p->a.o[0] && !in_parser(p, argc, argv))
-			return (-3);
+		if (p->a.data.len == -1 && p->a.o[0] && !in_parser(p, argc, argv))
+			return (-2);
 		if (!p->out_file && p->a.o[1] && !out_parser(p, argc, argv))
-			return (-3);
+			return (-2);
 		if (!p->in_file && p->a.o[2] && !inkey_parser(p, argc, argv))
-			return (-3);
+			return (-2);
 	}
-	if (!p->in_file && ft_dprintf(2, "%sno keyfile specified%s\n", KRED, KNRM))
-		return (-3);
-	if (p->a.data.msg == NULL && ft_read(&p->a.data, NULL) < 0)
-		return (-3);
+	if (!p->in_file && ft_dprintf(2, ERR_OPT_0, KRED, KNRM))
+		return (-2);
+	if (!p->a.o[4] && !p->a.o[5] && ft_dprintf(2, ERR_OPT_1, KRED, KNRM))
+		return (-2);
+	if (p->a.data.len == -1 && ft_read(&p->a.data, NULL) < 0)
+		return (-2);
+	if (p->a.data.len > V_MAX_LEN
+		&& ft_dprintf(2, ERR_DATA_LEN, KRED, p->a.data.len, KNRM))
+		return (-2);
 	return (1);
 }

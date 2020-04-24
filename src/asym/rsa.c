@@ -13,7 +13,7 @@ static void		text(t_parse *p, int nb_v)
 	if (nb_v == 2)
 	{
 		ft_dprintf(1, "RSA Public-Key: (%hd bit)\n", v_msb_id(p->a.rsak) + 1);
-		v_print(1, "Modulus", p->a.rsak);
+		v_print(1, "Modulus", p->a.rsak, true);
 		ft_dprintf(1, "Exponent: 65537 (0x10001)\n");
 	}
 	else if (nb_v == 9)
@@ -25,7 +25,7 @@ static void		text(t_parse *p, int nb_v)
 			if (i == 1)
 				ft_dprintf(1, "publicExponent: 65537 (0x10001)\n");
 			else
-				v_print(1, v_name[i], p->a.rsak + i + 1);
+				v_print(1, v_name[i], p->a.rsak + i + 1, true);
 		}
 	}
 }
@@ -43,12 +43,14 @@ static void		print_opts(t_parse *p, int nb_v)
 	}	
 }
 
-// check len of input key to prevent overflow in check_opt
 static void		check_opt(int *err, t_parse *p, int nb_v)
 {
 	t_varint		tmp[7];
 
 	if (nb_v != 9 && (*err += ft_dprintf(1, R_CHECK_0, KYEL, KNRM)))
+		return ;
+	if (p->a.rsak[1].len * 2 > V_MAX_LEN
+		&& (*err = ft_dprintf(2, ERR_CHECK_LEN, KRED, p->a.rsak[1].len * 2, KNRM)))
 		return ;
 	if (!prob_prime_test(p->a.rsak + 4, &p->rng, false))
 		*err += ft_dprintf(1, R_CHECK_1, KRED, KNRM);
@@ -84,7 +86,7 @@ int						rsa(t_parse *p)
 	int		err;
 
 	if (!(nb_v = read_rsak(p)))
-		return (0);
+		return (-1);
 	print_opts(p, nb_v);
 	if (p->a.o[12])
 	{
@@ -94,6 +96,6 @@ int						rsa(t_parse *p)
 			ft_dprintf(1, CHECK_SUCCESS, KGRN, KNRM);
 	}
 	if (!p->a.o[11])
-		write_rsak(p, nb_v);
+		return (write_rsak(p, nb_v));
 	return (0);
 }

@@ -66,7 +66,7 @@ static int				check_and_count(t_der_d *o, t_read *r)
 	while (tmp)
 	{
 		tmp = read_header(cur, tmp);
-		if (tmp < 0 && ft_dprintf(2, "%s%s%s", KRED, V_DER_COR, KNRM)
+		if (tmp < 0 && ft_dprintf(2, V_ERR_DER_COR, KRED, KNRM)
 			&& free_der_d(o))
 			return (-1);
 		cur = cur->nxt;
@@ -76,7 +76,7 @@ static int				check_and_count(t_der_d *o, t_read *r)
 	ret = 0;
 	while ((cur = cur->nxt) != NULL && ++ret)
 		tmp += cur->st - cur->st_h + cur->len;
-	if (tmp != (o->len) && ft_dprintf(2, "%s%s%s", KRED, V_DER_COR, KNRM)
+	if (tmp != (o->len) && ft_dprintf(2, V_ERR_DER_COR, KRED, KNRM)
 		&& free_der_d(o))
 		return (-1);
 	return (ret);
@@ -88,7 +88,7 @@ static t_varint			v_load(uint8_t *src, int len)
 	t_varint	ret;
 
 	if (len > V_MAX_LEN
-		&& ft_dprintf(2, ERR_DER_LEN, KRED, len, KNRM))
+		&& ft_dprintf(2, V_ERR_DER_OVFL, KRED, len, KNRM))
 		return (g_v[3]);
 	ret = g_v[0];
 	i = len;
@@ -115,7 +115,8 @@ t_varint				*v_asn1_int_seq_der_d(int *nb_varint, t_read *r)
 	ori.nxt = NULL;
 	if ((*nb_varint = check_and_count(&ori, r)) == -1)
 		return (NULL);
-	ret = (t_varint *)malloc(sizeof(t_varint) * *nb_varint);
+	if (!(ret = (t_varint *)malloc(sizeof(t_varint) * *nb_varint)))
+		return (NULL);
 	cur = &ori;
 	while ((cur = cur->nxt) != NULL)
 	{

@@ -34,8 +34,9 @@ static int			add_der_pub_offset(t_parse *p)
 		return (0);
 	if (put_der_header(h[0], 0x30, 15 + h[1][0] + 1 + p->r.len) == -1)
 		return (0);
-	tmp = (char *)ft_memalloc(sizeof(char) *
-		(h[0][0] + 15 + h[1][0] + 1 + p->r.len + 1));
+	if (!(tmp = (char *)ft_memalloc(sizeof(char) *
+		(h[0][0] + 15 + h[1][0] + 1 + p->r.len + 1))))
+		return (0);
 	ft_memcpy(tmp, h[0] + 1, h[0][0]);
 	tmp_len = h[0][0];
 	ft_memcpy(tmp + tmp_len, const_seq, 15);
@@ -49,23 +50,18 @@ static int			add_der_pub_offset(t_parse *p)
 	return (1);
 }
 
-static int			der_encode(t_parse *p, int nb_v)
+static bool			der_encode(t_parse *p, int nb_v)
 {
-	int		ret;
-
 	p->a.o[8] = (nb_v == 2) ? 1 : p->a.o[8];
 	if (p->a.o[8])
 	{
-		ret = (nb_v == 2) ? v_asn1_int_seq_der_e(&p->r, p->a.rsak, 2) :
-			v_asn1_int_seq_der_e(&p->r, p->a.rsak + 1, 2);
-		if (ret != 1 && ft_dprintf(2, "%spub der enc error%s\n", KRED, KNRM))
-			return (0);
+		if (!v_asn1_int_seq_der_e(&p->r, p->a.rsak + nb_v % 2, 2))
+			return (false);
 		if (!add_der_pub_offset(p))
-			return (0);
+			return (false);
+		return (true);
 	}
-	else if (v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9) != 1)
-		return (0);
-	return (1);
+		return (v_asn1_int_seq_der_e(&p->r, p->a.rsak, 9));
 }
 
 static int			des_pbkdf(t_parse *p)
@@ -122,12 +118,12 @@ static int			des_enc_b64(t_parse *p, int nb_v)
 int						write_rsak(t_parse *p, int nb_v)
 {
 	if (!der_encode(p, nb_v))
-		return (0);
+		return (-1);
 	p->w.fd = (p->out_file) ?
 		open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644) : 1;
    if (p->w.fd == -1
       && ft_dprintf(2, "%sout_file opening error\n%s", KRED, KNRM))
-      return (0);
+      return (-1);
 	if (!ft_strcmp("rsa", p->cmd.name))
 		ft_dprintf(2, "writing RSA key\n");
 	if (p->a.o[3] == 2)
@@ -136,9 +132,9 @@ int						write_rsak(t_parse *p, int nb_v)
 	{
 		ft_dprintf(p->w.fd, g_beg_end_str[p->a.o[8]]);
 		if (p->a.o[6] && !des_enc_b64(p, nb_v))
-				return (0);
-		else if (!p->a.o[6] && run_b64_e(p) == -2)
-			return (0);
+				return (-1);
+		else if (!p->a.o[6] && !run_b64_e(p))
+			return (-1);
 		write(p->w.fd, p->w.msg, p->w.len);
 		ft_dprintf(p->w.fd, g_beg_end_str[2 + p->a.o[8]]);
 	}
