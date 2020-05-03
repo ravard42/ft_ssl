@@ -407,6 +407,8 @@ int					read_rsak(t_parse *p);
 int					write_rsak(t_parse *p, int nb_v);
 int					rsa(t_parse *p);
 int					rsautl(t_parse *p);
+t_varint				cra(t_varint *data, t_varint *rsak);
+
 /*
 ** csprng.c
 */

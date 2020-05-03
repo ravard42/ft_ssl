@@ -69,8 +69,7 @@ static bool				rsa_dec(t_varint *data, t_parse *p, int nb_v)
 		return (false);
 	ft_memrcpy(data->x, p->a.data.msg, p->a.data.len);
 	v_len(data, p->a.data.len);
-	*data = v_expmod(*data, p->a.rsak[3], p->a.rsak[1], true);
-//	*data = crt(*data, p->a.rsak);
+	*data = cra(data, p->a.rsak);
 	if (is_g_v(3, data))
 		return (false);
 	ft_memrev(data->x, data->len);

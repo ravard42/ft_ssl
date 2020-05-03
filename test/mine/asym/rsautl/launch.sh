@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#NEW test_script_structure cf function_args.sh in ~/language/scriptShell/learning-bash
+#NEW test_script_archi cf function_args.sh in ~/language/scriptShell/learning-bash
 
 KNRM="\x1B[0m"
 KRED="\x1B[31;1m"
@@ -43,11 +43,11 @@ test_usage[0]='sh launch.sh expmod_raw_enc key_len nb_tests'
 test_type[1]='expmod_raw_encdec'
 test_nbarg[1]=3
 test_usage[1]='sh launch.sh expmod_raw_encdec key_len nb_tests'
-# PKCS#1 v1.5 padding pipe enc dec 
+# PKCS#1 v1.5 padding pipe enc(square-and-multiply) dec(square-and-multiply)
 test_type[2]='expmod_pad_encdec'
 test_nbarg[2]=3
 test_usage[2]='sh launch.sh expmod_pad_encdec key_len nb_tests'
-# CRT enc dec exponential modular computation
+# PKCS#1 v1.5 padding pipe enc(square-and-multiply) dec(Chinese remainder algorithm based on the CRT)
 test_type[3]='crt'
 test_nbarg[3]=3
 test_usage[3]='sh launch.sh crt key_len nb_tests'
@@ -132,15 +132,27 @@ head -c $data_byte_len /dev/urandom > data.ref
 ./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt  | ./ft_ssl rsautl -inkey key.pem -decrypt -out data.ft_ssl
 diff data.ref data.ft_ssl >/dev/null 2>&1
 
-#if (($? != 0));then
-#
-#hexdump -ve '1/1 "%02x"'  data.ref
-#echo ""
-#hexdump -ve '1/1 "%02x"'  data.ft_ssl
-#echo ""
-#
-#ft_exit
-#fi
+}
+
+crt() {
+key_bit_len=$2
+key_byte_len=$((1 + (key_bit_len - 1) / 8))
+echo -e "${KYEL}(key_bit_len, key_byte_len) = ($key_bit_len, $key_byte_len)$KNRM"
+if ((key_byte_len < 11)); then
+echo -e "${KRED}key_byte_len must be >= 11$KNRM"
+ft_exit
+fi
+#./ft_ssl genrsa -out key.pem $key_bit_len 
+#if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
+openssl genrsa -out key.pem $key_bit_len 2>/dev/null
+if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
+
+data_byte_len=$((RANDOM % (key_byte_len - 11 + 1)))
+echo -e "${KCYN}data_byte_len = $data_byte_len ---> randomely chosen to be at least 11 byte smaller than key_byte_len$KNRM"
+head -c $data_byte_len /dev/urandom > data.ref
+
+./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt | ./ft_ssl rsautl -inkey key.pem -decrypt -out data.ft_ssl
+diff data.ref data.ft_ssl >/dev/null 2>&1
 
 }
 

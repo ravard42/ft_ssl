@@ -2,8 +2,8 @@ CC = gcc
 NAME = ft_ssl
 
 #FLAGS = -Wall -Wextra -Werror
-FLAGS = -Wall -Wextra -g -fsanitize=address
-#FLAGS = -Wall -Wextra -O2
+#FLAGS = -Wall -Wextra -g -fsanitize=address
+FLAGS = -Wall -Wextra -O2
 
 SRC = src/main.c\
 		src/init.c\
@@ -56,6 +56,7 @@ SRC = src/main.c\
 		src/asym/write_rsak.c\
 		src/asym/rsa.c\
 		src/asym/rsautl.c\
+		src/asym/cra.c\
 		src/csprng.c\
 	
 OBJ = $(SRC:.c=.o)

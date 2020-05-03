@@ -39,7 +39,7 @@
 # define V_ERR_ADD_OVFL			"%soverflow in v_add|v_sub, V_MAX_LEN must be >= %d%s\n"
 # define V_ERR_MUL_OVFL			"%soverflow in v_mul, V_MAX_LEN must be >= %d%s\n"
 # define V_ERR_EXP_OVFL			"%soverflow in v_exp, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_EXPMOD_OVFL		"%soverflow in v_expmod, V_MAX_LEN must be >= %d%s\n"
+# define V_ERR_EXPMOD_OVFL		"%soverflow in v_expmod|cra, V_MAX_LEN must be >= %d%s\n"
 # define V_ERR_EEA_OVFL			"%soverflow in v_eea or v_inv, V_MAX_LEN must be >= %d%s\n"
 
 /*
@@ -48,7 +48,7 @@
 */
 
 # define V_BIT_LEN			8
-# define V_MAX_LEN		 	128
+# define V_MAX_LEN		 	256
 
 /*
 ** must be a mutliple of 8 and <= 4096 (32768 bits)
