@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/28 20:03:16 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 15:03:45 by ravard           ###   ########.fr       */
+/*   Created: 2020/05/03 19:33:39 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/03 19:33:50 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 **	0 : all works fine
 **	1 : init fatal error (bad cmd)
 **	2 : parsing error (hash only)
-**	3 : parsing fatal error 
+**	3 : parsing fatal error
 **	4 : cmd fatal error
 */
 
