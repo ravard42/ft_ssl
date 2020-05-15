@@ -11,7 +11,7 @@ KWHT="\x1B[37;1m"
 
 
 #>>>> MAKING ./FT_SSL >>>>>
-make_dir="/home/ravard/projets/42/ft_ssl"
+make_dir="../../../../"
 
 echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
 echo -ne "\r"

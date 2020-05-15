@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 16:11:56 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 02:37:59 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 13:57:41 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char					*set_pass(bool verify)
 	return (pw);
 }
 
-static int			set_salt(t_parse *p, char *salt)
+static int				set_salt(t_parse *p, char *salt)
 {
 	if (salt)
 	{
@@ -50,7 +50,7 @@ static int			set_salt(t_parse *p, char *salt)
 	return (1);
 }
 
-int					pbkdf(t_parse *p, bool verify, char *salt)
+int						pbkdf(t_parse *p, bool verify, char *salt)
 {
 	t_parse		tmp;
 

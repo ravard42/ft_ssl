@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_prime.c                                       :+:      :+:    :+:   */
+/*   prob_prime_test.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/30 23:31:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 04:04:12 by ravard           ###   ########.fr       */
+/*   Created: 2020/05/13 22:34:02 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/13 22:38:49 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,12 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 	n_min_1 = v_sub(n, g_v[1], false);
 	if (is_g_v(1, &r)
 		|| v_cmp(&r, "-eq", &n_min_1, false))
-//		&& ft_dprintf(2, "+"))
 		return (false);
 	i = g_v[1];
 	while (v_cmp(&i, "-lt", &s, false))
 	{
 		r = v_expmod(r, g_v[2], n, false);
 		if (v_cmp(&r, "-eq", &n_min_1, false))
-//			&& ft_dprintf(2, "+"))
 			return (false);
 		v_inc(&i, false);
 	}
@@ -74,7 +72,7 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 */
 
 static void			init_miller_rabin(t_varint *n, t_varint *s, t_varint *d)
-{ 
+{
 	t_varint		n_min_1;
 
 	n_min_1 = v_sub(*n, g_v[1], false);
@@ -91,8 +89,7 @@ static void			init_miller_rabin(t_varint *n, t_varint *s, t_varint *d)
 	*d = v_div(n_min_1, s[1], false);
 }
 
-
-bool					prob_prime_test(t_varint *n, t_rng *rng, bool progress_bar)
+bool				prob_prime_test(t_varint *n, t_rng *rng, bool progress_bar)
 {
 	t_varint	s[2];
 	t_varint	d;
@@ -109,4 +106,3 @@ bool					prob_prime_test(t_varint *n, t_rng *rng, bool progress_bar)
 	}
 	return (true);
 }
-

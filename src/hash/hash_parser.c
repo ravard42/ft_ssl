@@ -6,14 +6,20 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/28 20:17:10 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:47:31 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 00:25:41 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
 static const char		*g_hash_opt[] = {"-p", "-q", "-r", "-s", ""};
-static const char		*g_hash_usg[] = {P, Q, R, S, ""};
+static const char		*g_hash_usg[] = {
+	"-p, echo STDIN to STDOUT and append the checksum to STDOUT",
+	"-q, quiet mode, only print the checksum",
+	"-r, reverse the format of the output",
+	"-s, print the sum of the given string",
+	""
+};
 
 int			hash_parser(t_parse *p, int argc, char **argv)
 {

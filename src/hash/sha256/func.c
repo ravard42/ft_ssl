@@ -24,15 +24,15 @@ uint32_t		g1(uint32_t *h)
 
 uint32_t		g2(uint32_t *h)
 {
-	return (ROT_R(*h, 2) ^ ROT_R(*h, 13) ^ ROT_R(*h, 22));
+	return (rot_r(*h, 2) ^ rot_r(*h, 13) ^ rot_r(*h, 22));
 }
 
 uint32_t		g3(uint32_t *h)
 {
-	return (ROT_R(*h, 6) ^ ROT_R(*h, 11) ^ ROT_R(*h, 25));
+	return (rot_r(*h, 6) ^ rot_r(*h, 11) ^ rot_r(*h, 25));
 }
 
 uint32_t		g4(uint32_t *h)
 {
-	return (ROT_R(*h, 7) ^ ROT_R(*h, 18) ^ SH_R(*h, 3));
+	return (rot_r(*h, 7) ^ rot_r(*h, 18) ^ sh_r(*h, 3));
 }

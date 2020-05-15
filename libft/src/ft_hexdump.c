@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_hexdump.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/12 03:05:12 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/12 03:07:06 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static void		dumpline(int fd, uint8_t *p, int16_t k, int8_t len)
 {
-	char			c[17];
+	char		c[17];
 	int8_t		i;
 
 	ft_memset(c, '.', len);
@@ -18,12 +30,12 @@ static void		dumpline(int fd, uint8_t *p, int16_t k, int8_t len)
 			c[i] = p[k * 16 + i];
 	}
 	while (i++ < 16)
-			ft_dprintf(fd, "   ");
+		ft_dprintf(fd, "   ");
 	ft_dprintf(fd, "  %s", c);
 	ft_dprintf(fd, "\n");
 }
 
-void				ft_hexdump(int fd, void *p, size_t len)
+void			ft_hexdump(int fd, void *p, size_t len)
 {
 	uint8_t		*ui8p;
 	size_t		addr;
@@ -34,9 +46,9 @@ void				ft_hexdump(int fd, void *p, size_t len)
 	k = -1;
 	while (++k < len / 16)
 	{
-			ft_dprintf(fd, "%04hx - ", addr);
-			dumpline(fd, ui8p, k, 16);
-			addr += 16;
+		ft_dprintf(fd, "%04hx - ", addr);
+		dumpline(fd, ui8p, k, 16);
+		addr += 16;
 	}
 	if (len % 16)
 	{

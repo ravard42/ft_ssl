@@ -6,26 +6,26 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:02:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 01:19:08 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:39:53 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/* 
-** V_DIV|V_MOD OVFL NOTE
+/*
+**	V_DIV|V_MOD OVFL NOTE
 **
-** v[0] -> dividend
-** v[1] -> divisor
+**	v[0] -> dividend
+**	v[1] -> divisor
 **
 **	can't overflow in div or mod
 **	endeed quotient and modulus are always <= dividend
 */
 
-bool			v_div_check(t_varint *v[3])
+bool				v_div_check(t_varint *v[3])
 {
 	if (is_g_v(0, v[1])
-		&& ft_dprintf(2, V_ERR_DIV_0, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_DIV_0], KRED, KNRM))
 		return (false);
 	return (true);
 }
@@ -33,7 +33,7 @@ bool			v_div_check(t_varint *v[3])
 /*
 ** SHIFT and SUBSTRACT algorithm
 **
-** here dst is the remainder (r buffer in shift_substract scop)  
+** here dst is the remainder (r buffer in shift_substract scop)
 ** that we feed with the upper bit of src (dividend) at every starting loop.
 **	we then apply left_shift to quotient
 ** if r >= divisor
@@ -46,7 +46,8 @@ bool			v_div_check(t_varint *v[3])
 **						we feed r with first 64 chuncks of dividend
 */
 
-static void				v_feed(t_varint *dst, t_varint *src, int16_t *cursor, int16_t *init_r)
+static void			v_feed(t_varint *dst, t_varint *src, int16_t *cursor,
+		int16_t *init_r)
 {
 	int16_t	q;
 	int16_t	r;
@@ -67,21 +68,21 @@ static void				v_feed(t_varint *dst, t_varint *src, int16_t *cursor, int16_t *in
 		dst->x[0] |= (src->x[q] >> r) & 1;
 		(*cursor)--;
 	}
-	
 }
 
-static t_varint			v_shift_substract(t_varint dend, char *op, t_varint sor)
+static t_varint		v_shift_substract(t_varint dend, char *op, t_varint sor)
 {
 	int16_t			cursor;
 	t_varint		q;
 	t_varint		r;
-	int16_t		init_r;
+	int16_t			init_r;
 
 	if ((cursor = v_msb_id(&dend)) == -1)
 		return (g_v[0]);
 	q = g_v[0];
 	r = g_v[0];
-	init_r = v_cmp(&dend, "-le", &sor, false) ? v_msb_id(&dend) : v_msb_id(&sor);
+	init_r = v_cmp(&dend, "-le", &sor, false) ?
+		v_msb_id(&dend) : v_msb_id(&sor);
 	while (cursor != -1)
 	{
 		v_feed(&r, &dend, &cursor, &init_r);
@@ -97,7 +98,7 @@ static t_varint			v_shift_substract(t_varint dend, char *op, t_varint sor)
 	return (q);
 }
 
-t_varint				v_div(t_varint dend, t_varint sor, bool check)
+t_varint			v_div(t_varint dend, t_varint sor, bool check)
 {
 	t_varint		q;
 	int8_t			sign;
@@ -121,7 +122,7 @@ t_varint				v_div(t_varint dend, t_varint sor, bool check)
 **		ex: -12 mod 5 will return 3
 */
 
-t_varint				v_mod(t_varint dend, t_varint sor, bool eucl,
+t_varint			v_mod(t_varint dend, t_varint sor, bool eucl,
 		bool check)
 {
 	t_varint		r;

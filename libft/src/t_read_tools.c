@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_read_tools.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/12 03:14:34 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/12 03:14:35 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 /*
@@ -51,7 +63,7 @@ int64_t		ft_grep_line(const char *str, t_read *r, int64_t offset)
 	if (offset >= r->len
 		&& ft_dprintf(2, "%sft_grep_line error%s\n", KRED, KNRM))
 		return (-2);
-	len = ft_strlen(str);	
+	len = ft_strlen(str);
 	while (r->len - offset >= len && ft_strncmp(r->msg + offset, str, len))
 	{
 		if ((offset = ft_nxt_line(r, offset)) <= 0)

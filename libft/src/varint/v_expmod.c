@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:05:03 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 04:14:54 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:41:17 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 ** a^b mod(n) = (a mod(n))^b mod(n)
 **
 ** expmod reduce 'a' to 'a mod(n)' from the entry of the function
-**	so for overflow checking we only need to check that n * n don't overflow (see V_MUL OVFL NOTE)
+** so for overflow checking we only need to check that n * n don't overflow
+** (see V_MUL OVFL NOTE)
 **
 **
 ** a = v[0]
@@ -32,21 +33,21 @@ bool			v_expmod_check(t_varint *v[3])
 	int16_t	byte_len;
 
 	if (v[1]->sign == -1
-		&& ft_dprintf(2, V_ERR_NEG_POW, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_NEG_POW], KRED, KNRM))
 		return (false);
 	if (is_g_v(0, v[2])
-		&& ft_dprintf(2, V_ERR_DIV_0, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_DIV_0], KRED, KNRM))
 		return (false);
 	msb[0] = v_msb_id(v[2]);
 	msb[1] = msb[0] * 2;
 	byte_len = 1 + msb[1] / V_BIT_LEN;
 	if (byte_len > V_MAX_LEN
-		&& ft_dprintf(2, V_ERR_EXPMOD_OVFL, KRED, byte_len, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_EXPMOD_OVFL], KRED, byte_len, KNRM))
 		return (false);
 	return (true);
 }
 
-static void	sqr_mul_mod(t_varint *ret, t_varint *v, t_varint *mod)
+static void		sqr_mul_mod(t_varint *ret, t_varint *v, t_varint *mod)
 {
 	if (v == NULL)
 	{
@@ -60,11 +61,11 @@ static void	sqr_mul_mod(t_varint *ret, t_varint *v, t_varint *mod)
 	}
 }
 
-t_varint	v_expmod(t_varint v, t_varint e, t_varint mod, bool check)
+t_varint		v_expmod(t_varint v, t_varint e, t_varint mod, bool check)
 {
 	int16_t			i;
-	int8_t				j;
-	t_varint			ret;
+	int8_t			j;
+	t_varint		ret;
 
 	if (check && !v_check(&v, &e, &mod, "expmod"))
 		return (g_v[3]);

@@ -12,7 +12,7 @@ KCYN="\x1B[36;1m"
 KWHT="\x1B[37;1m"
 
 #>>>> MAKING ./FT_SSL >>>>>
-make_dir="/home/ravard/projets/42/ft_ssl"
+make_dir="../../../../"
 
 echo -ne "${KYEL}ft_ssl makefile is running [...]$KNRM"
 echo -ne "\r"
@@ -43,16 +43,12 @@ test_usage[0]='sh launch.sh expmod_raw_enc key_len nb_tests'
 test_type[1]='expmod_raw_encdec'
 test_nbarg[1]=3
 test_usage[1]='sh launch.sh expmod_raw_encdec key_len nb_tests'
-# PKCS#1 v1.5 padding pipe enc(square-and-multiply) dec(square-and-multiply)
+# PKCS#1 v1.5 padding pipe enc(square-and-multiply) dec(Chinese remainder algorithm based on the CRT)
 test_type[2]='expmod_pad_encdec'
 test_nbarg[2]=3
 test_usage[2]='sh launch.sh expmod_pad_encdec key_len nb_tests'
-# PKCS#1 v1.5 padding pipe enc(square-and-multiply) dec(Chinese remainder algorithm based on the CRT)
-test_type[3]='crt'
-test_nbarg[3]=3
-test_usage[3]='sh launch.sh crt key_len nb_tests'
 
-nb_type=4
+nb_type=3
 # $1 : type of the test
 for ((id = 0; id < nb_type; ++id)); do
 if [[ $1 == ${test_type[$id]} ]]; then break; fi
@@ -79,10 +75,10 @@ err512="don't use key size < 512"
 expmod_raw_enc() {
 key_bit_len=$2
 key_byte_len=$((1 + (key_bit_len - 1) / 8))
-./ft_ssl genrsa -out key.pem $key_bit_len 
-if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
-#openssl genrsa -out key.pem $key_bit_len 2>/dev/null
-#if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
+#./ft_ssl genrsa -out key.pem $key_bit_len 
+#if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
+openssl genrsa -out key.pem $key_bit_len 2>/dev/null
+if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
 
 echo -ne "\x00" > data.ref
 data_byte_len=$((key_byte_len - 1))
@@ -98,10 +94,10 @@ diff data_enc.ft_ssl data_enc.openssl >/dev/null 2>&1
 expmod_raw_encdec() {
 key_bit_len=$2
 key_byte_len=$((1 + (key_bit_len - 1) / 8))
-./ft_ssl genrsa -out key.pem $key_bit_len 
-if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
-#openssl genrsa -out key.pem $key_bit_len 2>/dev/null
-#if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
+#./ft_ssl genrsa -out key.pem $key_bit_len 
+#if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
+openssl genrsa -out key.pem $key_bit_len 2>/dev/null
+if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
 
 echo -ne "\x00" > data.ref
 data_byte_len=$((key_byte_len - 1))
@@ -120,28 +116,6 @@ if ((key_byte_len < 11)); then
 echo -e "${KRED}key_byte_len must be >= 11$KNRM"
 ft_exit
 fi
-./ft_ssl genrsa -out key.pem $key_bit_len 
-if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
-#openssl genrsa -out key.pem $key_bit_len 2>/dev/null
-#if (($? != 0));then echo -e "${KRED}${err512}${KNRM}"; ft_exit; fi
-
-data_byte_len=$((RANDOM % (key_byte_len - 11 + 1)))
-echo -e "${KCYN}data_byte_len = $data_byte_len ---> randomely chosen to be at least 11 byte smaller than key_byte_len$KNRM"
-head -c $data_byte_len /dev/urandom > data.ref
-
-./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt  | ./ft_ssl rsautl -inkey key.pem -decrypt -out data.ft_ssl
-diff data.ref data.ft_ssl >/dev/null 2>&1
-
-}
-
-crt() {
-key_bit_len=$2
-key_byte_len=$((1 + (key_bit_len - 1) / 8))
-echo -e "${KYEL}(key_bit_len, key_byte_len) = ($key_bit_len, $key_byte_len)$KNRM"
-if ((key_byte_len < 11)); then
-echo -e "${KRED}key_byte_len must be >= 11$KNRM"
-ft_exit
-fi
 #./ft_ssl genrsa -out key.pem $key_bit_len 
 #if (($? != 0));then echo -e "${KRED}${err64}${KNRM}"; ft_exit; fi
 openssl genrsa -out key.pem $key_bit_len 2>/dev/null
@@ -151,7 +125,7 @@ data_byte_len=$((RANDOM % (key_byte_len - 11 + 1)))
 echo -e "${KCYN}data_byte_len = $data_byte_len ---> randomely chosen to be at least 11 byte smaller than key_byte_len$KNRM"
 head -c $data_byte_len /dev/urandom > data.ref
 
-./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt | ./ft_ssl rsautl -inkey key.pem -decrypt -out data.ft_ssl
+./ft_ssl rsautl -in data.ref -inkey key.pem -encrypt  | ./ft_ssl rsautl -inkey key.pem -decrypt -out data.ft_ssl
 diff data.ref data.ft_ssl >/dev/null 2>&1
 
 }

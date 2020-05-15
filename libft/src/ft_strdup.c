@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/12 19:58:24 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/22 03:52:54 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:10:46 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strdup(const char *str)
 	int		i;
 
 	if (!str
-		&& ft_dprintf(2, "%sft_strdup(NULL) returned NULL [...]%s\n", KYEL, KNRM))
+		&& ft_dprintf(2, "%sft_strdup(NULL) returned NULL%s\n", KYEL, KNRM))
 		return (NULL);
 	if (!(dup = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1)))
 		&& ft_dprintf(2, "%smalloc error in ft_strdup%s\n", KRED, KNRM))

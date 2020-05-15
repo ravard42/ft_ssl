@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 14:59:42 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 03:26:38 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 23:06:56 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void				init_h(t_hash *h, bool init)
 
 static void				init_s(t_sym *s, bool init)
 {
-	int8_t	i;
+	int8_t		i;
 	uint16_t	tmp;
 
 	if (!init)
@@ -45,7 +45,7 @@ static void				init_s(t_sym *s, bool init)
 	s->endian = (*((uint8_t *)&tmp)) ? 0 : 1;
 }
 
-static void			init_a(t_asym *a, bool init)
+static void				init_a(t_asym *a, bool init)
 {
 	int8_t	i;
 
@@ -60,12 +60,12 @@ static void			init_a(t_asym *a, bool init)
 	a->data.len = -1;
 }
 
-static void		init_rng(t_rng *rng, bool init)
+static void				init_rng(t_rng *rng, bool init)
 {
 	if (!init)
 		return ;
 	if ((rng->fd = open("/dev/urandom", O_RDONLY)) == -1
-		&& ft_dprintf(2, "%s/dev/urandom open to seed rng error%s\n", KRED, KNRM))
+		&& ft_dprintf(2, g_ssl_str[PRNG_ERR_OPEN_DEVURAND], KRED, KNRM))
 		exit(0);
 	rng->co = 0xa00000;
 	init_s(&rng->s, init);
@@ -79,7 +79,7 @@ static void		init_rng(t_rng *rng, bool init)
 **		8		->		a
 **		16		->		rng
 **	NB: combinable
-**		 exempli gratia/e.g: 
+**		 exempli gratia/e.g:
 **		 init_opt == 15 (01111)
 **		 will init  p(i, r, in_file, w, out_file)
 **					 + h
@@ -87,7 +87,7 @@ static void		init_rng(t_rng *rng, bool init)
 **					 + a
 */
 
-bool						init_p(t_parse *p, char *cmd, uint8_t init_opt)
+bool					init_p(t_parse *p, char *cmd, uint8_t init_opt)
 {
 	if (cmd && !cmd_parser(p, cmd))
 		return (false);

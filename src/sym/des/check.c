@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 11:35:03 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 06:53:15 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 13:54:37 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			check_k_v(t_parse *p)
 		if (p->s.arg[0].set
 			&& (p->s.arg[1].set || !p->cmd.needed[1]))
 			return (1);
-		ft_dprintf(2, "%sk and/or v undefined and salt missing %s\n", KRED, KNRM);
+		ft_dprintf(2, g_ssl_str[DES_ERR_KVS], KRED, KNRM);
 		return (0);
 	}
 	if (!pbkdf(p, false, p->r.msg + 8))

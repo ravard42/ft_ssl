@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 02:11:26 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/22 02:12:59 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/04 08:35:08 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ int					ft_atoi(const char *str);
 int					ft_hexatoi(const char *str);
 bool				ft_is_decimal(char *str);
 char				ft_toupper(char c);
-uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str, bool yel_msg);
+uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str,
+						bool yel_msg);
 char				**malloc_empty_str_tab(void);
 int					free_ok(void *ptr);
 int					free_split(char **tab);
@@ -124,9 +125,9 @@ char				*rm_multi_whitespace(char *str);
 int					get_next_line(int fd, char **line);
 void				*ft_rand(void *dest, size_t len);
 uint64_t			ft_range(uint64_t src, uint64_t min, uint64_t max);
-int				ft_read(t_read *r, char *file);
-int64_t			ft_nxt_line(t_read *r, int64_t offset);
-int64_t			ft_grep_line(const char *str, t_read *r, int64_t offset);
+int					ft_read(t_read *r, char *file);
+int64_t				ft_nxt_line(t_read *r, int64_t offset);
+int64_t				ft_grep_line(const char *str, t_read *r, int64_t offset);
 
 /*
 **	ft_printf

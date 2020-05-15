@@ -6,21 +6,19 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:06:22 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/25 02:27:40 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:45:24 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-
 /*
 ** V_GCD OVFL NOT
 **
 ** just one v_mod in there so GCD isn't concerned by ovfl
-**
 */
 
-t_varint		v_gcd(t_varint a, t_varint b, bool check)
+t_varint			v_gcd(t_varint a, t_varint b, bool check)
 {
 	t_varint		r[2];
 	t_varint		tmp;
@@ -42,15 +40,17 @@ t_varint		v_gcd(t_varint a, t_varint b, bool check)
 }
 
 /*
-** V_EEA OVFL NOTE
+** 	V_EEA OVFL NOTE
 **
-** we know that final resultat (coef_r0, coef_r0 + 1) can be stored in the same varint len than max(a.len, b.len)
-** however when processing v_mul algo in eea it could overflow in the way we handle carry (32-bit * 32-bit in 64-bit)
-** (cf v_mul algo -> u64 = (uint64_t *)((uint32_t *)ret->x + i + j);)
+** 	we know that final resultat (coef_r0, coef_r0 + 1)
+**	can be stored in the same varint len than max(a.len, b.len)
+** 	however when processing v_mul algo in eea
+**	it could overflow in the way we handle carry (32-bit * 32-bit in 64-bit)
+**	(cf v_mul algo -> u64 = (uint64_t *)((uint32_t *)ret->x + i + j);)
 **	2 more uint32_t chuncks are needed to compute it
 */
 
-bool			v_eea_check(t_varint *v[3])
+bool				v_eea_check(t_varint *v[3])
 {
 	int64_t	len32[2];
 
@@ -59,12 +59,12 @@ bool			v_eea_check(t_varint *v[3])
 	len32[0] += 2;
 	len32[1] = V_MAX_LEN / 4;
 	if (len32[0] > len32[1]
-		&& ft_dprintf(2, V_ERR_EEA_OVFL, KRED, len32[0] * 4, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_EEA_OVFL], KRED, len32[0] * 4, KNRM))
 		return (false);
 	return (true);
 }
 
-static void	process(t_varint *coef_r0, t_varint *coef_r1, t_varint *r)
+static void			process(t_varint *coef_r0, t_varint *coef_r1, t_varint *r)
 {
 	t_varint	tmp[2];
 
@@ -86,14 +86,15 @@ static void	process(t_varint *coef_r0, t_varint *coef_r1, t_varint *r)
 ** coef_r1[2]	: coef alpha et beta de r[1]
 */
 
-t_varint 		*v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check)
+t_varint			*v_eea(t_varint *coef_r0, t_varint a, t_varint b,
+		bool check)
 {
-	int8_t	sign[3];
+	int8_t		sign[3];
 	t_varint	r[2];
 	t_varint	coef_r1[2];
 
 	if (check && !v_check(&a, &b, NULL, "eea"))
-		return NULL;
+		return (NULL);
 	sign[2] = v_sort(&a, &b, sign);
 	r[0] = a;
 	r[1] = b;
@@ -118,10 +119,9 @@ t_varint 		*v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check)
 ** V_INV OVFL NOT
 **
 ** same as EEA
-**
 */
 
-t_varint		v_inv(t_varint v, t_varint mod, bool check)
+t_varint			v_inv(t_varint v, t_varint mod, bool check)
 {
 	t_varint	tmp[2];
 	t_varint	gcd;
@@ -130,7 +130,7 @@ t_varint		v_inv(t_varint v, t_varint mod, bool check)
 		return (g_v[3]);
 	gcd = v_gcd(v, mod, false);
 	if (!is_g_v(1, &gcd)
-		&& ft_dprintf(2, V_ERR_INV, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_INV], KRED, KNRM))
 		return (g_v[3]);
 	v_eea(tmp, v, mod, false);
 	if (tmp[0].sign == -1)

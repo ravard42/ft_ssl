@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 02:29:11 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 04:04:13 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 02:27:50 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,33 @@
 */
 
 /*
-** V_ERR_MSGS 
+** V_ERR_MSGS
 */
 
-# define V_ERR						"%sg_v_r has been called%s\n"
-# define V_ERR_MAXLEN			"%sV_MAX_LEN must be a multiple of 8 s.t 0 < V_MAX_LEN <= 4096\nexit ...\n"
-# define V_ERR_LEN_0				"%sv.len <= 0 or v.len > MAX_LEN%s\n"
-# define V_ERR_LEN_1 			"%scorrupted varint : len and data doesn't match%s\n"
-# define V_ERR_DIV_0 			"%sdivision by 0%s\n"
-# define V_ERR_NEG_POW 			"%sneg pow not handle%s\n"
-# define V_ERR_EXP_LIM			"%sexponent lim value overtaken in v_exp%s\n"
-# define V_ERR_INV 				"%selem not inversible for this modulo%s\n"
-# define V_ERR_DER_2BIG			"%sasn1 der header len must be <= 0xffff)%s\n"
-# define V_ERR_DER_COR			"%sder file corrupted or is'not a sequence of integers%s\n"
+enum					e_v_errno {
+	V_ERR,
+	V_ERR_MAXLEN,
+	V_ERR_LEN_0,
+	V_ERR_LEN_1,
+	V_ERR_DIV_0,
+	V_ERR_NEG_POW,
+	V_ERR_EXP_LIM,
+	V_ERR_INV,
+	V_ERR_DER_2BIG,
+	V_ERR_DER_COR,
+	V_ERR_DER_OVFL,
+	V_ERR_LSHIFT_OVFL,
+	V_ERR_ADD_OVFL,
+	V_ERR_MUL_OVFL,
+	V_ERR_EXP_OVFL,
+	V_ERR_EXPMOD_OVFL,
+	V_ERR_EEA_OVFL,
+};
 
-# define V_ERR_DER_OVFL 		"%scan't store asn1_der number, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_LSHIFT_OVFL		"%soverflow in v_left_shift, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_ADD_OVFL			"%soverflow in v_add|v_sub, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_MUL_OVFL			"%soverflow in v_mul, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_EXP_OVFL			"%soverflow in v_exp, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_EXPMOD_OVFL		"%soverflow in v_expmod|cra, V_MAX_LEN must be >= %d%s\n"
-# define V_ERR_EEA_OVFL			"%soverflow in v_eea or v_inv, V_MAX_LEN must be >= %d%s\n"
+extern const char		*g_v_sterr[];
 
 /*
-**	V_MAX_LEN is the number maximum of 8-bit chunks 
+**	V_MAX_LEN is the number maximum of 8-bit chunks
 **	available for t_varint struct
 */
 
@@ -57,7 +60,7 @@
 typedef struct				s_varint
 {
 	int8_t					sign;
-	int16_t				len;
+	int16_t					len;
 	uint8_t					x[V_MAX_LEN];
 }							t_varint;
 
@@ -71,7 +74,6 @@ typedef struct				s_varint
 **		int16_t v.len can contain all possible byte len
 **		and their associated Most Significant Bit ID (cf v_msb_id)
 */
-
 
 typedef struct				s_der_d
 {
@@ -94,8 +96,7 @@ typedef struct				s_der_d
 typedef struct s_read		t_read;
 typedef bool				(*t_op_check)(t_varint *[3]);
 
-
-static const t_varint					g_v[4] = {
+static const t_varint		g_v[4] = {
 	{1, 1, {0}},
 	{1, 1, {1}},
 	{1, 1, {2}},
@@ -115,7 +116,8 @@ static const t_varint					g_v[4] = {
 bool						is_g_v(int8_t i, t_varint *v);
 void						v_len(t_varint *v, int16_t start_chunk);
 t_varint					v_init(char sign, uint8_t *src, int16_t len);
-void						v_print(int fd, char *name, t_varint *v, bool check);
+void						v_print(int fd, char *name, t_varint *v,
+		bool check);
 int16_t						v_msb_id(t_varint *v);
 t_varint					v_abs(t_varint v);
 t_varint					*v_inc(t_varint *a, bool check);
@@ -134,7 +136,7 @@ bool						v_eea_check(t_varint *v[3]);
 
 bool						v_cmp(t_varint *a, char *cmp, t_varint *b,
 		bool check);
-uint8_t					v_sort(t_varint *a, t_varint *b, int8_t *sign);
+uint8_t						v_sort(t_varint *a, t_varint *b, int8_t *sign);
 t_varint					v_left_shift(t_varint v, bool check);
 t_varint					v_right_shift(t_varint v, bool check);
 t_varint					v_add(t_varint a, t_varint b, bool check);
@@ -147,11 +149,14 @@ t_varint					v_mod(t_varint dend, t_varint sor, bool eucl,
 t_varint					v_expmod(t_varint v, t_varint e, t_varint mod,
 		bool check);
 t_varint					v_gcd(t_varint a, t_varint b, bool check);
-t_varint					*v_eea(t_varint *coef_r0, t_varint a, t_varint b, bool check);
+t_varint					*v_eea(t_varint *coef_r0, t_varint a, t_varint b,
+		bool check);
 t_varint					v_inv(t_varint v, t_varint mod, bool check);
 
-bool							v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint);
-int8_t						put_der_header(uint8_t *h, uint8_t type, unsigned int len);
+bool						v_asn1_int_seq_der_e(t_read *r, t_varint *v,
+		int nb_varint);
+int8_t						put_der_header(uint8_t *h, uint8_t type,
+		unsigned int len);
 t_varint					*v_asn1_int_seq_der_d(int *nb_varint, t_read *r);
 
 #endif

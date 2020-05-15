@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:45:01 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 16:09:50 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 13:49:33 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static bool			b64_d_check(uint32_t in, uint8_t b_endian)
 		i = g_rev_tab64[ascii_id];
 		if (i == 64)
 			equal = 1;
-		if (i == 80 && ft_dprintf(2, "%sb64 err_0 : bad char\n%s", KRED, KNRM))
+		if (i == 80 && ft_dprintf(2, g_ssl_str[B64_ERR_0], KRED, KNRM))
 			return (false);
 		else if (equal && i != 64
-				&& ft_dprintf(2, "%sb64 err_1 : bad use of '='%s\n", KRED, KNRM))
+				&& ft_dprintf(2, g_ssl_str[B64_ERR_1], KRED, KNRM))
 			return (false);
 		else if (i == 64 && (pos == 0 || pos == 1)
-				&& ft_dprintf(2, "%sb64 err_2 : bad use of '='%s\n", KRED, KNRM))
+				&& ft_dprintf(2, g_ssl_str[B64_ERR_2], KRED, KNRM))
 			return (false);
 	}
 	return (true);

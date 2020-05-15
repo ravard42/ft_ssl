@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:38:00 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 02:44:04 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:57:22 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 /*
 ** we recall that V_MAX_LEN <= 4096 bytes = 32768 bits
 ** v_msb_id can return a maximum of 32767  (int16_t)
-** but it stay valid as it represents the index of the MSB (Most Significant Bit)
-** and not the number of bits 
+** but it stay valid as it represents the index of the MSB
+** (Most Significant Bit)
+** and not the number of bits
 **
 ** v_msb_id need valid varint len!
 **
@@ -35,7 +36,7 @@ int16_t					v_msb_id(t_varint *v)
 	while (j != -1 && !(v->x[v->len - 1] >> j & 1))
 		j--;
 	if (j == -1
-		&& ft_dprintf(2, V_ERR_LEN_1, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_LEN_1], KRED, KNRM))
 		return (-1);
 	j += (v->len - 1) * V_BIT_LEN;
 	return (j);
@@ -60,7 +61,8 @@ t_varint				v_abs(t_varint v)
 }
 
 /*
-** load len pseudo random uint8_t chunk from /dev/urandom in a varint variable and return it
+** 	load len pseudo random uint8_t chunk from /dev/urandom
+**	in a varint variable and return it
 */
 
 t_varint				v_rand(int16_t len, bool neg)

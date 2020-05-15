@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:07:33 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 00:54:48 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 22:50:58 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,16 @@ typedef struct s_parse	t_parse;
 
 typedef struct			s_cmd
 {
-	int8_t			type;
+	int8_t				type;
 	char				name[15];
-//	uint8_t			init_opt;
 	char				endian;
 	char				hash_hex_len;
-	int				(*parser)(t_parse *, int, char **);
+	int					(*parser)(t_parse *, int, char **);
 	bool				needed[3];
-	uint8_t			nb_k;
-	int				(*run)(t_parse *);
-	int				(*run_e)(t_parse *);
-	int				(*run_d)(t_parse *);
+	uint8_t				nb_k;
+	int					(*run)(t_parse *);
+	int					(*run_e)(t_parse *);
+	int					(*run_d)(t_parse *);
 }						t_cmd;
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:01:24 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/29 07:09:30 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 00:24:31 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool				opt_parser(t_parse *p, const char **opts, char *arg)
 	return (false);
 }
 
-int				opt_usage(char *title, const char **usg)
+int					opt_usage(char *title, const char **usg)
 {
 	int	i;
 

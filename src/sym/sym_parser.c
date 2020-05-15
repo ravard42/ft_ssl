@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:38:26 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/31 02:36:44 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 13:50:52 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,19 @@
 static const char		*g_sym_opt[] = {"-e", "-d", "-i", "-o", "-a",
 	"-k", "-v", "-s", "-p", ""};
 
-static const char		*g_sym_usg[] = {E, D, I, O,
-	DES, A, K, V, SALT, PW, ""};
+static const char		*g_sym_usg[] = {
+	"-e, encode/encrypt mode (default)",
+	"-d, decode/decrypt mode",
+	"-i, input file",
+	"-o, output file",
+	"\x1B[33;1mdes:\x1B[0m",
+	" -a, decode/encode the input/output in base64",
+	" -k, key in hexa is the next argument.",
+	" -v, initialization vector in hexa is the next argument.",
+	" -s, the salt in hexa is the next argument.",
+	" -p, password in ascii is the next argument.",
+	""
+};
 
 void			format_key(t_sym *s, uint8_t nb_k)
 {

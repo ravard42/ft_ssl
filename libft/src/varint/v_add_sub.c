@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 03:57:53 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/25 02:23:05 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:29:08 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,23 @@ bool			v_add_check(t_varint *v[3])
 	msb[2] += v[0]->sign == v[1]->sign ? 1 : 0;
 	byte_len = 1 + msb[2] / V_BIT_LEN;
 	if (byte_len > V_MAX_LEN
-		&& ft_dprintf(2, V_ERR_ADD_OVFL, KRED, byte_len, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_ADD_OVFL], KRED, byte_len, KNRM))
 		return (false);
 	return (true);
 }
 
 t_varint		v_add_pos(t_varint a, t_varint b)
 {
-	uint64_t		*u64[2];
+	uint64_t	*u64[2];
 	int16_t		len;
 	int16_t		i;
-	uint64_t		tmp;
+	uint64_t	tmp;
 	uint8_t		carry;
-	
+
 	u64[0] = (uint64_t *)a.x;
 	u64[1] = (uint64_t *)b.x;
-	len = a.len / (ssize_t)sizeof(uint64_t);
-	len += (a.len % (ssize_t)sizeof(uint64_t)) ? 1 : 0;
+	len = a.len / sizeof(uint64_t);
+	len += (a.len % sizeof(uint64_t)) ? 1 : 0;
 	carry = 0;
 	i = -1;
 	while (++i < len)
@@ -79,17 +79,17 @@ t_varint		v_add_pos(t_varint a, t_varint b)
 ** a >= b >= 0 (cf v_sort in v_add)
 */
 
-t_varint				v_sub_pos(t_varint a, t_varint b)
+t_varint		v_sub_pos(t_varint a, t_varint b)
 {
-	uint64_t		*u64[2];
+	uint64_t	*u64[2];
 	int16_t		len;
 	int16_t		i;
 	uint8_t		carry[2];
 
 	u64[0] = (uint64_t *)a.x;
 	u64[1] = (uint64_t *)b.x;
-	len = a.len / (ssize_t)sizeof(uint64_t);
-	len += (a.len % (ssize_t)sizeof(uint64_t)) ? 1 : 0;
+	len = a.len / sizeof(uint64_t);
+	len += (a.len % sizeof(uint64_t)) ? 1 : 0;
 	carry[0] = 0;
 	i = -1;
 	while (++i < len)
@@ -108,7 +108,7 @@ t_varint				v_sub_pos(t_varint a, t_varint b)
 ** note that v_sort here is in absolute mode (cf v_tools.c)
 */
 
-t_varint			v_add(t_varint a, t_varint b, bool check)
+t_varint		v_add(t_varint a, t_varint b, bool check)
 {
 	int8_t		sign[2];
 
@@ -123,7 +123,7 @@ t_varint			v_add(t_varint a, t_varint b, bool check)
 	return (a);
 }
 
-t_varint			v_sub(t_varint a, t_varint b, bool check)
+t_varint		v_sub(t_varint a, t_varint b, bool check)
 {
 	int8_t		sign[2];
 

@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:23:53 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 16:10:02 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 22:50:10 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static const char	g_tab64[65] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
 	'2', '3', '4', '5', '6', '7', '8', '9', '+', '/', '='};
 
 /*
-**	g_rev_tab[ascii] return the base64 tab id of ascii if there is one, 80 if not
-**
+**	g_rev_tab[ascii] return the base64 tab id of ascii if there is one,
+**	80 if not
 */
 
 static const char	g_rev_tab64[123] = {80, 80, 80, 80, 80, 80, 80, 80, 80, 80,

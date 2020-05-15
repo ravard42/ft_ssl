@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:22:35 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 07:06:34 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:55:33 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool			is_g_v(int8_t i, t_varint *v)
 	if (i == 3)
 	{
 		if (v->sign != -1 && v->sign != 1
-			&& ft_dprintf(2, V_ERR, KRED, KNRM))
+			&& ft_dprintf(2, g_v_sterr[V_ERR], KRED, KNRM))
 			return (true);
 		return (false);
 	}
@@ -34,8 +34,10 @@ bool			is_g_v(int8_t i, t_varint *v)
 
 /*
 **	v_len check for the len of v and return it.
-**	depending on msc (Most Significant Chunk) we can limit the range of the check
-**	if we need full viewing on v data we set msc to V_MAX_LEN (cost more computation time)
+**	depending on msc (Most Significant Chunk)
+**	we can limit the range of the check
+**	if we need full viewing on v data we set msc to V_MAX_LEN
+**	(cost more computation time)
 */
 
 void			v_len(t_varint *v, int16_t msc)
@@ -55,13 +57,13 @@ void			v_len(t_varint *v, int16_t msc)
 
 t_varint		v_init(char sign, uint8_t *src, int16_t len)
 {
-	t_varint		v;
+	t_varint	v;
 	int16_t		i;
 
 	if (sign != -1 && sign != 1)
 		return (g_v[3]);
 	if ((len <= 0 || len > V_MAX_LEN)
-		&& ft_dprintf(2, V_ERR_LEN_0, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_LEN_0], KRED, KNRM))
 		return (g_v[3]);
 	v = g_v[0];
 	v.sign = sign;
@@ -78,19 +80,19 @@ t_varint		v_init(char sign, uint8_t *src, int16_t len)
 **
 **	if sign == NULL
 **		put bigger in a and lower in b (with regard on their signs)
-**	else 
+**	else
 **		put bigger absolute in a and lower absolute in b
-**		save the sign of the bigger absolute in sign[0] (respectively sign[1] for the lower absolute)
+**		save the sign of the bigger absolute in sign[0]
+**		(respectively sign[1] for the lower absolute)
 **		and finally turn a->sign and b->sign to one
 **
 **	return -1 for error, 1 if switch occured, 0 if not
 */
 
-
 uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
 {
 	t_varint	tmp;
-	int8_t	tmp_sign;
+	int8_t		tmp_sign;
 
 	if (sign)
 	{
@@ -98,7 +100,7 @@ uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
 		sign[1] = b->sign;
 		a->sign = 1;
 		b->sign = 1;
-	}	
+	}
 	if (v_cmp(a, "-lt", b, false))
 	{
 		tmp = *a;
@@ -133,15 +135,15 @@ void			v_print(int fd, char *name, t_varint *v, bool check)
 	i = v->len;
 	while (--i >= 0)
 	{
-			if (k == 0)
-				ft_dprintf(fd, "    ");
-			ft_dprintf(fd, "%02x", v->x[i]);
-			if (i == 0)
-				break;
-			ft_dprintf(fd, ":");
-			k++;
-			if ((k %= 15) == 0)
-				ft_dprintf(fd, "\n");
+		if (k == 0)
+			ft_dprintf(fd, "    ");
+		ft_dprintf(fd, "%02x", v->x[i]);
+		if (i == 0)
+			break ;
+		ft_dprintf(fd, ":");
+		k++;
+		if ((k %= 15) == 0)
+			ft_dprintf(fd, "\n");
 	}
 	ft_dprintf(fd, "\n");
 }

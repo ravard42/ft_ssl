@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   genrsa_parser.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/13 15:29:55 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/13 21:49:34 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static int		numbits(char *nb)
@@ -5,14 +17,14 @@ static int		numbits(char *nb)
 	int16_t		ret;
 
 	if (!ft_is_decimal(nb)
-		&& ft_dprintf(2, "%sCan't parse %s as a decimal number%s\n", KRED, nb, KNRM))
-		return(-1);
+		&& ft_dprintf(2, g_ssl_str[GRSA_ERR_NB_0], KRED, nb, KNRM))
+		return (-1);
 	ret = (int16_t)ft_atoi(nb);
 	if (ret < 64
-		&& ft_dprintf(2, "%smodulus numbits must be >= 64%s\n", KRED, KNRM))
+		&& ft_dprintf(2, g_ssl_str[GRSA_ERR_NB_1], KRED, KNRM))
 		return (-1);
 	else if (ret > 4096
-		&& ft_dprintf(2, "%smodulus numbits must be <= 4096%s\n", KRED, KNRM))
+		&& ft_dprintf(2, g_ssl_str[GRSA_ERR_NB_2], KRED, KNRM))
 		return (-1);
 	return (ret);
 }
@@ -35,8 +47,13 @@ static bool		init_rsak(t_asym *a)
 }
 
 static const char		*g_grsa_opt[] = {"-rand", "-out", ""};
-static const char		*g_grsa_usg[] = {RAND, OUT, NB, ""};
-
+static const char		*g_grsa_usg[] = {
+	"-rand file, use file data to seed the random number generator",
+	"-out file (default stdout)",
+	"numbits, size of the modulus in bits express in decimal " \
+	"(must be the last option specified, default 128 bits)",
+	""
+};
 
 int				genrsa_parser(t_parse *p, int argc, char **argv)
 {

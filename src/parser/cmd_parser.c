@@ -6,13 +6,13 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:03:40 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 15:28:04 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/13 00:21:41 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-static bool		load_cmd(t_cmd *cmd, const t_cmd *src)
+static bool			load_cmd(t_cmd *cmd, const t_cmd *src)
 {
 	uint16_t			endian_sys;
 
@@ -69,11 +69,14 @@ static const char	*g_cmd_name[] = {
 	"des-ede3", "des-ede3-cbc", "des3", "des-ede3-ofb", "des-ede3-cfb", "end2"
 };
 
-int				cmd_usage(void)
+static const char	*g_usg =
+"%susage%s: ./ft_ssl %scommand %s[opts]%s [args]\n";
+
+int					cmd_usage(void)
 {
 	int				i;
 
-	ft_dprintf(2, U, KGRN, KWHT, KBLU, KYEL, KWHT);
+	ft_dprintf(2, g_usg, KGRN, KWHT, KBLU, KYEL, KWHT);
 	i = -1;
 	ft_dprintf(2, "\n%sStandard commands%s:\n", KBLU, KNRM);
 	while (ft_strcmp("end0", g_cmd_name[++i]))

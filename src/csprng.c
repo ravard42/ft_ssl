@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 07:01:13 by ravard            #+#    #+#             */
-/*   Updated: 2020/05/03 19:38:54 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 21:55:52 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static bool			seeding(t_rng *rng)
 	{
 		rng->co = 0;
 		if (read(rng->fd, &buff, 24) != 24
-			&& ft_dprintf(2, "%s%s%s\n", KRED, SEED_ERR, KNRM))
+			&& ft_dprintf(2, g_ssl_str[PRNG_ERR_SEED], KRED, KNRM))
 			return (false);
 		ft_memcpy(rng->s.arg[0].x, buff, 24);
 		format_key(&rng->s, 3);

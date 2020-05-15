@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rsa_parser.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/13 21:56:56 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/13 21:56:57 by ravard           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 /*
@@ -39,7 +51,8 @@ static bool		form_parser(t_parse *p, int argc, char **argv)
 		tmp = 2;
 	else
 	{
-		ft_dprintf(2, "%s-inform invalid format (available : PEM|DER)%s\n", KRED, KNRM);
+		ft_dprintf(2, "%s-inform invalid format \
+				(available : PEM|DER)%s\n", KRED, KNRM);
 		return (false);
 	}
 	p->a.o[2] = (p->a.o[2] == 1) ? tmp : p->a.o[2];
@@ -55,12 +68,15 @@ static bool		form_parser(t_parse *p, int argc, char **argv)
 **
 **	if file:pathname
 **		the password string is read on the first line of the file
+**
+**	NB : 	the strings read are stored in p->s.arg[0].p and p->s.arg[1].p
+**			respectively for -passin (p->a.o[4]) and -passout (p->a.o[5])
 */
 
 static char		*load_pw(int8_t mode, char *pw_in)
 {
 	int		fd;
-	char		*pw;
+	char	*pw;
 
 	pw = NULL;
 	if (mode == 0)
@@ -81,7 +97,7 @@ static char		*load_pw(int8_t mode, char *pw_in)
 		free(pw);
 		pw = NULL;
 	}
-	return (pw); 
+	return (pw);
 }
 
 static char		*pw_parser(t_parse *p, int argc, char **argv)
@@ -103,8 +119,30 @@ static char		*pw_parser(t_parse *p, int argc, char **argv)
 	return (load_pw(mode, argv[p->i[0]] + 5));
 }
 
-static const char		*g_rsa_opt[] = {"-in", "-out", "-inform", "-outform", "-passin", "-passout", "-des", "-pubin", "-pubout", "-text", "-modulus", "-noout", "-check", ""};
-static const char		*g_rsa_usg[] = {IN, OUT, IF, OF, PI, PO, ENC, PBI, PBO, T, M, N, C, ""};
+static const char		*g_rsa_opt[] = {"-in", "-out", "-inform", "-outform",
+	"-passin", "-passout", "-des", "-pubin", "-pubout", "-text", "-modulus",
+	"-noout", "-check", ""};
+
+static const char		*g_rsa_usg[] = {
+	"-in file (default stdin)",
+	"-out file (default stdout)",
+	"-inform DER|PEM , key input format expected on -in (default PEM)",
+	"-outform DER|PEM , key output format expected on -out (default PEM)",
+	"-passin, des password for reading is the next arg (decrypt)",
+	"-passout, des password for writing is the next arg (encrypt)",
+	"-des, encrypt private key with des before writing it\n  "\
+	"(pbkdf is used, if -passout not present, "\
+	"user will be prompted for a pass phrase)",
+	"-pubin, private key is read by default on -in, "\
+	"with this option a public key is read instead",
+	"-pubout, private key is output by default on -out, "\
+	"with this option a public key is output instead",
+	"-text, print key components and key encoded version",
+	"-modulus, print out the value of the modulus of the key",
+	"-noout, this option prevents output of the encoded version of the key",
+	"-check, check the consistency of an RSA private key",
+	""
+};
 
 int				rsa_parser(t_parse *p, int argc, char **argv)
 {

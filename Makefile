@@ -6,6 +6,7 @@ NAME = ft_ssl
 FLAGS = -Wall -Wextra -O2
 
 SRC = src/main.c\
+		src/g_ssl_str.c\
 		src/init.c\
 		src/free.c\
 		src/parser/cmd_parser.c\
@@ -14,6 +15,7 @@ SRC = src/main.c\
 		src/hash/hash_parser.c\
 		src/hash/hash_padding.c\
 		src/hash/format.c\
+		src/hash/shift_rot.c\
 		src/hash/md5/md5.c\
 		src/hash/md5/init.c\
 		src/hash/md5/func.c\
@@ -53,6 +55,7 @@ SRC = src/main.c\
 		src/asym/prob_prime_test.c\
 		src/asym/genrsa.c\
 		src/asym/read_rsak.c\
+		src/asym/rsa_des_opt.c\
 		src/asym/write_rsak.c\
 		src/asym/rsa.c\
 		src/asym/rsautl.c\

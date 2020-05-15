@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 04:39:29 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/22 05:38:46 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:30:37 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 **  h[x][5] = add sign byte (or not) between header and value
 */
 
-int8_t	put_der_header(uint8_t *h, uint8_t type, unsigned int len)
+int8_t			put_der_header(uint8_t *h, uint8_t type, unsigned int len)
 {
 	if (len > 0xffff
-		&& ft_dprintf(2, V_ERR_DER_2BIG, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_DER_2BIG], KRED, KNRM))
 		return (-1);
 	ft_memset((char *)h, 0, 5);
 	h[1] = type;
@@ -61,7 +61,8 @@ static int		set_sub_header(uint8_t *h, t_varint v)
 	return (tot_len);
 }
 
-void				write_data(t_read *r, uint8_t h[][6], t_varint *v, int nb_varint)
+void			write_data(t_read *r, uint8_t h[][6], t_varint *v,
+		int nb_varint)
 {
 	int				i;
 
@@ -82,7 +83,7 @@ void				write_data(t_read *r, uint8_t h[][6], t_varint *v, int nb_varint)
 **	NB: *r must be blank (r->msg not allocated)
 */
 
-bool				v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
+bool			v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
 {
 	unsigned int	seq_len;
 	int				i;

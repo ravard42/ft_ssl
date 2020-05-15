@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 03:53:09 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/22 03:54:07 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:13:40 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ static void			load_x(uint64_t *x, int64_t len, char *str)
 }
 
 /*
-**
 **	hstr_to_64_t:
 **
-**	load a number of len_64 * 8 bytes described by an hexadecimal string into uint64_t *
+**	load a number of len_64 * 8 bytes
+**	described by an hexadecimal string into uint64_t *
 **
 ** if (x == NULL) => on alloue dynamiquement la mémoire
 ** if (x != NULL) => on fait confiance à l'utilisateur
@@ -86,12 +86,12 @@ static void			load_x(uint64_t *x, int64_t len, char *str)
 **							accueillir au moins len_64 * 8 bytes
 **							(sinon segfault ...)
 **
-**	NB : bytes are loaded one by one so little endian systems will change the input value
-**
+**	NB : bytes are loaded one by one
+**		 little endian systems will change the input value
 */
 
-
-uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str, bool yel_msg)
+uint64_t			*hstr_to_64_t(uint64_t *x, int64_t len_64, char *str,
+		bool yel_msg)
 {
 	char		buff[len_64 * 8 * 2];
 	int64_t		len;

@@ -6,23 +6,22 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 03:59:40 by ravard            #+#    #+#             */
-/*   Updated: 2020/01/30 06:44:51 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:48:46 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-
 /*
 **	V_MUL OVFL NOTE
 **
 **	we know result can be stored in a varint v s.t:
-** v.len = a.len + b.len
-** however we need 2 more uint32_t chuncks because of the way we compute data with uint64_t ptr (cf process func)
-** 
+** 	v.len = a.len + b.len
+** 	however we need 2 more uint32_t chuncks
+**	because of the way we compute data with uint64_t ptr (cf process func)
 */
 
-bool			v_mul_check(t_varint *v[3])
+bool				v_mul_check(t_varint *v[3])
 {
 	int64_t	len32[2];
 
@@ -31,19 +30,18 @@ bool			v_mul_check(t_varint *v[3])
 	len32[0] += 2;
 	len32[1] = V_MAX_LEN / 4;
 	if (len32[0] > len32[1]
-		&& ft_dprintf(2, V_ERR_MUL_OVFL, KRED, len32[0] * 4, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_MUL_OVFL], KRED, len32[0] * 4, KNRM))
 		return (false);
 	return (true);
 }
-
 
 static void			process(t_varint *ret, uint32_t *u32[2], int16_t len[2])
 {
 	int16_t		i;
 	int16_t		j;
 	int16_t		k;
-	uint64_t		*u64;
-	uint64_t		carry;
+	uint64_t	*u64;
+	uint64_t	carry;
 
 	j = -1;
 	while (++j < len[1])
@@ -65,18 +63,18 @@ static void			process(t_varint *ret, uint32_t *u32[2], int16_t len[2])
 
 t_varint			v_mul(t_varint a, t_varint b, bool check)
 {
-	uint32_t		*u32[2];
+	uint32_t	*u32[2];
 	int16_t		len[2];
-	t_varint		ret;
+	t_varint	ret;
 
 	if (check && !v_check(&a, &b, NULL, "mul"))
 		return (g_v[3]);
 	u32[0] = (uint32_t *)a.x;
 	u32[1] = (uint32_t *)b.x;
-	len[0] = a.len / (ssize_t)sizeof(uint32_t);
-	len[0] += (a.len % (ssize_t)sizeof(uint32_t)) ? 1 : 0;
-	len[1] = b.len / (ssize_t)sizeof(uint32_t);
-	len[1] += (b.len % (ssize_t)sizeof(uint32_t)) ? 1 : 0;
+	len[0] = a.len / sizeof(uint32_t);
+	len[0] += (a.len % sizeof(uint32_t)) ? 1 : 0;
+	len[1] = b.len / sizeof(uint32_t);
+	len[1] += (b.len % sizeof(uint32_t)) ? 1 : 0;
 	ret = g_v[0];
 	ret.sign = a.sign * b.sign;
 	process(&ret, u32, len);
@@ -98,13 +96,13 @@ t_varint			v_mul(t_varint a, t_varint b, bool check)
 **		300000*8 = 2100000 (~2^21 bits)
 **
 **	if e >= 2^16 an error is raised
-** explanation:
+**	explanation:
 **	if we set v = e = 2^16
 **	(2^16)^(2^16) = 2^(16 * 2^16) = 2^(2^4 * 2^16) = 2^(2^20)
 **	it's almost the mac-mini stack limit of 2^21 bits
 */
 
-bool			v_exp_check(t_varint *v[3])
+bool				v_exp_check(t_varint *v[3])
 {
 	int8_t		i;
 	uint64_t	e64;
@@ -112,10 +110,10 @@ bool			v_exp_check(t_varint *v[3])
 	int16_t		byte_len;
 
 	if (v[1]->sign == -1
-		&& ft_dprintf(2, V_ERR_NEG_POW, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_NEG_POW], KRED, KNRM))
 		return (false);
 	if (v[1]->len > 2
-		&& ft_dprintf(2, V_ERR_EXP_LIM, KRED, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_EXP_LIM], KRED, KNRM))
 		return (false);
 	e64 = 0;
 	i = -1;
@@ -125,7 +123,7 @@ bool			v_exp_check(t_varint *v[3])
 	msb[1] = (msb[0] + 1) * e64;
 	byte_len = 1 + msb[1] / V_BIT_LEN;
 	if (byte_len > V_MAX_LEN
-		&& ft_dprintf(2, V_ERR_EXP_OVFL, KRED, byte_len, KNRM))
+		&& ft_dprintf(2, g_v_sterr[V_ERR_EXP_OVFL], KRED, byte_len, KNRM))
 		return (false);
 	return (true);
 }
@@ -137,9 +135,9 @@ bool			v_exp_check(t_varint *v[3])
 
 t_varint			v_exp(t_varint v, t_varint e)
 {
-	int16_t					i;
-	int8_t						j;
-	t_varint					ret;
+	int16_t		i;
+	int8_t		j;
+	t_varint	ret;
 
 	if (!v_check(&v, &e, NULL, "exp"))
 		return (g_v[3]);

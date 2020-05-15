@@ -51,6 +51,7 @@ SRC =	src/ft_memalloc.c\
 		src/ft_printf/malloc.c\
 		src/ft_printf/utf_32_to_8.c\
 		src/bswap.c\
+		src/varint/g_v_sterr.c\
 		src/varint/v_tools.c\
 		src/varint/v_tools_2.c\
 		src/varint/v_check.c\

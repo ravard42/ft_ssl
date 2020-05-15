@@ -1,18 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   func_bis.c                                         :+:      :+:    :+:   */
+/*   shift_rot.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/30 12:44:44 by ravard            #+#    #+#             */
-/*   Updated: 2019/06/30 12:44:53 by ravard           ###   ########.fr       */
+/*   Created: 2020/05/13 16:37:53 by ravard            #+#    #+#             */
+/*   Updated: 2020/05/13 16:37:55 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-uint32_t		g5(uint32_t *h)
+uint32_t		sh_l(uint32_t x, uint8_t n)
 {
-	return (rot_r(*h, 17) ^ rot_r(*h, 19) ^ sh_r(*h, 10));
+	return ((x) << (n));
+}
+
+uint32_t		sh_r(uint32_t x, uint8_t n)
+{
+	return ((x) >> (n));
+}
+
+uint32_t		rot_l(uint32_t x, uint8_t n)
+{
+	return (((x) << (n)) | ((x) >> (32 - (n))));
+}
+
+uint32_t		rot_r(uint32_t x, uint8_t n)
+{
+	return (((x) >> (n)) | ((x) << (32 - (n))));
 }

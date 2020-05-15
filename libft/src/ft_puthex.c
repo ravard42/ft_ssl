@@ -6,7 +6,7 @@
 /*   By: ravard <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 12:20:25 by ravard            #+#    #+#             */
-/*   Updated: 2019/09/10 12:20:28 by ravard           ###   ########.fr       */
+/*   Updated: 2020/05/12 03:09:39 by ravard           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void		put_hex_digit(int fd, uint8_t x, bool capitalize)
 	else if (x >= 10 && x < 16)
 		ft_putchar(fd, a + x - 10);
 }
-
 
 static void		heading_zero(int fd, uint8_t first_byte, uint8_t opts)
 {

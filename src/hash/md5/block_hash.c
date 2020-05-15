@@ -52,7 +52,7 @@ void				md5_block_hash(t_hash *hash, char *pad, int64_t *id_block)
 		tmp[2] = h[3];
 		h[3] = h[2];
 		h[2] = h[1];
-		h[1] = ROT_L(h[0] + tmp[1] + hash->k[i] + w[tmp[0]], hash->s[i]) + h[1];
+		h[1] = rot_l(h[0] + tmp[1] + hash->k[i] + w[tmp[0]], hash->s[i]) + h[1];
 		h[0] = tmp[2];
 	}
 	i = -1;
