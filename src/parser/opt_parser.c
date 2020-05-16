@@ -30,6 +30,8 @@ bool				opt_parser(t_parse *p, const char **opts, char *arg)
 			return (p->h.o[i + 1] = 1);
 		else if (p->cmd.type == 2)
 			return (p->s.o[i] = 1);
+		else if (p->cmd.type == 3)
+			return (p->c.o[i] = 1);
 	}
 	ft_dprintf(2, "%s\"%s\" invalid option%s\n", KRED, arg, KNRM);
 	return (false);

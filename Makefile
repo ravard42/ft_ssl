@@ -61,6 +61,8 @@ SRC = src/main.c\
 		src/asym/rsautl.c\
 		src/asym/cra.c\
 		src/csprng.c\
+		src/crypta/crypta_parser.c\
+		src/crypta/crypta.c\
 	
 OBJ = $(SRC:.c=.o)
 

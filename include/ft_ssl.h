@@ -213,6 +213,21 @@ typedef struct			s_rng
 **	s	: t_sym variable to compute 3des
 */
 
+
+typedef struct			s_crypta
+{
+	uint8_t				o[3];
+}							t_crypta;
+
+/*
+**	CRYPTA OPTIONS
+**
+**	o[0] : key 
+**	o[1] : algo
+**	o[2] : plaintext
+**			
+*/
+
 typedef struct			s_parse
 {
 	t_cmd				cmd;
@@ -225,6 +240,7 @@ typedef struct			s_parse
 	t_sym				s;
 	t_asym				a;
 	t_rng				rng;
+	t_crypta			c;
 }						t_parse;
 
 /*
@@ -373,4 +389,12 @@ t_varint				cra(t_varint *data, t_varint *rsak);
 ** csprng.c
 */
 void					*prng(void *dest, size_t len, t_rng *r, uint8_t opts);
+/*
+** C-C-C_Combo_Breaker
+*/
+
+int			crypta_parser(t_parse *p, int argc, char **argv);
+int			crypta(t_parse *p);
+
+
 #endif
