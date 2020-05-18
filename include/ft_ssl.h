@@ -78,6 +78,8 @@ enum					e_ssl_strno {
 	RSAU_ERR_OUT_FD,
 	PRNG_ERR_OPEN_DEVURAND,
 	PRNG_ERR_SEED,
+	CRYPTA_ERR_LEN,
+	CRYPTA_ERR_DATA
 };
 
 extern const char		*g_ssl_str[];
@@ -216,16 +218,16 @@ typedef struct			s_rng
 
 typedef struct			s_crypta
 {
-	uint8_t				o[3];
+	uint8_t				o[2];
+	uint64_t				p;
+	uint64_t				c;
 }							t_crypta;
 
 /*
 **	CRYPTA OPTIONS
 **
-**	o[0] : key 
-**	o[1] : algo
-**	o[2] : plaintext
-**			
+**	o[0] : plaintext 
+**	o[1] : ciphertext
 */
 
 typedef struct			s_parse
@@ -394,7 +396,7 @@ void					*prng(void *dest, size_t len, t_rng *r, uint8_t opts);
 */
 
 int			crypta_parser(t_parse *p, int argc, char **argv);
-int			crypta(t_parse *p);
+int			break_des_ecb(t_parse *p);
 
 
 #endif

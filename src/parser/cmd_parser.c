@@ -60,7 +60,7 @@ bool				cmd_parser(t_parse *p, char *arg)
 ** beginning to end0 	: Standard commands
 ** between end0 and end1 : Message Digest commands
 ** between end1 and end2 : Cipher commands
-** between end2 and end3 : C-C-C_Combo_Breaker (Cyptanalysis)
+** between end2 and end3 : Cryptanalysis (Bonus)
 */
 
 static const char	*g_cmd_name[] = {
@@ -68,7 +68,7 @@ static const char	*g_cmd_name[] = {
 	"md5", "sha256", "end1",
 	"base64", "des-ecb", "des-cbc", "des", "des-ofb", "des-cfb",
 	"des-ede3", "des-ede3-cbc", "des3", "des-ede3-ofb", "des-ede3-cfb", "end2",
-	"crypta", "end3"
+	"break_des-ecb", "end3"
 };
 
 static const char	*g_usg =
@@ -89,7 +89,7 @@ int					cmd_usage(void)
 	ft_dprintf(2, "\n%sCipher commands%s:\n", KBLU, KNRM);
 	while (ft_strcmp("end2", g_cmd_name[++i]))
 		ft_dprintf(2, " %s\n", g_cmd_name[i]);
-	ft_dprintf(2, "\n%sC-C-C_Combo_Breaker (Cyptanalysis)%s:\n", KBLU, KNRM);
+	ft_dprintf(2, "\n%sCyptanalysis (Bonus)%s:\n", KBLU, KNRM);
 	while (ft_strcmp("end3", g_cmd_name[++i]))
 		ft_dprintf(2, " %s\n", g_cmd_name[i]);
 	return (1);

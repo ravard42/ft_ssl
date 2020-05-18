@@ -43,6 +43,9 @@ typedef struct			s_cmd
 ** nb_k == 3 <=> 192bit key needed : 168 used
 **
 ** type == 3 <=> C-C-C_Combo_Breaker Bonus (Cryptanalysis)
+** we use nb_k value in this mode to determine the block cipher size,
+**	i-e the length of plaintext and related ciphertext data needed at least
+**	for attempting cryptanalysis on it (e.g: 8 for des)
 */
 
 int						hash_parser(t_parse *p, int argc, char **argv);
@@ -72,7 +75,7 @@ int						rsa(t_parse *p);
 int						rsautl_parser(t_parse *p, int argc, char **argv);
 int						rsautl(t_parse *p);
 int						crypta_parser(t_parse *p, int argc, char **argv);
-int						crypta(t_parse *p);
+int						break_des_ecb(t_parse *p);
 
 
 static const			t_cmd g_cmds[] = {
@@ -108,8 +111,8 @@ static const			t_cmd g_cmds[] = {
 		{true, true, false}, 3, des, ofb3_e_d, ofb3_e_d},
 	{2, "des-ede3-cfb", -1, -1, sym_parser,
 		{true, true, false}, 3, des, cfb3_e, cfb3_d},
-	{3, "crypta", -1, -1, crypta_parser,
-		{false, false, false}, 0, crypta, NULL, NULL},
+	{3, "break_des-ecb", -1, -1, crypta_parser,
+		{false, false, false}, 8, break_des_ecb, NULL, NULL},
 	{-1, "", 0, 0, NULL,
 		{false, false, false}, 0, NULL, NULL, NULL}
 };
