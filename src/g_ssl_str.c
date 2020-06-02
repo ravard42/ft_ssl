@@ -45,6 +45,6 @@ const char		*g_ssl_str[] = {
 	"%sout_file opening error%s\n",
 	"%serror in opening /dev/urandom as csprng seed%s\n",
 	"%scsprng (re)seeding failed: lack of random input data on rng->fd%s\n",
-	"%splaintext and ciphertext sample must be at least 64 bits for %s%s\n",
+	"%splaintext and ciphertext samples must be at least %d bits in length%s\n",
 	"%splaintext and ciphertext must both be set for attempting cryptanalysis%s\n"
 };

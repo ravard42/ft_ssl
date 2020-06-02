@@ -1,9 +1,9 @@
 #include "ft_ssl.h"
 
-static const char		*g_crypta_opt[] = {"-plaintxt", "-ciphertxt", ""};
+static const char		*g_crypta_opt[] = {"-p", "-c", ""};
 static const char		*g_crypta_usg[] = {
-	"-plaintxt file",
-	"-ciphertxt file",
+	"-p plaintext_file",
+	"-c ciphertext_file",
 	""
 };
 
@@ -17,7 +17,7 @@ static bool		load_text(uint64_t *text, int argc, char **argv, t_parse *p)
 		&& ft_dprintf(2, "%sopen error%s\n", KRED, KNRM))
 		return (false);
 	if (read(fd, text, p->cmd.nb_k) < p->cmd.nb_k 
-		&& ft_dprintf(2, g_ssl_str[CRYPTA_ERR_LEN], KRED, p->cmd.name, KNRM))
+		&& ft_dprintf(2, g_ssl_str[CRYPTA_ERR_LEN], KRED, p->cmd.nb_k * 8, KNRM))
 		return (false);
 	return (true);
 }

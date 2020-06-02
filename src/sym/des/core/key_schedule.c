@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-uint64_t				parity_bit_drop(uint64_t x)
+static uint64_t			parity_bit_drop(uint64_t x)
 {
 	uint64_t		y;
 	int8_t			i;
@@ -29,7 +29,7 @@ uint64_t				parity_bit_drop(uint64_t x)
 	return (y);
 }
 
-uint64_t				compress_d_box(uint64_t x)
+static uint64_t			compress_d_box(uint64_t x)
 {
 	uint64_t		y;
 	int8_t			i;

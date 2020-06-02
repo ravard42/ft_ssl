@@ -329,8 +329,6 @@ int						opt_a_d(t_parse *p);
 /*
 ** des/core
 */
-uint64_t				parity_bit_drop(uint64_t key);
-uint64_t				compress_d_box(uint64_t x);
 void					load_sub_k(t_sym *s, uint8_t id_k);
 uint64_t				initial_perm(uint64_t x);
 uint64_t				final_perm(uint64_t x);
