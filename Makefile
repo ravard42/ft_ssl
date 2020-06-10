@@ -1,9 +1,8 @@
 CC = gcc
 NAME = ft_ssl
 
-#FLAGS = -Wall -Wextra -Werror
 #FLAGS = -Wall -Wextra -g -fsanitize=address
-FLAGS = -Wall -Wextra -O2
+FLAGS = -Wall -Wextra -Werror -O2
 
 SRC = src/main.c\
 		src/g_ssl_str.c\

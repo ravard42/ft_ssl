@@ -122,6 +122,6 @@ int					rsautl(t_parse *p)
 	if (p->a.o[6])
 		ft_hexdump(p->w.fd, (char *)data.x, data.len);
 	else
-		write(p->w.fd, data.x, data.len);
+		nb_v = write(p->w.fd, data.x, data.len);
 	return (0);
 }

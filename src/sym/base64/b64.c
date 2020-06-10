@@ -87,6 +87,9 @@ int				run_b64_d(t_parse *p)
 
 int				b64(t_parse *p)
 {
+	int	rw;
+
+	(void)rw;
 	p->w.fd = (p->out_file) ?
 		open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644) : 1;
 	if (p->w.fd == -1
@@ -96,6 +99,6 @@ int				b64(t_parse *p)
 		return (-1);
 	if (!p->s.o[1] && !run_b64_e(p))
 		return (-1);
-	write(p->w.fd, p->w.msg, p->w.len);
+	rw = write(p->w.fd, p->w.msg, p->w.len);
 	return (0);
 }

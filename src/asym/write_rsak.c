@@ -71,10 +71,13 @@ static bool				der_encode(t_parse *p, int nb_v)
 
 static void				write_out_rsak(t_parse *p)
 {
+	int	rw;
+
+	(void)rw;
 	if (!ft_strcmp("rsa", p->cmd.name))
 		ft_dprintf(2, "writing RSA key\n");
 	if (p->a.o[3] == 2)
-		write(p->w.fd, p->r.msg, p->r.len);
+		rw = write(p->w.fd, p->r.msg, p->r.len);
 	else
 	{
 		ft_dprintf(p->w.fd, g_rsa_header[p->a.o[8]]);
@@ -84,7 +87,7 @@ static void				write_out_rsak(t_parse *p)
 			ft_puthex(p->w.fd, p->s.arg[1].x, 8, 7);
 			ft_dprintf(p->w.fd, "\n");
 		}
-		write(p->w.fd, p->w.msg, p->w.len);
+		rw = write(p->w.fd, p->w.msg, p->w.len);
 		ft_dprintf(p->w.fd, g_rsa_header[2 + p->a.o[8]]);
 	}
 }

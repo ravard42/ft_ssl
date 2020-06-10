@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   break_des_ecb.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/10 18:16:31 by user42            #+#    #+#             */
+/*   Updated: 2020/06/10 18:29:10 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 /*
 ** pbd:
 ** cf. parity_bit_drop function in sym/des/core/key_schedule.c
-**	we don't care about bits of index (0, 8, 16, 24, 32, 40, 48, 56) 
+**	we don't care about bits of index (0, 8, 16, 24, 32, 40, 48, 56)
 **	LSb first (Least Significant bit)
 */
 
-static uint64_t		pbd(uint64_t x)
+static uint64_t	pbd(uint64_t x)
 {
-	uint8_t	u8_tab[16] = {0x0};
+	uint8_t	u8_tab[16];
 	uint8_t	i;
 
 	*((uint64_t *)u8_tab) = x;
@@ -19,23 +31,23 @@ static uint64_t		pbd(uint64_t x)
 	return (*((uint64_t *)u8_tab));
 }
 
-static bool				is_key(t_parse *p, uint64_t key, int fd_log, uint64_t log_tic)
+static bool		is_key(t_parse *p, uint64_t key, int fd_log, uint64_t log_tic)
 {
-		uint64_t		dec_try;
-		
-		ft_memcpy(p->s.arg[0].x, &key, 8);
-		load_sub_k(&p->s, 0);
-		dec_try = des_block_d(p->c.c, &p->s);
-		if (key % log_tic == 0)
-			ft_dprintf(fd_log, g_ssl_str[CRYPTA_LOG], dec_try, key, p->c.p);
-		if (p->c.p == dec_try)
-		{
-			ft_dprintf(fd_log, "\n");
-			ft_dprintf(fd_log, g_ssl_str[CRYPTA_LOG], dec_try, key, p->c.p);
-			ft_dprintf(fd_log, "\nYou found the key : %#018lx\n", key);
-			return (true);
-		}
-		return (false);
+	uint64_t	dec_try;
+
+	ft_memcpy(p->s.arg[0].x, &key, 8);
+	load_sub_k(&p->s, 0);
+	dec_try = des_block_d(p->c.c, &p->s);
+	if (key % log_tic == 0)
+		ft_dprintf(fd_log, g_ssl_str[CRYPTA_LOG], dec_try, key, p->c.p);
+	if (p->c.p == dec_try)
+	{
+		ft_dprintf(fd_log, "\n");
+		ft_dprintf(fd_log, g_ssl_str[CRYPTA_LOG], dec_try, key, p->c.p);
+		ft_dprintf(fd_log, "\nYou found the key : %#018lx\n", key);
+		return (true);
+	}
+	return (false);
 }
 
 /*
@@ -53,10 +65,10 @@ static bool				is_key(t_parse *p, uint64_t key, int fd_log, uint64_t log_tic)
 **	and always set to 0
 */
 
-int						break_des_ecb(t_parse *p)
+int				break_des_ecb(t_parse *p)
 {
 	uint64_t		i;
-	int			fd_log;
+	int				fd_log;
 	uint64_t		log_tic;
 
 	if ((fd_log = open("crypta.log", O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1

@@ -77,7 +77,6 @@ int						rsautl(t_parse *p);
 int						crypta_parser(t_parse *p, int argc, char **argv);
 int						break_des_ecb(t_parse *p);
 
-
 static const			t_cmd g_cmds[] = {
 	{0, "genrsa", -1, -1, genrsa_parser,
 		{false, false, false}, 3, genrsa, NULL, NULL},

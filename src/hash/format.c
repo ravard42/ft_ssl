@@ -14,16 +14,18 @@
 
 static void		toupper_stdout(char *str)
 {
+	int		rw;
 	int		i;
 	char	tmp;
 
+	(void)rw;
 	i = -1;
 	while (str[++i])
 	{
 		if ((tmp = str[i] - 'a' + 'A') >= 'A' && tmp <= 'Z')
-			write(1, &tmp, 1);
+			rw = write(1, &tmp, 1);
 		else
-			write(1, str + i, 1);
+			rw = write(1, str + i, 1);
 	}
 }
 

@@ -18,10 +18,8 @@ uint64_t			des_block_e(uint64_t x, t_sym *s)
 
 	x = (s->endian) ? x : bswap64(x);
 	x = initial_perm(x);
-	s->l = (s->endian) ?
-		*((uint32_t *)&x) : *((uint32_t *)&x + 1);
-	s->r = (s->endian) ?
-		*((uint32_t *)&x + 1) : *((uint32_t *)&x);
+	s->l = (uint32_t)(x >> 32);
+	s->r = (uint32_t)(x & 0xffffffff);
 	i = -1;
 	while (++i < 16)
 		des_round(s, i);
@@ -37,10 +35,8 @@ uint64_t			des_block_d(uint64_t x, t_sym *s)
 
 	x = (s->endian) ? x : bswap64(x);
 	x = initial_perm(x);
-	s->l = (s->endian) ?
-		*((uint32_t *)&x) : *((uint32_t *)&x + 1);
-	s->r = (s->endian) ?
-		*((uint32_t *)&x + 1) : *((uint32_t *)&x);
+	s->l = (uint32_t)(x >> 32);
+	s->r = (uint32_t)(x & 0xffffffff);
 	i = 16;
 	while (--i >= 0)
 		des_round(s, i);

@@ -91,6 +91,7 @@ bool			v_asn1_int_seq_der_e(t_read *r, t_varint *v, int nb_varint)
 	uint8_t			h[1 + nb_varint][6];
 
 	seq_len = 0;
+	tmp = 0;
 	i = -1;
 	while (++i < nb_varint
 		&& (tmp = set_sub_header(h[i + 1], v[i])) != -1)

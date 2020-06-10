@@ -219,18 +219,17 @@ typedef struct			s_rng
 **	s	: t_sym variable to compute 3des
 */
 
-
 typedef struct			s_crypta
 {
-	uint8_t				o[2];
-	uint64_t				p;
-	uint64_t				c;
-}							t_crypta;
+	uint8_t		o[2];
+	uint64_t	p;
+	uint64_t	c;
+}						t_crypta;
 
 /*
 **	CRYPTA OPTIONS
 **
-**	o[0] : plaintext 
+**	o[0] : plaintext
 **	o[1] : ciphertext
 */
 
@@ -397,8 +396,7 @@ void					*prng(void *dest, size_t len, t_rng *r, uint8_t opts);
 ** C-C-C_Combo_Breaker
 */
 
-int			crypta_parser(t_parse *p, int argc, char **argv);
-int			break_des_ecb(t_parse *p);
-
+int						crypta_parser(t_parse *p, int argc, char **argv);
+int						break_des_ecb(t_parse *p);
 
 #endif

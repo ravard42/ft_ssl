@@ -53,6 +53,9 @@ int					des_dec(t_parse *p)
 
 int					des(t_parse *p)
 {
+	int	rw;
+
+	(void)rw;
 	if (!check_out(p))
 		return (-1);
 	if (p->s.o[1] && p->s.o[4] && !opt_a_d(p))
@@ -65,6 +68,6 @@ int					des(t_parse *p)
 		return (-1);
 	if (!p->s.o[1] && p->s.o[4] && !opt_a_e(p))
 		return (-1);
-	write(p->w.fd, p->w.msg, p->w.len);
+	rw = write(p->w.fd, p->w.msg, p->w.len);
 	return (0);
 }
