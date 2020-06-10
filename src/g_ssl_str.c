@@ -46,5 +46,10 @@ const char		*g_ssl_str[] = {
 	"%serror in opening /dev/urandom as csprng seed%s\n",
 	"%scsprng (re)seeding failed: lack of random input data on rng->fd%s\n",
 	"%splaintext and ciphertext samples must be at least %d bits in length%s\n",
-	"%splaintext and ciphertext must both be set for attempting cryptanalysis%s\n"
+	"%splaintext and ciphertext must both be set "\
+	"for attempting cryptanalysis%s\n",
+	"\nwrong (plaintext, ciphertext) des_ecb couple\n",
+	"Attempting DES-ECB decryption\n--> Saving logs to %scrypta.log\n[...]%s\n",
+	"NOTE: variable _le suffix stands for little endian and _be for big endian.\n\n",
+	"(dec_try_le, key_be, plaintext_le) = (%#018lx, %#018lx, %#018lx)\n"
 };
