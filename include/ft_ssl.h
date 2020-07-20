@@ -36,12 +36,15 @@
 /*
 ** WARNING: rsautl need twice as many memory than genrsa and rsa cmds
 **
-** for all t_varint variable v we have by def in libft/varint:
-** v.len <= 4096 (32768 bits) (cf varint.h)
-** as we need to twice the memory to compute operations in rsautl (expmod)
+** for all t_varint variable v :
+** v.len <= V_MAX_LEN <= 4096 (32768 bits)
+** (cf libft/include/varint.h + libft/src/varint/v_check.c)
+** as we need to twice the memory to compute operations in rsautl (v_expmod)
 ** it means we have an rsa key-size (modulus) treshold set to 16384 bits.
-** In practice and because of rsa run-time limitation
-** We set it to 4096 for modulus key-size.
+**
+** In practice and because of run-time limitation
+** We set max modulus key-size to 2048
+** and V_MAX_LEN = 512 which allow to compute rsautl on it
 */
 
 enum					e_ssl_strno {
@@ -82,7 +85,6 @@ enum					e_ssl_strno {
 	CRYPTA_ERR_DATA,
 	CRYPTA_ERR_DEC,
 	CRYPTA_DESECB_RUNNING,
-	CRYPTA_VAR_SUFFIX,
 	CRYPTA_LOG
 };
 
@@ -110,6 +112,11 @@ typedef struct			s_write
 **	t_write is the buffer where the t_read plaintext data
 **	(respectively the t_read ciphertext data)
 **	will be encrypted (respectively decrypted)
+**
+**	NB: in asym rsautl command,
+**	data to be encrypted/decrypted are loaded in p->a.data (t_read)
+**	they are then duplicated in a t_varint data (local to rsautl scop)
+**	for processing expmod encryption/decryption
 */
 
 typedef struct			s_hash
@@ -203,6 +210,7 @@ typedef struct			s_asym
 ** 	mod_nb 						: modulus number of bits
 ** 	rsa private key order 		: version, n, e, d, p, q, dp, dq, qinv
 **		rsa public key order	: n, e
+**	data: we load data to be encrypted/decrypted with rsautl here from -in file
 */
 
 typedef struct			s_rng

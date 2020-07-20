@@ -19,6 +19,14 @@ static const char		*g_crypta_usg[] = {
 	""
 };
 
+/*
+** cf include/commands.h
+** type == 3 <=> C-C-C_Combo_Breaker Bonus (Cryptanalysis)
+** we use command nb_k value in this mode to determine the block cipher size,
+**	i-e the length of plaintext and related ciphertext data needed at least
+**	for attempting cryptanalysis on it (e.g: 8 for des)
+*/
+
 static bool		load_text(uint64_t *text, int argc, char **argv, t_parse *p)
 {
 	int	fd;

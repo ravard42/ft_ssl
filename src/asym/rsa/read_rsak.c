@@ -23,7 +23,13 @@ const char			*g_rsa_header[] = {
 /*
 ** grep_pem
 **
-** scan t_read *r to find a pem valid sequence.
+** scan t_read *r trying to find {BEGIN_(ENC), END} valid pem header tags
+** on success: data between BEGIN_(ENC) and END tags are copied into p->r.msg
+** if ENCRYPTION header is found, the iv/salt is stored in p->s.arg[2]
+**
+**	o[2] : -inform (0 for PEM, 2 for DER)
+**	o[4] : 1 for -passin, else 0
+**	o[7] : 1 for -pubin, else 0
 */
 
 int					grep_pem(t_parse *p)
@@ -36,7 +42,7 @@ int					grep_pem(t_parse *p)
 		return (0);
 	if ((offset[0] = ft_nxt_line(&p->r, offset[0])) <= 0)
 		return (0);
-	if (!p->a.o[7] && check_enc_header(offset, p) == -1)
+	if (!p->a.o[7] && !check_enc_header(offset, p))
 		return (0);
 	if ((offset[1] = ft_grep_line(g_rsa_header[2 + p->a.o[7]],
 					&p->r, offset[0])) < 0)
@@ -83,10 +89,10 @@ int					pem_2_der(t_parse *p)
 /*
 **	About read_rsak
 **
-**	ASN1 DER DECODING prototype:
+**	ASN1 DER DECODING prototype (cf libft/src/varint):
 **	t_varint	*v_asn1_int_seq_der_d(int *nb_varint, t_read *r)
 **
-**	t_read *r must contain a valid DER interger sequence
+**	t_read *r must contain a valid DER interger sequence.
 **	nb_varint could be:
 **	9 for private keys: version, n, e, d, p, q, dp, dq, qinv
 **	2 for public keys : n, e

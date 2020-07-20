@@ -100,6 +100,11 @@ static void			check_opt(int *err, t_parse *p, int nb_v)
 **	o[12] : 1 for -check, else 0
 */
 
+/*
+** ASN1-FORMAT -> read_rsak() -> t_varint *rsak -> print/check opts on rsak
+** t_varint *rsak -> write_rsak() -> ASN1-FORMAT
+*/
+
 int					rsa(t_parse *p)
 {
 	int		nb_v;

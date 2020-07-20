@@ -39,12 +39,6 @@ static bool				v_len_check(t_varint *v)
 ** if the resultat of op will not overflow V_MAX_LEN
 ** and verify that the operation is well defined
 ** (ex: divison by 0 same for a negative exponent)
-**
-** NB : no check func needed for v_gcd v_eea and v_inv,
-** endeed if params can be set it's ok, computation doesn't need more
-**
-** v_check_crt to be computed
-** (v_crt have some error and need to be reviewed so awaiting)
 */
 
 static const char	*g_op_name[] = {"left_shift", "add", "mul", "exp",
@@ -73,9 +67,9 @@ bool					v_check(t_varint *a, t_varint *b, t_varint *m, char *op)
 		}
 	}
 	i = -1;
-	while (g_op_name[++i] && ft_strcmp(g_op_name[i], op))
+	while (op && g_op_name[++i] && ft_strcmp(g_op_name[i], op))
 		;
-	if (g_op_name[i])
+	if (op && g_op_name[i])
 		return (g_op_check[i](v_tab));
 	return (true);
 }

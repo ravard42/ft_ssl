@@ -18,7 +18,7 @@
 ** a^b mod(n) = (a mod(n))^b mod(n)
 **
 ** expmod reduce 'a' to 'a mod(n)' from the entry of the function
-** so for overflow checking we only need to check that n * n don't overflow
+** so for overflow checking we only need to check that n * n doesn't overflow
 ** (see V_MUL OVFL NOTE)
 **
 **
@@ -72,7 +72,7 @@ t_varint		v_expmod(t_varint v, t_varint e, t_varint mod, bool check)
 	if (is_g_v(0, &e) && !is_g_v(1, &mod))
 		return (g_v[1]);
 	j = V_BIT_LEN - 1;
-	while ((e.x[e.len - 1] >> j & 1) == 0 && j)
+	while ((e.x[e.len - 1] >> j & 1) == 0)
 		j--;
 	ret = v_mod(v, mod, true, false);
 	i = e.len;

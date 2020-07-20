@@ -16,17 +16,18 @@
 **	about the process of generating random nb-bit prime candidat in varint:
 **	1] we load a full random uint8_t varint v s.t v.len = len
 **		where len is the lower len that can contain nb-bit
-**	2] we make it odd turning LSB to one
+**		len = 1 + (nb - 1) / (V_BIT_LEN)
+**	2] we make it odd turning LSb to one
 **	3] we apply a bitmask on the head of v
 **		which set bits of index nb-1, nb-2, nb-3 to 1, 0, 0 respectively
 **		and all uppers to 0
 **
-**	NB : 64 <= mod_nb <= 4096
-**		 so 32 <= nb <= 2048
+**	NB : 64 <= mod_nb <= 2048
+**		 so 32 <= nb <= 1024
 **		 and v >= 0x80000001 (remark: v is bigger than all g_prime numbers)
-**		 we set bit of index nb-2 and nb-3 to 0 cause:
+**		 we set bit of index nb-2 and nb-3 to 0 because:
 **		 1] we don't want sieve to return an nb+1 bit lenght number (nb-2 == 0)
-**		 2] modulus has always valid length (nb-3=0)
+**		 2] we don't want n = p * q overflowing mod_nb (nb - 3 == 0)
 */
 
 static void			v_mask(t_varint *v, int16_t nb)
@@ -71,11 +72,6 @@ static t_varint		find_prime(int16_t nb, int16_t len, t_rng *rng)
 	return (v);
 }
 
-/*
-**	1 + (nb - 1) / (V_BIT_LEN) is the lower number of random uint8_t needed
-** to construct all kind of nb-bit number in a varint variable
-*/
-
 static t_varint		set_rsa_prime(int16_t nb, t_rng *rng)
 {
 	t_varint		tmp;
@@ -95,6 +91,16 @@ static t_varint		set_rsa_prime(int16_t nb, t_rng *rng)
 	}
 	return (ret);
 }
+
+/*
+** remark: for a 8 bit data len -> MSb is 2^7
+**
+** in set_rsa_prime
+** we take p_nb = mod_nb - mod_nb / 2 + 1 -> MSb is 2^(mod_nb - mod_nb / 2)
+** we take q_nb = mod_nb / 2 bits 	  -> MSb is 2^(mod_nb / 2 - 1)
+** hence n MSb will be 2^(mod_nb - 1)
+** it is exactly the len we want for modulus
+*/
 
 int					genrsa(t_parse *p)
 {

@@ -51,8 +51,8 @@ static bool		form_parser(t_parse *p, int argc, char **argv)
 		tmp = 2;
 	else
 	{
-		ft_dprintf(2, "%s-inform invalid format \
-				(available : PEM|DER)%s\n", KRED, KNRM);
+		ft_dprintf(2, "%s-inform invalid format "\
+			"(available : PEM|DER)%s\n", KRED, KNRM);
 		return (false);
 	}
 	p->a.o[2] = (p->a.o[2] == 1) ? tmp : p->a.o[2];
@@ -137,9 +137,9 @@ static const char		*g_rsa_usg[] = {
 	"with this option a public key is read instead",
 	"-pubout, private key is output by default on -out, "\
 	"with this option a public key is output instead",
-	"-text, print key components and key encoded version",
+	"-text, print key components",
 	"-modulus, print out the value of the modulus of the key",
-	"-noout, this option prevents output of the encoded version of the key",
+	"-noout, this option prevents output",
 	"-check, check the consistency of an RSA private key",
 	""
 };

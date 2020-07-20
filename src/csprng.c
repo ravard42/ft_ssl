@@ -29,19 +29,6 @@ static bool			seeding(t_rng *rng)
 	return (true);
 }
 
-/*
-** load len pseudo random bytes from des3 csprng in dest
-** beware that dest have enough space memory for len bytes
-**
-** 	NB : csprng seeding process on rng->fd
-**	by default points on /dev/urandom
-** 	treshold set at 0xa00000 for reseeding (~10min)
-**
-**	option bits:
-**	0x01	<->	0x00 is off for all
-**	0x02	<->	0x00 is off for MSBY (Most Significant BYte)
-*/
-
 static bool			any_zero(uint8_t *buff, int8_t len)
 {
 	int8_t		i;
@@ -66,6 +53,19 @@ static void			des3_ctr_mode(uint8_t *ptr, uint8_t size,
 			buff = des3_block_e(++rng->co, &rng->s);
 	ft_memcpy(ptr, &buff, size);
 }
+
+/*
+** load len pseudo random bytes from des3 csprng in dest
+** beware that dest have enough space memory for len bytes
+**
+** 	NB : csprng seeding process on rng->fd
+**	by default points on /dev/urandom
+** 	treshold set at 0xa00000 for reseeding (~10min)
+**
+**	option bits:
+**	0x01	<->	0x00 is off for all
+**	0x02	<->	0x00 is off for MSB (Most Significant Byte)
+*/
 
 void				*prng(void *dest, size_t len, t_rng *rng, uint8_t opts)
 {

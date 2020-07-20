@@ -12,6 +12,10 @@
 
 #include "libft.h"
 
+/*
+**	fast check of g_v array often used varint (cf varint.h)
+*/
+
 bool			is_g_v(int8_t i, t_varint *v)
 {
 	if (i == 3)
@@ -23,10 +27,8 @@ bool			is_g_v(int8_t i, t_varint *v)
 	}
 	if (v->len == 1)
 	{
-		if ((v->sign == 1 || v->sign == -1)
-			&& v->x[0] == i && (v->sign = 1))
-			return (true);
-		if (v->sign == 1 && v->x[0] == i)
+		v->sign = (v->x[0] == 0) ? 1 : v->sign;
+		if (v->sign == g_v[i].sign && v->x[0] == g_v[i].x[0])
 			return (true);
 	}
 	return (false);
@@ -34,17 +36,16 @@ bool			is_g_v(int8_t i, t_varint *v)
 
 /*
 **	v_len check for the len of v and return it.
-**	depending on msc (Most Significant Chunk)
-**	we can limit the range of the check
-**	if we need full viewing on v data we set msc to V_MAX_LEN
+**	depending on msb (Most Significant Byte) we can limit the range of the check
+**	if we need full viewing on v data we set msb to V_MAX_LEN
 **	(cost more computation time)
 */
 
-void			v_len(t_varint *v, int16_t msc)
+void			v_len(t_varint *v, int16_t msb)
 {
 	int16_t		i;
 
-	i = msc;
+	i = msb;
 	while (--i > 0)
 		if (v->x[i])
 			break ;
@@ -86,7 +87,7 @@ t_varint		v_init(char sign, uint8_t *src, int16_t len)
 **		(respectively sign[1] for the lower absolute)
 **		and finally turn a->sign and b->sign to one
 **
-**	return -1 for error, 1 if switch occured, 0 if not
+**	1 if switch occured, 0 if not
 */
 
 uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
@@ -118,7 +119,7 @@ uint8_t			v_sort(t_varint *a, t_varint *b, int8_t *sign)
 }
 
 /*
-**	ft_dprintf(2, "%s|%hhd|%hd:\n", name, v->sign, v->len);
+**	print varint in openssl rsa format
 */
 
 void			v_print(int fd, char *name, t_varint *v, bool check)

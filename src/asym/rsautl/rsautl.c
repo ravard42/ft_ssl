@@ -83,20 +83,38 @@ static bool			rsa_dec(t_varint *data, t_parse *p, int nb_v)
 		return (false);
 	ft_memrcpy(data->x, p->a.data.msg, p->a.data.len);
 	v_len(data, p->a.data.len);
+	if (v_cmp(data, "-ge", p->a.rsak + 1, false) &&
+		ft_dprintf(2, g_ssl_str[RSAU_ERR_DATA_LEN_3], KRED, KNRM))
+		return (false);
 	*data = cra(data, p->a.rsak);
 	if (is_g_v(3, data))
 		return (false);
 	ft_memrev(data->x, data->len);
 	if (p->a.o[7])
 	{
-		ft_memshift(data->x, data->len, p->a.rsak[nb_v % 2].len - data->len);
-		ft_memset((char *)data->x, 0, p->a.rsak[nb_v % 2].len - data->len);
-		data->len = p->a.rsak[nb_v % 2].len;
+		ft_memshift(data->x, data->len, p->a.rsak[1].len - data->len);
+		ft_memset((char *)data->x, 0, p->a.rsak[1].len - data->len);
+		data->len = p->a.rsak[1].len;
 	}
 	else if (!rsa_unpad(data))
 		return (false);
 	return (true);
 }
+
+/*
+**	RSAUTL OPTS
+**
+**	o[3] : 1 for -pubin, else 0
+**	o[4] : 1 for -encrypt, else 0
+**	o[5] : 1 for -decrypt, else 0
+**	o[6] : 1 for -hexdump, else 0
+**	o[7] : 1 for -raw, else 0
+**
+**	NB: we copy all asym options p->a.o[] in tmp_o before we call read_rsak
+**	endeed read_rsak react to p->a.o[], so we need to clear it!
+**	-pubin is the only key option we have to handle here.
+**	(always PEM keys and never des encrypted)
+*/
 
 int					rsautl(t_parse *p)
 {

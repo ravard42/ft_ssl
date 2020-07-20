@@ -15,8 +15,8 @@
 /*
 ** we recall that V_MAX_LEN <= 4096 bytes = 32768 bits
 ** v_msb_id can return a maximum of 32767  (int16_t)
-** but it stay valid as it represents the index of the MSB
-** (Most Significant Bit)
+** but it stay valid as it represents the index of the MSb
+** (Most Significant bit)
 ** and not the number of bits
 **
 ** v_msb_id need valid varint len!

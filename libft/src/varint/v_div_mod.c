@@ -33,17 +33,18 @@ bool				v_div_check(t_varint *v[3])
 /*
 ** SHIFT and SUBSTRACT algorithm
 **
-** here dst is the remainder (r buffer in shift_substract scop)
+** in v_feed, dst is the remainder (r buffer in shift_substract scop)
 ** that we feed with the upper bit of src (dividend) at every starting loop.
-**	we then apply left_shift to quotient
+**	we then apply left_shift to quotient (shift_substract scop)
 ** if r >= divisor
 **		we substract divisor to r,
-**		and turn the quotient LSB (Low Significant Bit) to one
+**		and turn the quotient LSb (Low Significant bit) to one
 **
 ** cursor represent where we are in the lecture of dividend
 **
 ** optimization : before first loop, as left shifting 0 is doing nothing,
-**						we feed r with first 64 chuncks of dividend
+**						we feed r with first chuncks of dividend
+**						(see init_r: beware to not overcome dividend data)
 */
 
 static void			v_feed(t_varint *dst, t_varint *src, int16_t *cursor,
@@ -115,10 +116,10 @@ t_varint			v_div(t_varint dend, t_varint sor, bool check)
 
 /*
 ** 1]
-**	pos == false -> behave like % operator
+**	eucl == false -> behave like % operator
 **		ex: -12 % 5 will return -2
 **	2]
-**	pos == true	 -> behave like true euclidian divison reminder
+**	eucl == true	 -> behave like true euclidian divison remainder
 **		ex: -12 mod 5 will return 3
 */
 

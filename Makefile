@@ -47,18 +47,18 @@ SRC = src/main.c\
 		src/sym/des/mode/cbc3.c\
 		src/sym/des/mode/ofb3.c\
 		src/sym/des/mode/cfb3.c\
-		src/asym/asym_parser/genrsa_parser.c\
-		src/asym/asym_parser/rsa_parser.c\
-		src/asym/asym_parser/rsautl_parser.c\
-		src/asym/sieve.c\
-		src/asym/prob_prime_test.c\
-		src/asym/genrsa.c\
-		src/asym/read_rsak.c\
-		src/asym/rsa_des_opt.c\
-		src/asym/write_rsak.c\
-		src/asym/rsa.c\
-		src/asym/rsautl.c\
-		src/asym/cra.c\
+		src/asym/genrsa/genrsa_parser.c\
+		src/asym/genrsa/sieve.c\
+		src/asym/genrsa/prob_prime_test.c\
+		src/asym/genrsa/genrsa.c\
+		src/asym/rsa/rsa_parser.c\
+		src/asym/rsa/read_rsak.c\
+		src/asym/rsa/rsa_des_opt.c\
+		src/asym/rsa/write_rsak.c\
+		src/asym/rsa/rsa.c\
+		src/asym/rsautl/rsautl_parser.c\
+		src/asym/rsautl/rsautl.c\
+		src/asym/rsautl/cra.c\
 		src/csprng.c\
 		src/crypta/crypta_parser.c\
 		src/crypta/break_des_ecb.c\

@@ -13,7 +13,7 @@
 #include "libft.h"
 
 /*
-** V_GCD OVFL NOT
+** V_GCD OVFL NOTE
 **
 ** just one v_mod in there so GCD isn't concerned by ovfl
 */
@@ -64,6 +64,21 @@ bool				v_eea_check(t_varint *v[3])
 	return (true);
 }
 
+/*
+**	EEA algo recursively:
+**	αₒ*a + βₒ*b = r[0]
+**	α₁*a + β₁*b = r[1]
+**	r[0] = r[1]*q + r2
+**	r2 = (αₒ - α₁*q) * a + (βₒ - β₁*q) * b
+**	r[0] = r[1]
+**	r[1] = r2
+**
+**	with:
+**	αₒ = coef_r0[0], βₒ = coef_r0[1]
+**	α₁ = coef_r1[0], β₁ = coef_r1[1]
+**	tmp[0] = r2, tmp[1] = q
+*/
+
 static void			process(t_varint *coef_r0, t_varint *coef_r1, t_varint *r)
 {
 	t_varint	tmp[2];
@@ -105,7 +120,7 @@ t_varint			*v_eea(t_varint *coef_r0, t_varint a, t_varint b,
 	while (!is_g_v(0, r + 1))
 		process(coef_r0, coef_r1, r);
 	coef_r0[0].sign *= (sign[0] != a.sign) ? -1 : 1;
-	(coef_r0[1]).sign *= (sign[1] != a.sign) ? -1 : 1;
+	(coef_r0[1]).sign *= (sign[1] != b.sign) ? -1 : 1;
 	if (sign[2])
 	{
 		r[0] = coef_r0[0];

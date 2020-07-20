@@ -35,6 +35,13 @@ bool				v_mul_check(t_varint *v[3])
 	return (true);
 }
 
+/*
+**	remarks about process:
+**
+**	1] uint32_t * uint32_t never overflow in uint64_t
+**	2] uint64_t + uint64_t can only overflow of 1 bit
+*/
+
 static void			process(t_varint *ret, uint32_t *u32[2], int16_t len[2])
 {
 	int16_t		i;
@@ -144,7 +151,7 @@ t_varint			v_exp(t_varint v, t_varint e)
 	if (is_g_v(0, &e))
 		return (g_v[1]);
 	j = V_BIT_LEN - 1;
-	while (!(e.x[e.len - 1] >> j & 1))
+	while ((e.x[e.len - 1] >> j & 1) == 0)
 		j--;
 	ret = v;
 	i = e.len;

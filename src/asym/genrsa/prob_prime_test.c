@@ -65,7 +65,7 @@ static int			miller_witness(t_varint n, t_varint s, t_varint d,
 }
 
 /*
-**	n_min_1 = 2^s * d  (with d % 2 == 0)
+**	n_min_1 = 2^s * d  (with d % 2 != 0)
 **
 **	NB :in first place we use d as an lvalue
 **		to store intermediate results to compute s

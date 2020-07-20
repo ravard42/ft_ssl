@@ -19,7 +19,7 @@
 /*
 ** check_enc_header
 **
-**	read encryption header if one and set p->a.iv_salt,
+**	read encryption header if there is one and set iv/salt in p->s.arg[2]
 ** offset[0] must point on b64 data at the end of this function
 **
 **	return 1 if ok, 0 if error

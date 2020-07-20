@@ -51,10 +51,10 @@ extern const char		*g_v_sterr[];
 */
 
 # define V_BIT_LEN			8
-# define V_MAX_LEN		 	256
+# define V_MAX_LEN		 	512
 
 /*
-** must be a mutliple of 8 and <= 4096 (32768 bits)
+** V_MAX_LEN must be a mutliple of 8 and <= 4096 (32768 bits)
 */
 
 typedef struct				s_varint
@@ -104,7 +104,7 @@ static const t_varint		g_v[4] = {
 };
 
 /*
-**		g_v array regroups often used varint values
+**		g_v array regroups often used one byte varint
 **
 **		index	value
 **		  0		  0

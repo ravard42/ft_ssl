@@ -19,10 +19,10 @@
 ** 	CONST_SEQ
 **			OBJECT
 **			NULL
-** 	BIT STRING (BIT_STRING_HEADER 0x00 v_asn1_int_seq_der_e)
+** 	BIT STRING (BIT_STRING_HEADER tag : 0x03, value begin with 00)
 **
 **	about uint8_t h[2][5]:
-**	index 0 for TOTAL_SEQ HEADER and h[1] for BIT_STRING_HEADER
+**	h[0] for TOTAL_SEQ HEADER and h[1] for BIT_STRING_HEADER
 **	h[x][0] = header len
 **	h[x][1:4] = header
 */
@@ -54,6 +54,10 @@ static int				add_der_pub_offset(t_parse *p)
 	p->r.len += tmp_len;
 	return (1);
 }
+
+/*
+**	o[8] : 1 for -pubout, else 0
+*/
 
 static bool				der_encode(t_parse *p, int nb_v)
 {
@@ -106,6 +110,7 @@ static void				write_out_rsak(t_parse *p)
 
 int						write_rsak(t_parse *p, int nb_v)
 {
+	p->a.o[6] = (p->a.o[3] == 2 || p->a.o[8]) ? 0 : p->a.o[6];
 	if (!der_encode(p, nb_v))
 		return (-1);
 	p->w.fd = (p->out_file) ?

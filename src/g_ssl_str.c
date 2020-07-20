@@ -18,7 +18,7 @@ const char		*g_ssl_str[] = {
 	"%sV_MAX_LEN must be >= %d for this key size%s\n",
 	"%sCan't parse %s as a decimal number%s\n",
 	"%smodulus numbits must be >= 64%s\n",
-	"%smodulus numbits must be <= 4096%s\n",
+	"%smodulus numbits must be <= 2048%s\n",
 	"Generating RSA private key, %hd bit long modulus (2 primes)\n",
 	"%spriv key is expected on input when -des opt is on, "\
 	"des enc not computed%s\n",
@@ -50,7 +50,5 @@ const char		*g_ssl_str[] = {
 	"for attempting cryptanalysis%s\n",
 	"\nwrong (plaintext, ciphertext) des_ecb couple\n",
 	"Attempting DES-ECB decryption\n--> Saving logs to %scrypta.log\n[...]%s\n",
-	"NOTE: variable _le suffix stands for little endian "\
-	"and _be for big endian.\n\n",
-	"(dec_try_le, key_be, plaintext_le) = (%#018lx, %#018lx, %#018lx)\n"
+	"(dec_try, key, plaintext) = (%#018lx, %#018lx, %#018lx)\n"
 };

@@ -23,7 +23,7 @@ static int		numbits(char *nb)
 	if (ret < 64
 		&& ft_dprintf(2, g_ssl_str[GRSA_ERR_NB_1], KRED, KNRM))
 		return (-1);
-	else if (ret > 4096
+	else if (ret > 2048
 		&& ft_dprintf(2, g_ssl_str[GRSA_ERR_NB_2], KRED, KNRM))
 		return (-1);
 	return (ret);
@@ -48,10 +48,11 @@ static bool		init_rsak(t_asym *a)
 
 static const char		*g_grsa_opt[] = {"-rand", "-out", ""};
 static const char		*g_grsa_usg[] = {
-	"-rand file, use file data to seed the random number generator",
+	"-rand file, use file to seed the random number generator " \
+	"(default /dev/urandom)",
 	"-out file (default stdout)",
-	"numbits, size of the modulus in bits express in decimal " \
-	"(must be the last option specified, default 128 bits)",
+	"numbits, size of the modulus between 64 (default) and 2048 " \
+	"(must be the last option specified)",
 	""
 };
 
@@ -64,7 +65,7 @@ int				genrsa_parser(t_parse *p, int argc, char **argv)
 		if (p->i[0] == argc - 1)
 		{
 			if ((p->a.mod_nb = numbits(argv[p->i[0]])) == -1)
-				return (-2);
+				return (opt_usage("genrsa opts", g_grsa_usg));
 		}
 		else
 		{
